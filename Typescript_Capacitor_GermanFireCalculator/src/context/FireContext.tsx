@@ -62,14 +62,18 @@ export function FireProvider({ children }: { children: React.ReactNode }) {
 
   const computed = useMemo(() => {
     const netWorth        = fireService.calcNetWorth(state);
-    const grossSWR        = fireService.calcGrossSWR(netWorth);
+    const grossSWR        = fireService.calcGrossSWR(state);
     const netSWR          = fireService.calcNetSWR(state, grossSWR);
-    const fireTarget      = fireService.calcFireTarget(state);
+    const weightedReturn  = fireService.calcWeightedReturn(state);
+    const fireTarget      = fireService.calcFireTarget(state, weightedReturn);
     const firePercentage  = fireService.calcFirePercentage(netWorth, fireTarget);
     const abgabenQuote    = fireService.calcAbgabenQuote(state, grossSWR);
     const monthlySavings  = fireService.calcMonthlySavings(state);
-    const weightedReturn  = fireService.calcWeightedReturn(state);
-    const fireDate        = fireService.calcFIREDate(netWorth, monthlySavings, fireTarget, weightedReturn);
+    const fireDate     = fireService.calcFIREDate(
+      state.etfBalance, state.cashBalance,
+      state.etfRate, state.cashRate,
+      monthlySavings, fireTarget,
+    );
 
     const currentYear  = new Date().getFullYear();
     const pensionYear  = currentYear + Math.max(0, state.pensionAge - state.currentAge);
@@ -81,14 +85,12 @@ export function FireProvider({ children }: { children: React.ReactNode }) {
       fireDate.year + 24,
     ])].sort((a, b) => a - b);
 
+    const monthlyWithdraw = state.fixedExpenses + state.pkvContribution + state.variableExpenses;
     const chartData = fireService.calcProjectedWealth(
-      netWorth,
-      monthlySavings,
-      state.fixedExpenses + state.pkvContribution + state.variableExpenses,
-      fireDate.year,
-      uniqueYears,
-      weightedReturn,
-      pensionYear,
+      state.etfBalance, state.cashBalance,
+      state.etfRate, state.cashRate,
+      monthlySavings, monthlyWithdraw, state.assetTaxRate,
+      fireDate.year, uniqueYears, pensionYear,
     );
 
     return { netWorth, grossSWR, netSWR, fireTarget, firePercentage, abgabenQuote, monthlySavings, weightedReturn, fireDate, chartData };

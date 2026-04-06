@@ -11,6 +11,7 @@ interface Props {
 
 export function DashboardContainer({ onTabChange, onNavigateToPrognose }: Props) {
   const {
+    state,
     netWorth,
     firePercentage,
     fireDate,
@@ -24,6 +25,7 @@ export function DashboardContainer({ onTabChange, onNavigateToPrognose }: Props)
     : '0,0';
 
   const monthlyAssetIncome = fireService.calcAssetIncome(netWorth, weightedReturn) / 12;
+  const monthlySafeWithdrawal = fireService.calcGrossSWR(state);
 
   return (
     <DashboardView
@@ -35,6 +37,7 @@ export function DashboardContainer({ onTabChange, onNavigateToPrognose }: Props)
       growthBadge={growthBadge}
       monthlySavingsFormatted={fmtCurrency(monthlySavings)}
       assetIncomeFormatted={fmtCurrency(monthlyAssetIncome)}
+      safeWithdrawalFormatted={fmtCurrency(monthlySafeWithdrawal)}
       chartData={chartData}
       onTabChange={onTabChange}
       onNavigateToPrognose={onNavigateToPrognose}

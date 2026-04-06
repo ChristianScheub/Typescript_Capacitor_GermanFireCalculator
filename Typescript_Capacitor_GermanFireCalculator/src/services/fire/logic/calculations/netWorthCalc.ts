@@ -1,10 +1,13 @@
 import type { FireState } from '../../../../types/fire/models/FireState';
-import { FIRE_CONSTANTS }  from '../fireConfig';
 
 export function calcNetWorth(state: FireState): number {
-  return state.etfBalance + state.cashBalance + state.cryptoBalance;
+  return state.etfBalance + state.cashBalance;
 }
 
-export function calcGrossSWR(netWorth: number): number {
-  return (netWorth * FIRE_CONSTANTS.SWR_RATE) / 12;
+/** Monthly gross safe withdrawal: ETF uses etfWithdrawalRate, Cash yields only interest. */
+export function calcGrossSWR(state: FireState): number {
+  return (
+    state.etfBalance * (state.etfWithdrawalRate / 100)
+    + state.cashBalance * (state.cashRate / 100)
+  ) / 12;
 }

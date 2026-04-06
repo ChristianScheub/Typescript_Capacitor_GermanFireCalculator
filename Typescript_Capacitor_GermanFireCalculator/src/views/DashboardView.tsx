@@ -14,6 +14,7 @@ interface DashboardViewProps {
   growthBadge:             string;
   monthlySavingsFormatted: string;
   assetIncomeFormatted:    string;
+  safeWithdrawalFormatted: string;
   chartData:               ChartDataPoint[];
   onTabChange:             (tab: Tab) => void;
   onNavigateToPrognose:    (cfg: PrognoseConfig) => void;
@@ -28,6 +29,7 @@ export function DashboardView({
   growthBadge,
   monthlySavingsFormatted,
   assetIncomeFormatted,
+  safeWithdrawalFormatted,
   chartData,
   onTabChange,
   onNavigateToPrognose,
@@ -111,6 +113,18 @@ export function DashboardView({
             </div>
             <p className="kpi-card__label">EINK. AUS ASSETS</p>
             <p className="kpi-card__value">{assetIncomeFormatted}&thinsp;€<span className="kpi-card__unit">/Monat</span></p>
+          </div>
+
+          <div className="card kpi-card">
+            <div className="kpi-card__header">
+              <div className="kpi-icon kpi-icon--orange">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                </svg>
+              </div>
+            </div>
+            <p className="kpi-card__label">SICHERE ENTNAHME</p>
+            <p className="kpi-card__value">{safeWithdrawalFormatted}&thinsp;€<span className="kpi-card__unit">/Monat</span></p>
           </div>
         </div>
 

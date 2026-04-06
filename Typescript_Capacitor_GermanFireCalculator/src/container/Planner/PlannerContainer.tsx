@@ -3,13 +3,24 @@ import { fmtCurrency, FIRE_CONSTANTS } from '../../services/fire';
 import { PlannerView }   from '../../views/PlannerView';
 
 export function PlannerContainer() {
-  const { state, updateField, firePercentage } = useFireContext();
+  const { state, updateField, firePercentage, fireTarget, weightedReturn } = useFireContext();
 
-  const kirchensteuerRateDisplay = String(FIRE_CONSTANTS.KIRCHENSTEUER_RATE * 100);
-  const fireProgressWidth        = `${Math.min(100, firePercentage).toFixed(0)}%`;
+  const fireProgressWidth = `${Math.min(100, firePercentage).toFixed(0)}%`;
+
+  // GKV: estimated monthly contribution = fireTarget * weightedReturn * 21% / 12, capped at 1 300 €
+  const gkvMonthly = !state.isPkvUser
+    ? Math.min(
+        FIRE_CONSTANTS.GKV_MAX_MONTHLY,
+        (fireTarget * weightedReturn * FIRE_CONSTANTS.GKV_RATE) / 12,
+      )
+    : 0;
+  const gkvMonthlyFormatted = fmtCurrency(gkvMonthly);
+  const isCapped             = !state.isPkvUser
+    && (fireTarget * weightedReturn * FIRE_CONSTANTS.GKV_RATE) / 12 > FIRE_CONSTANTS.GKV_MAX_MONTHLY;
 
   // Total Fixkosten inkl. KV (shown as italic hint)
-  const totalFixedWithKV         = state.fixedExpenses + state.pkvContribution;
+  const kvAmount              = state.isPkvUser ? state.pkvContribution : gkvMonthly;
+  const totalFixedWithKV      = state.fixedExpenses + kvAmount;
   const totalFixedWithKVFormatted = fmtCurrency(totalFixedWithKV);
 
   return (
@@ -18,8 +29,9 @@ export function PlannerContainer() {
       updateField={updateField}
       firePercentageRounded={Math.round(firePercentage)}
       fireProgressWidth={fireProgressWidth}
-      kirchensteuerRateDisplay={kirchensteuerRateDisplay}
       totalFixedWithKVFormatted={totalFixedWithKVFormatted}
+      gkvMonthlyFormatted={gkvMonthlyFormatted}
+      isCapped={isCapped}
     />
   );
 }

@@ -60,8 +60,9 @@ interface PlannerViewProps {
   updateField:              <K extends keyof FireState>(key: K, value: FireState[K]) => void;
   firePercentageRounded:    number;
   fireProgressWidth:        string;
-  kirchensteuerRateDisplay: string;
   totalFixedWithKVFormatted: string;
+  gkvMonthlyFormatted:      string;
+  isCapped:                 boolean;
 }
 
 export function PlannerView({
@@ -69,8 +70,9 @@ export function PlannerView({
   updateField,
   firePercentageRounded,
   fireProgressWidth,
-  kirchensteuerRateDisplay,
   totalFixedWithKVFormatted,
+  gkvMonthlyFormatted,
+  isCapped,
 }: PlannerViewProps) {
   const { t } = useTranslation();
 
@@ -163,12 +165,11 @@ export function PlannerView({
           <NumericInput label={t('planner.etfStocks')} value={state.etfBalance} unit="€" onChange={v => updateField('etfBalance', v)} />
           <NumericInput label={t('planner.expectedReturnEtf')} value={state.etfRate} unit="%" onChange={v => updateField('etfRate', v)}
             hint={t('planner.taxEtf')} />
+          <NumericInput label={t('planner.etfWithdrawalRate')} value={state.etfWithdrawalRate} unit="%" onChange={v => updateField('etfWithdrawalRate', v)}
+            hint={t('planner.etfWithdrawalRateHint')} />
           <NumericInput label={t('planner.cash')} value={state.cashBalance} unit="€" onChange={v => updateField('cashBalance', v)} />
           <NumericInput label={t('planner.interestRateCash')} value={state.cashRate} unit="%" onChange={v => updateField('cashRate', v)}
             hint={t('planner.taxCash')} />
-          <NumericInput label="KRYPTO" value={state.cryptoBalance} unit="€" onChange={v => updateField('cryptoBalance', v)} />
-          <NumericInput label={t('planner.expectedReturnCrypto')} value={state.cryptoRate} unit="%" onChange={v => updateField('cryptoRate', v)}
-            hint={t('planner.taxCrypto')} />
         </div>
 
         {/* ── Ruhestand Budget ── */}
@@ -226,6 +227,19 @@ export function PlannerView({
               onClick={() => updateField('isPkvUser', true)}
             >PKV</button>
           </div>
+          {!state.isPkvUser && (
+            <div className="info-card" style={{ marginTop: '16px' }}>
+              <div className="info-card__text">
+                <p className="info-card__title">GKV-Beitrag im Ruhestand</p>
+                <p className="info-card__body">
+                  {isCapped
+                    ? `Es wird der GKV-Höchstbetrag von ${gkvMonthlyFormatted} € / Monat berücksichtigt (Beitragsdeckel).`
+                    : `Es werden ca. 21% Ihres Asset-Einkommens im FIRE-Jahr berücksichtigt (~${gkvMonthlyFormatted} € / Monat, max. 1.300 €).`
+                  }
+                </p>
+              </div>
+            </div>
+          )}
           {state.isPkvUser && (
             <div className="field" style={{ marginTop: '16px' }}>
               <label className="field__label">MONATLICHER BEITRAG PKV</label>
@@ -258,33 +272,22 @@ export function PlannerView({
               </svg>
             </div>
           </div>
-          <div className="toggle-row">
-            <div>
-              <p className="toggle-row__title">Kirchensteuer</p>
-              <p className="toggle-row__hint">Regelsatz {kirchensteuerRateDisplay}% (BY/BW) bzw. 9%</p>
-            </div>
-            <button
-              className={`toggle${state.hasKirchensteuer ? ' toggle--on' : ''}`}
-              role="switch"
-              aria-checked={state.hasKirchensteuer}
-              onClick={() => updateField('hasKirchensteuer', !state.hasKirchensteuer)}
-              aria-label="Kirchensteuer"
-            >
-              <span className="toggle__thumb" />
-            </button>
-          </div>
+          <NumericInput
+            label={t('planner.assetTaxRate')}
+            value={state.assetTaxRate}
+            unit="%"
+            onChange={v => updateField('assetTaxRate', v)}
+          />
           <div className="info-card">
             <div className="kpi-icon kpi-icon--green kpi-icon--sm">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16" strokeWidth="3" strokeLinecap="round"/>
               </svg>
             </div>
             <div className="info-card__text">
-              <p className="info-card__title">Sparerpauschbetrag</p>
-              <p className="info-card__body">
-                Wir berücksichtigen automatisch den gesetzlichen Freibetrag von{' '}
-                <strong>1.000 €</strong> pro Jahr für Ihre Kapitalerträge.
-              </p>
+              <p className="info-card__title">{t('planner.assetTaxRateTitle')}</p>
+              <p className="info-card__body">{t('planner.assetTaxRateHint')}</p>
             </div>
           </div>
         </div>

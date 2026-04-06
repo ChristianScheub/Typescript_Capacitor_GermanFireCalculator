@@ -8,7 +8,7 @@ import type { PrognoseConfig }                            from '../../types/prog
 
 export function SteuerContainer() {
   const { t } = useTranslation();
-  const { state, firePercentage, netWorth, fireDate, monthlySavings, fireTarget, weightedReturn } = useFireContext();
+  const { state, firePercentage, netWorth, fireDate, monthlySavings, fireTarget } = useFireContext();
 
   const [selectedBadge, setSelectedBadge] = useState<string | null>(null);
 
@@ -24,10 +24,10 @@ export function SteuerContainer() {
     title:         t('tax.crash'),
     badge:         'CRASH',
     stateOverride: {
-      etfBalance:    state.etfBalance    * FIRE_CONSTANTS.CRASH_FACTOR,
-      cryptoBalance: state.cryptoBalance * FIRE_CONSTANTS.CRASH_FACTOR,
+      etfBalance:  state.etfBalance  * FIRE_CONSTANTS.CRASH_FACTOR,
+      cashBalance: state.cashBalance * FIRE_CONSTANTS.CRASH_FACTOR,
     },
-  }), [t, state.etfBalance, state.cryptoBalance]);
+  }), [t, state.etfBalance, state.cashBalance]);
 
   const hardcoreConfig: PrognoseConfig = useMemo(() => ({
     title:         t('tax.hardcoreFire'),
@@ -39,15 +39,18 @@ export function SteuerContainer() {
 
   const teilzeitFIREDate = useMemo(() => {
     const savings = state.monthlySavingsAmount * FIRE_CONSTANTS.TEILZEIT_FACTOR;
-    return fireService.calcFIREDate(netWorth, savings, fireTarget, weightedReturn);
-  }, [state.monthlySavingsAmount, netWorth, fireTarget, weightedReturn]);
+    return fireService.calcFIREDate(state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, savings, fireTarget);
+  }, [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, state.monthlySavingsAmount, fireTarget]);
 
   const teilzeitDeltaYears = teilzeitFIREDate.year - fireDate.year;
 
   const crashFIREDate = useMemo(() => {
-    const crashedPortfolio = netWorth * FIRE_CONSTANTS.CRASH_FACTOR;
-    return fireService.calcFIREDate(crashedPortfolio, monthlySavings, fireTarget, weightedReturn);
-  }, [netWorth, monthlySavings, fireTarget, weightedReturn]);
+    return fireService.calcFIREDate(
+      state.etfBalance * FIRE_CONSTANTS.CRASH_FACTOR,
+      state.cashBalance * FIRE_CONSTANTS.CRASH_FACTOR,
+      state.etfRate, state.cashRate, monthlySavings, fireTarget,
+    );
+  }, [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, fireTarget]);
 
   const crashDeltaMonths = Math.round(
     (crashFIREDate.year - fireDate.year) * 12
@@ -57,9 +60,9 @@ export function SteuerContainer() {
   const hardcoreFIREDate = useMemo(() => {
     const hardcoreExpenses = state.fixedExpenses + state.pkvContribution
       + state.variableExpenses * FIRE_CONSTANTS.HARDCORE_FIRE_FACTOR;
-    const hardcoreTarget = (hardcoreExpenses * 12) / FIRE_CONSTANTS.SWR_RATE;
-    return fireService.calcFIREDate(netWorth, monthlySavings, hardcoreTarget, weightedReturn);
-  }, [state.fixedExpenses, state.pkvContribution, state.variableExpenses, netWorth, monthlySavings, weightedReturn]);
+    const hardcoreTarget = (hardcoreExpenses * 12) / (state.etfWithdrawalRate / 100);
+    return fireService.calcFIREDate(state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, hardcoreTarget);
+  }, [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, state.fixedExpenses, state.pkvContribution, state.variableExpenses, state.etfWithdrawalRate, monthlySavings]);
 
   const hardcoreDeltaYears = hardcoreFIREDate.year - fireDate.year;
 

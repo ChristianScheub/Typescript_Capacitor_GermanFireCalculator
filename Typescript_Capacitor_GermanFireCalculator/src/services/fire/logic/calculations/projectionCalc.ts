@@ -1,31 +1,41 @@
 import type { FireState } from '../../../../types/fire/models/FireState';
-import { FIRE_CONSTANTS }  from '../fireConfig';
 
 export function calcMonthlySavings(state: FireState): number {
   return state.monthlySavingsAmount;
 }
 
-export function calcFIREDate(
-  startCapital:   number,
-  monthlySavings: number,
-  fireTarget:     number,
-  annualReturn:   number = FIRE_CONSTANTS.ANNUAL_RETURN,
-): { year: number; month: string } {
-  const monthlyReturn = annualReturn / 12;
-  let capital = startCapital;
-  let months  = 0;
+const MONTH_NAMES = [
+  'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez',
+];
 
-  while (capital < fireTarget && months < 600) {
-    capital = capital * (1 + monthlyReturn) + monthlySavings;
+/**
+ * Simulates month-by-month growth of ETF and Cash separately until total >= fireTarget.
+ * Monthly savings are added exclusively to ETF.
+ * Cash grows only via interest — no savings added, no principal withdrawn.
+ */
+export function calcFIREDate(
+  etfBalance:    number,
+  cashBalance:   number,
+  etfRate:       number,   // annual return % (e.g. 7)
+  cashRate:      number,   // annual interest % (e.g. 2)
+  monthlySavings: number,
+  fireTarget:    number,
+): { year: number; month: string } {
+  const etfMonthly  = etfRate  / 100 / 12;
+  const cashMonthly = cashRate / 100 / 12;
+
+  let etf  = etfBalance;
+  let cash = cashBalance;
+  let months = 0;
+
+  while (etf + cash < fireTarget && months < 600) {
+    etf  = etf  * (1 + etfMonthly)  + monthlySavings;
+    cash = cash * (1 + cashMonthly);
     months++;
   }
 
-  const fireDate   = new Date();
+  const fireDate = new Date();
   fireDate.setMonth(fireDate.getMonth() + months);
-
-  const MONTH_NAMES = [
-    'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez',
-  ];
   return { year: fireDate.getFullYear(), month: MONTH_NAMES[fireDate.getMonth()] };
 }

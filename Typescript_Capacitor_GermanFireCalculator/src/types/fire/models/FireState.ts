@@ -3,12 +3,11 @@ export interface FireState {
   monthlySavingsAmount: number;  // € / Monat
 
   // II. Portfolio
-  etfBalance:    number;  // €
-  etfRate:       number;  // % p.a.
-  cashBalance:   number;  // €
-  cashRate:      number;  // % p.a.
-  cryptoBalance: number;  // €
-  cryptoRate:    number;  // % p.a.
+  etfBalance:        number;  // €
+  etfRate:           number;  // % p.a. (erwartete Rendite für Projektion)
+  etfWithdrawalRate: number;  // % p.a. (sichere Entnahmerate)
+  cashBalance:       number;  // €
+  cashRate:          number;  // % p.a. (nur Zinsen zählen, kein Kapitalverzehr)
 
   // III. Ruhestand Budget
   fixedExpenses:    number;  // € / Monat (Fixkosten OHNE Krankenversicherung)
@@ -17,7 +16,7 @@ export interface FireState {
   // IV. KV & Steuer
   isPkvUser:        boolean;
   pkvContribution:  number;  // € / Monat
-  hasKirchensteuer: boolean;
+  assetTaxRate:     number;  // % — pauschale Steuer auf Kapitalerträge (z. B. 26.375)
 
   // V. Rente
   currentAge:    number;  // Jahre

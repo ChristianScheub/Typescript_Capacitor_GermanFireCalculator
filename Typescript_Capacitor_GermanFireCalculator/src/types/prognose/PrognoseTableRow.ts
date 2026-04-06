@@ -1,9 +1,15 @@
 export interface PrognoseTableRow {
   year: number;
-  valueFormatted: string;
-  incomeFormatted: string;
+  // Wealth sub-lines
+  totalValueFormatted: string;
+  etfValueFormatted:   string;
+  cashValueFormatted:  string;
+  // Income / withdrawal columns
+  incomeFormatted:     string;
+  withdrawalFormatted: string;
+  // Display helpers
   rowClassName: string;
-  isToday: boolean;
-  isFire: boolean;
+  isToday:  boolean;
+  isFire:   boolean;
   isPension: boolean;
 }
