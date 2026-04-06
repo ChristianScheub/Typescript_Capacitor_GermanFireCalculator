@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { FireProvider }      from './context/FireContext';
-import { BottomNav }         from './ui/navigation/BottomNav';
-import { Dashboard }         from './screens/Dashboard';
-import { Planner }           from './screens/Planner';
-import { SteuerEngine }      from './screens/SteuerEngine';
-import { Menu }              from './screens/Menu';
-import { PrognoseScreen }    from './screens/PrognoseScreen';
-import type { Tab }          from './types/navigation/Tab';
-import type { PrognoseConfig } from './types/prognose/PrognoseConfig';
+import { useState }                    from 'react';
+import { FireProvider }               from './context/FireContext';
+import { BottomNav }                  from './ui/navigation/BottomNav';
+import { DashboardContainer }         from './container/Dashboard/DashboardContainer';
+import { PlannerContainer }           from './container/Planner/PlannerContainer';
+import { SteuerContainer }            from './container/Steuer/SteuerContainer';
+import { PrognoseContainer }          from './container/Prognose/PrognoseContainer';
+import { Menu }                       from './views/MenuView';
+import type { Tab }                   from './types/navigation/Tab';
+import type { PrognoseConfig }        from './types/prognose/PrognoseConfig';
 import './App.css';
 
 function AppShell() {
@@ -26,14 +26,14 @@ function AppShell() {
     <div className="app-shell">
       <main className="app-main">
         {prognoseConfig ? (
-          <PrognoseScreen config={prognoseConfig} onBack={closePrognose} />
+          <PrognoseContainer config={prognoseConfig} onBack={closePrognose} />
         ) : (
           <>
             {activeTab === 'dashboard' && (
-              <Dashboard onTabChange={handleTabChange} onNavigateToPrognose={navigateToPrognose} />
+              <DashboardContainer onTabChange={handleTabChange} onNavigateToPrognose={navigateToPrognose} />
             )}
-            {activeTab === 'planner'   && <Planner />}
-            {activeTab === 'scenarios' && <SteuerEngine />}
+            {activeTab === 'planner'   && <PlannerContainer />}
+            {activeTab === 'scenarios' && <SteuerContainer />}
             {activeTab === 'menu'      && <Menu />}
           </>
         )}

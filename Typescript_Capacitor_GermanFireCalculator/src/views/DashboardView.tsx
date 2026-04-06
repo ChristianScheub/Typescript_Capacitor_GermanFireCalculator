@@ -1,30 +1,38 @@
-import { useFireContext }             from '../context/FireContext';
-import { ProgressRing }              from '../ui/charts/ProgressRing';
-import { BarChart }                  from '../ui/charts/BarChart';
-import { fmtCurrency, fmtPercent }   from '../services/fire';
-import type { Tab }                  from '../types/navigation/Tab';
-import type { PrognoseConfig }       from '../types/prognose/PrognoseConfig';
+import { useTranslation }     from 'react-i18next';
+import { ProgressRing }       from '../ui/charts/ProgressRing';
+import { BarChart }           from '../ui/charts/BarChart';
+import type { ChartDataPoint } from '../types/fire/models/ChartDataPoint';
+import type { Tab }            from '../types/navigation/Tab';
+import type { PrognoseConfig } from '../types/prognose/PrognoseConfig';
 
-interface DashboardProps {
-  onTabChange:          (tab: Tab) => void;
-  onNavigateToPrognose: (cfg: PrognoseConfig) => void;
+interface DashboardViewProps {
+  firePercentageRounded:   number;
+  firePercentage:          number;
+  fireDateMonth:           string;
+  fireDateYear:            number;
+  netWorthFormatted:       string;
+  growthBadge:             string;
+  monthlySavingsFormatted: string;
+  assetIncomeFormatted:    string;
+  chartData:               ChartDataPoint[];
+  onTabChange:             (tab: Tab) => void;
+  onNavigateToPrognose:    (cfg: PrognoseConfig) => void;
 }
 
-export function Dashboard({ onTabChange, onNavigateToPrognose }: DashboardProps) {
-  const {
-    netWorth,
-    netSWR,
-    firePercentage,
-    fireDate,
-    chartData,
-    monthlySavings,
-  } = useFireContext();
-
-  // chartMode entfernt, da nur noch kumuliert angezeigt wird
-
-  const growthBadge = netWorth > 0
-    ? fmtPercent((monthlySavings / netWorth) * 100, 1)
-    : '0,0';
+export function DashboardView({
+  firePercentageRounded,
+  firePercentage,
+  fireDateMonth,
+  fireDateYear,
+  netWorthFormatted,
+  growthBadge,
+  monthlySavingsFormatted,
+  assetIncomeFormatted,
+  chartData,
+  onTabChange,
+  onNavigateToPrognose,
+}: DashboardViewProps) {
+  const { t } = useTranslation();
 
   return (
     <div className="screen">
@@ -35,11 +43,11 @@ export function Dashboard({ onTabChange, onNavigateToPrognose }: DashboardProps)
             <rect x="3" y="14" width="4" height="8"/><rect x="10" y="10" width="4" height="12"/><rect x="17" y="6" width="4" height="16"/>
             <line x1="4" y1="9" x2="20" y2="3"/>
           </svg>
-          <span>FIRE LEDGER</span>
+          <span>{t('dashboard.title')}</span>
         </div>
         <button className="icon-btn" aria-label="Hilfe">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <circle cx="12" cy="12" r="10"/><path d={t('dashboard.icon1')} />
             <line x1="12" y1="17" x2="12.01" y2="17" strokeWidth="3" strokeLinecap="round"/>
           </svg>
         </button>
@@ -48,9 +56,9 @@ export function Dashboard({ onTabChange, onNavigateToPrognose }: DashboardProps)
       <div className="screen__content">
         <section className="hero-section">
           <p className="label-overline">FINANZIELLE UNABHÄNGIGKEIT</p>
-          <h1 className="hero-heading">{Math.round(firePercentage)}% bereit für<br />FIRE.</h1>
+          <h1 className="hero-heading">{firePercentageRounded}% bereit für<br />FIRE.</h1>
           <p className="hero-subtitle">
-            Voraussichtliche Freiheit:&nbsp;<strong>{fireDate.month} {fireDate.year}</strong>
+            Voraussichtliche Freiheit:&nbsp;<strong>{fireDateMonth} {fireDateYear}</strong>
           </p>
         </section>
 
@@ -78,19 +86,19 @@ export function Dashboard({ onTabChange, onNavigateToPrognose }: DashboardProps)
               <span className="badge badge--positive">+{growthBadge}%</span>
             </div>
             <p className="kpi-card__label">NETTOVERMÖGEN</p>
-            <p className="kpi-card__value">{fmtCurrency(netWorth)}&thinsp;€</p>
+            <p className="kpi-card__value">{netWorthFormatted}&thinsp;€</p>
           </div>
 
           <div className="card kpi-card">
             <div className="kpi-card__header">
               <div className="kpi-icon kpi-icon--teal">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                  <path d={t('dashboard.icon2')} />
                 </svg>
               </div>
             </div>
-            <p className="kpi-card__label">SPARRATE</p>
-            <p className="kpi-card__value">{fmtCurrency(monthlySavings)}&thinsp;€<span className="kpi-card__unit">/Monat</span></p>
+            <p className="kpi-card__label">{t('planner.savingsRate')}</p>
+            <p className="kpi-card__value">{monthlySavingsFormatted}&thinsp;€<span className="kpi-card__unit">/Monat</span></p>
           </div>
 
           <div className="card kpi-card">
@@ -101,19 +109,19 @@ export function Dashboard({ onTabChange, onNavigateToPrognose }: DashboardProps)
                 </svg>
               </div>
             </div>
-            <p className="kpi-card__label">SICHERE ENTNAHME</p>
-            <p className="kpi-card__value">{fmtCurrency(netSWR)}&thinsp;€<span className="kpi-card__unit">/Monat</span></p>
+            <p className="kpi-card__label">EINK. AUS ASSETS</p>
+            <p className="kpi-card__value">{assetIncomeFormatted}&thinsp;€<span className="kpi-card__unit">/Monat</span></p>
           </div>
         </div>
 
         <button
           className="card chart-card chart-card--clickable"
           onClick={() => onNavigateToPrognose({ title: 'Prognose', badge: 'BASIS' })}
-          aria-label="Prognose öffnen"
+          aria-label={t('dashboard.openPrognosis')}
         >
           <div className="chart-card__header">
             <div>
-              <h2 className="chart-card__title">Prognostiziertes Vermögen</h2>
+              <h2 className="chart-card__title">{t('dashboard.title')}</h2>
               <p className="chart-card__subtitle">Wachstum inkl. Zinseszins und gesetzlicher Rente</p>
             </div>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="chart-card__chevron">
@@ -132,7 +140,7 @@ export function Dashboard({ onTabChange, onNavigateToPrognose }: DashboardProps)
           </div>
           <h3 className="tip-card__title">Sparrate um 50€ erhöhen?</h3>
           <p className="tip-card__body">
-            Dies würde Ihren FIRE-Termin um 7 Monate nach vorne verschieben (Oktober&nbsp;{fireDate.year - 1}).
+            Dies würde Ihren FIRE-Termin um 7 Monate nach vorne verschieben (Oktober&nbsp;{fireDateYear - 1}).
           </p>
         </div>
 

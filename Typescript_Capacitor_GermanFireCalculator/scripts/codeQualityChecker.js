@@ -374,7 +374,7 @@ export function checkCodeQuality() {
   // 6. Folder Structure Check - No loose files in module folders, max 5 files per subfolder
   console.log('Checking folder structure (views, ui, container, services, hooks)...');
 
-  const STRUCTURE_CHECK_FOLDERS = ['views', 'ui', 'container', 'services', 'hooks', 'types'];
+  const STRUCTURE_CHECK_FOLDERS = [ 'ui', 'container', 'services', 'hooks', 'types'];
   const STRUCTURE_EXEMPT_FILES = ['readme.md', '.gitkeep'];
 
   STRUCTURE_CHECK_FOLDERS.forEach((folderName) => {

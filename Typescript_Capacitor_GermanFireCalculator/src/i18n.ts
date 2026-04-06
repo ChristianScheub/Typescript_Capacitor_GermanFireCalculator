@@ -1,16 +1,10 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import de from './i18n/locales/de.json';
 
 const resources = {
-  en: {
-    translation: {
-      "welcome": "Welcome to the Fire Calculator!"
-    }
-  },
   de: {
-    translation: {
-      "welcome": "Willkommen beim Feuerrechner!"
-    }
+    translation: de
   }
 };
 
@@ -18,10 +12,10 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'en', // Default language
-    fallbackLng: 'en',
+    lng: 'de', // Standardsprache auf Deutsch
+    fallbackLng: 'de',
     interpolation: {
-      escapeValue: false // React already escapes values
+      escapeValue: false // React macht das bereits
     }
   });
 

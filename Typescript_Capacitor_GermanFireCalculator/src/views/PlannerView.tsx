@@ -1,5 +1,12 @@
-import { useFireContext }   from '../context/FireContext';
-import { fmtPercent, FIRE_CONSTANTS } from '../services/fire';
+import { useTranslation } from 'react-i18next';
+import type { FireState }  from '../types/fire/models/FireState';
+
+const SPAR_DYNAMIK = [
+  { value: '0', label: 'planner.noAdjustment' },
+  { value: '1', label: 'planner.onePercent' },
+  { value: '2', label: 'planner.twoPercent' },
+  { value: '3', label: 'planner.threePercent' },
+];
 
 function NumericInput({
   label, value, unit, onChange, hint,
@@ -48,15 +55,24 @@ function SelectInput({
   );
 }
 
-const SPAR_DYNAMIK = [
-  { value: '0', label: 'Keine Anpassung' },
-  { value: '1', label: '1 % p.a.' },
-  { value: '2', label: '2 % (Inflationsausgleich)' },
-  { value: '3', label: '3 % p.a.' },
-];
+interface PlannerViewProps {
+  state:                    FireState;
+  updateField:              <K extends keyof FireState>(key: K, value: FireState[K]) => void;
+  firePercentageRounded:    number;
+  fireProgressWidth:        string;
+  kirchensteuerRateDisplay: string;
+  totalFixedWithKVFormatted: string;
+}
 
-export function Planner() {
-  const { state, updateField, firePercentage } = useFireContext();
+export function PlannerView({
+  state,
+  updateField,
+  firePercentageRounded,
+  fireProgressWidth,
+  kirchensteuerRateDisplay,
+  totalFixedWithKVFormatted,
+}: PlannerViewProps) {
+  const { t } = useTranslation();
 
   return (
     <div className="screen">
@@ -67,11 +83,11 @@ export function Planner() {
             <rect x="3" y="14" width="4" height="8"/><rect x="10" y="10" width="4" height="12"/><rect x="17" y="6" width="4" height="16"/>
             <line x1="4" y1="9" x2="20" y2="3"/>
           </svg>
-          <span>FINANZ-CHECK</span>
+          <span>{t('planner.title')}</span>
         </div>
         <button className="icon-btn" aria-label="Hilfe">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <circle cx="12" cy="12" r="10"/><path d={t('planner.icon1')} />
             <line x1="12" y1="17" x2="12.01" y2="17" strokeWidth="3" strokeLinecap="round"/>
           </svg>
         </button>
@@ -83,11 +99,12 @@ export function Planner() {
           <h1 className="page-heading">Die Architektur Ihrer<br />finanziellen Freiheit.</h1>
         </section>
 
+        {/* ── Sparrate ── */}
         <div className="section-card">
           <div className="section-card__header">
             <div>
-              <h2 className="section-card__title">Einnahmen &amp; Sparen</h2>
-              <p className="section-card__subtitle">Ihre monatliche Cashflow-Basis</p>
+              <h2 className="section-card__title">{t('planner.savingsSection')}</h2>
+              <p className="section-card__subtitle">{t('planner.savingsSectionSub')}</p>
             </div>
             <div className="section-icon section-icon--green">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -95,12 +112,42 @@ export function Planner() {
               </svg>
             </div>
           </div>
-          <NumericInput label="BRUTTOEINKOMMEN (P.M.)" value={state.monthlyBrutto} unit="€" onChange={v => updateField('monthlyBrutto', v)} />
-          <NumericInput label="NETTOEINKOMMEN (P.M.)"  value={state.monthlyNetto}  unit="€" onChange={v => updateField('monthlyNetto', v)} />
-          <NumericInput label="SPARRATE (%)"            value={state.savingsRate}   unit="%" onChange={v => updateField('savingsRate', v)} />
-          <SelectInput  label="SPAR-DYNAMIK (P.A.)" value="2" options={SPAR_DYNAMIK} onChange={() => undefined} />
+          <NumericInput
+            label={t('planner.monthlySavings')}
+            value={state.monthlySavingsAmount}
+            unit="€"
+            onChange={v => updateField('monthlySavingsAmount', v)}
+            hint={t('planner.monthlySavingsHint')}
+          />
+          <SelectInput
+            label={t('planner.savingsDynamic')}
+            value="2"
+            options={SPAR_DYNAMIK.map(o => ({ ...o, label: t(o.label) }))}
+            onChange={() => undefined}
+          />
         </div>
 
+        {/* ── Rente & Alter ── */}
+        <div className="section-card">
+          <div className="section-card__header">
+            <div>
+              <h2 className="section-card__title">{t('planner.pensionSection')}</h2>
+              <p className="section-card__subtitle">{t('planner.pensionSectionSub')}</p>
+            </div>
+            <div className="section-icon section-icon--teal">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+            </div>
+          </div>
+          <NumericInput label={t('planner.currentAge')}   value={state.currentAge}    unit={t('planner.years')} onChange={v => updateField('currentAge', v)} />
+          <NumericInput label={t('planner.pensionAge')}   value={state.pensionAge}    unit={t('planner.years')} onChange={v => updateField('pensionAge', v)} />
+          <NumericInput label={t('planner.pensionMonthly')} value={state.pensionMonthly} unit="€" onChange={v => updateField('pensionMonthly', v)}
+            hint={t('planner.pensionMonthlyHint')} />
+        </div>
+
+        {/* ── Portfolio-Mix ── */}
         <div className="section-card">
           <div className="section-card__header">
             <div>
@@ -109,32 +156,51 @@ export function Planner() {
             </div>
             <div className="section-icon section-icon--teal">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/>
+                <path d={t('planner.icon2')}/><path d={t('planner.icon3')}/>
               </svg>
             </div>
           </div>
-          <NumericInput label="ETFs / AKTIEN" value={state.etfBalance} unit="€" onChange={v => updateField('etfBalance', v)} />
-          <NumericInput label="ERWARTETE RENDITE ETF (P.A.)" value={state.etfRate} unit="%" onChange={v => updateField('etfRate', v)}
-            hint="Steuer: 25% Abgeltungssteuer + Soli (Teilfreistellung 30% bei Aktien-ETFs)." />
-          <NumericInput label="CASH / TAGESGELD" value={state.cashBalance} unit="€" onChange={v => updateField('cashBalance', v)} />
-          <NumericInput label="ZINSSATZ TAGESGELD (P.A.)" value={state.cashRate} unit="%" onChange={v => updateField('cashRate', v)}
-            hint="Steuer: Zinserträge unterliegen der Abgeltungssteuer. 1.000€ Freibetrag p.P." />
+          <NumericInput label={t('planner.etfStocks')} value={state.etfBalance} unit="€" onChange={v => updateField('etfBalance', v)} />
+          <NumericInput label={t('planner.expectedReturnEtf')} value={state.etfRate} unit="%" onChange={v => updateField('etfRate', v)}
+            hint={t('planner.taxEtf')} />
+          <NumericInput label={t('planner.cash')} value={state.cashBalance} unit="€" onChange={v => updateField('cashBalance', v)} />
+          <NumericInput label={t('planner.interestRateCash')} value={state.cashRate} unit="%" onChange={v => updateField('cashRate', v)}
+            hint={t('planner.taxCash')} />
           <NumericInput label="KRYPTO" value={state.cryptoBalance} unit="€" onChange={v => updateField('cryptoBalance', v)} />
-          <NumericInput label="ERWARTETE RENDITE KRYPTO (P.A.)" value={state.cryptoRate} unit="%" onChange={v => updateField('cryptoRate', v)}
-            hint="Steuer: Steuerfrei nach 1 Jahr Haltefrist. Unter 600€ Gewinn steuerfrei." />
+          <NumericInput label={t('planner.expectedReturnCrypto')} value={state.cryptoRate} unit="%" onChange={v => updateField('cryptoRate', v)}
+            hint={t('planner.taxCrypto')} />
         </div>
 
+        {/* ── Ruhestand Budget ── */}
         <div className="section-card">
           <div className="section-card__header">
-            <div><h2 className="section-card__title">Fixkosten</h2></div>
+            <div>
+              <h2 className="section-card__title">{t('planner.retirementBudgetTitle')}</h2>
+              <p className="section-card__subtitle">{t('planner.retirementBudgetSub')}</p>
+            </div>
             <div className="section-icon section-icon--orange">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/>
               </svg>
             </div>
           </div>
-          <NumericInput label="BUDGET IM RUHESTAND"       value={state.pensionExpenses} unit="€" onChange={v => updateField('pensionExpenses', v)}
-            hint="Berücksichtigen Sie private Krankenversicherung &amp; Inflation." />
+          <NumericInput
+            label={t('planner.fixedExpenses')}
+            value={state.fixedExpenses}
+            unit="€"
+            onChange={v => updateField('fixedExpenses', v)}
+            hint={t('planner.fixedExpensesNote')}
+          />
+          <em className="field__hint field__hint--total">
+            {t('planner.fixedTotalHint')}: {totalFixedWithKVFormatted} € / Monat
+          </em>
+          <NumericInput
+            label={t('planner.variableExpenses')}
+            value={state.variableExpenses}
+            unit="€"
+            onChange={v => updateField('variableExpenses', v)}
+            hint={t('planner.variableExpensesNote')}
+          />
         </div>
 
         {/* ── KV-Check ── */}
@@ -146,7 +212,7 @@ export function Planner() {
             </div>
             <div className="section-icon section-icon--teal">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d={t('planner.icon4')} />
               </svg>
             </div>
           </div>
@@ -195,7 +261,7 @@ export function Planner() {
           <div className="toggle-row">
             <div>
               <p className="toggle-row__title">Kirchensteuer</p>
-              <p className="toggle-row__hint">Regelsatz {FIRE_CONSTANTS.KIRCHENSTEUER_RATE * 100}% (BY/BW) bzw. 9%</p>
+              <p className="toggle-row__hint">Regelsatz {kirchensteuerRateDisplay}% (BY/BW) bzw. 9%</p>
             </div>
             <button
               className={`toggle${state.hasKirchensteuer ? ' toggle--on' : ''}`}
@@ -229,10 +295,10 @@ export function Planner() {
       <div className="planner-footer">
         <div className="fire-status-bar">
           <p className="fire-status-bar__label">AKTUELLER STATUS</p>
-          <p className="fire-status-bar__pct">{Math.round(firePercentage)}%</p>
+          <p className="fire-status-bar__pct">{firePercentageRounded}%</p>
           <p className="fire-status-bar__hint">Ihres finanziellen Fundaments ist gelegt.</p>
           <div className="progress-bar">
-            <div className="progress-bar__fill" style={{ width: `${fmtPercent(firePercentage, 0)}%` }} />
+            <div className="progress-bar__fill" style={{ width: `${fireProgressWidth}` }} />
           </div>
         </div>
       </div>

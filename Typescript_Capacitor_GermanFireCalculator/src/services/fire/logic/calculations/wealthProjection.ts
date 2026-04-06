@@ -8,6 +8,7 @@ export function calcProjectedWealth(
   fireYear:        number,
   targetYears:     number[],
   annualReturn:    number = FIRE_CONSTANTS.ANNUAL_RETURN,
+  pensionYear?:    number,
 ): ChartDataPoint[] {
   const currentYear   = new Date().getFullYear();
   const monthlyReturn = annualReturn / 12;
@@ -26,9 +27,10 @@ export function calcProjectedWealth(
     }
 
     const label    = year === currentYear ? 'HEUTE' : String(year);
+    const resolvedPensionYear = pensionYear ?? fireYear + FIRE_CONSTANTS.YEARS_TO_PENSION;
     const sublabel = year === fireYear
       ? '(FIRE)'
-      : year === fireYear + FIRE_CONSTANTS.YEARS_TO_PENSION
+      : year === resolvedPensionYear
       ? '(RENTE)'
       : undefined;
 

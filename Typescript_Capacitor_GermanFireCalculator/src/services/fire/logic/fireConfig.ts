@@ -16,4 +16,5 @@ export const FIRE_CONSTANTS = {
   STATUTORY_PENSION_MONTHLY: 1450,  // Geschätzte gesetzl. Rente p.m. (Orientierungswert)
   CRASH_FACTOR:              0.8,   // Depot-Abschlag im Börsen-Sturm-Szenario
   TEILZEIT_FACTOR:           0.8,   // Sparraten-Reduktion im Teilzeit-Turbo-Szenario
+  HARDCORE_FIRE_FACTOR:      0.5,   // Variablekosten-Reduktion im Hardcore-FIRE-Szenario
 } as const;

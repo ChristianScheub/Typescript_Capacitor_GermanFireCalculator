@@ -2,7 +2,7 @@ import type { FireState } from '../../../../types/fire/models/FireState';
 import { FIRE_CONSTANTS }  from '../fireConfig';
 
 export function calcMonthlySavings(state: FireState): number {
-  return state.monthlyNetto * (state.savingsRate / 100);
+  return state.monthlySavingsAmount;
 }
 
 export function calcFIREDate(

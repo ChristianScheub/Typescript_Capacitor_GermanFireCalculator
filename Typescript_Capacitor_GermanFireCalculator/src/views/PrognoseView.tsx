@@ -1,0 +1,186 @@
+import { useTranslation }         from 'react-i18next';
+import type { PrognoseConfig }    from '../types/prognose/PrognoseConfig';
+import type { PrognoseTableRow }  from '../types/prognose/PrognoseTableRow';
+
+interface PrognoseViewProps {
+  config:               PrognoseConfig;
+  onBack:               () => void;
+  // Hero section
+  fireTargetText:       string;
+  firePercentageText:   string;
+  yearsToFIRE:          number;
+  isOnTrack:            boolean;
+  progressWidth:        number;
+  // Milestones
+  currentYear:          number;
+  fireYear:             number;
+  netWorthFormatted:    string;
+  netSWRFormatted:      string;
+  pensionYear:               number;
+  pensionMonthlyFormatted:   string;
+  // Table
+  realReturnPct:        number;
+  weightedReturnText:   string;
+  tableRows:            PrognoseTableRow[];
+}
+
+export function PrognoseView({
+  config,
+  onBack,
+  fireTargetText,
+  firePercentageText,
+  yearsToFIRE,
+  isOnTrack,
+  progressWidth,
+  currentYear,
+  fireYear,
+  netWorthFormatted,
+  netSWRFormatted,
+  pensionYear,
+  pensionMonthlyFormatted,
+  realReturnPct,
+  weightedReturnText,
+  tableRows,
+}: PrognoseViewProps) {
+  const { t } = useTranslation();
+
+  return (
+    <div className="screen">
+      <header className="app-header">
+        <button className="icon-btn prognose-back" onClick={onBack} aria-label="Zurück">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <div className="app-header__brand">
+          <span>PROGNOSE</span>
+          {config.badge && <span className="prognose-header-badge">{config.badge}</span>}
+        </div>
+        <button className="icon-btn" aria-label="Hilfe">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" /><path d={t('prognosis.icon1')} />
+            <line x1="12" y1="17" x2="12.01" y2="17" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+        </button>
+      </header>
+
+      <div className="screen__content">
+        {/* ── Hero Card ── */}
+        <div className="prognose-hero">
+          <p className="prognose-hero__overline">{t('prognosis.wealth')}</p>
+          <h1 className="prognose-hero__title">
+            Ziel-Vermögen:<br />{fireTargetText}
+          </h1>
+          <div className="prognose-hero__stats">
+            <div className="prognose-hero__stat">
+              <p className="prognose-hero__stat-label">FORTSCHRITT</p>
+              <p className="prognose-hero__stat-value">{firePercentageText}%</p>
+            </div>
+            <div className="prognose-hero__divider" />
+            <div className="prognose-hero__stat">
+              <p className="prognose-hero__stat-label">RESTZEIT</p>
+              <p className="prognose-hero__stat-value">{yearsToFIRE} Jahre</p>
+            </div>
+          </div>
+          <div className={`prognose-hero__status${isOnTrack ? ' prognose-hero__status--on-track' : ''}`}>
+            <span className="prognose-hero__status-icon">{isOnTrack ? '⚡' : '⚠'}</span>
+            <span>{isOnTrack ? t('prognosis.onTrack') : t('prognosis.slightlyDelayed')}</span>
+          </div>
+          <div className="prognose-hero__bar">
+            <div className="prognose-hero__bar-fill" style={{ width: `${progressWidth}%` }} />
+          </div>
+        </div>
+
+        {/* ── Milestone Cards ── */}
+        <div className="milestone-list">
+          <div className="milestone-card">
+            <div className="milestone-icon milestone-icon--default">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+            </div>
+            <div className="milestone-info">
+              <p className="milestone-label">HEUTE</p>
+              <p className="milestone-year">{currentYear}</p>
+              <p className="milestone-sub">Startpunkt · {netWorthFormatted} €</p>
+            </div>
+          </div>
+
+          <div className="milestone-card milestone-card--fire">
+            <div className="milestone-icon milestone-icon--fire">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div className="milestone-info">
+              <p className="milestone-label">FIRE REACHED</p>
+              <p className="milestone-year">{fireYear}</p>
+              <p className="milestone-sub">Entnahme möglich · {netSWRFormatted} € / Monat</p>
+            </div>
+          </div>
+
+          <div className="milestone-card">
+            <div className="milestone-icon milestone-icon--default">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="1" y="4" width="22" height="16" rx="2" /><line x1="1" y1="10" x2="23" y2="10" />
+              </svg>
+            </div>
+            <div className="milestone-info">
+              <p className="milestone-label">RENTE</p>
+              <p className="milestone-year">{pensionYear}</p>
+              <p className="milestone-sub">Zusatz-Einkommen · +{pensionMonthlyFormatted} € / Monat</p>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Table ── */}
+        <div className="prognose-table-section">
+          <h2 className="prognose-table-title">Vermögensentwicklung</h2>
+          <p className="prognose-table-subtitle">
+            Projektion basierend auf {realReturnPct}% Realrendite p.a. (gewichtet)
+          </p>
+
+          <div className="prognose-table">
+            <div className="prognose-table__row prognose-table__row--header">
+              <span>JAHR</span>
+              <span>{t('prognosis.wealth')}</span>
+              <span>{t('prognosis.incomeFromAssets')}</span>
+            </div>
+
+            {tableRows.map(row => (
+              <div key={row.year} className={row.rowClassName}>
+                <span className="prognose-table__year">
+                  {row.year}
+                  {row.isToday  && <span className="prognose-table__tag prognose-table__tag--heute">HEUTE</span>}
+                  {row.isFire   && <span className="prognose-table__tag prognose-table__tag--fire">FIRE</span>}
+                  {row.isPension && <span className="prognose-table__tag prognose-table__tag--rente">RENTE</span>}
+                </span>
+                <span className="prognose-table__value">{row.valueFormatted} €</span>
+                <span className="prognose-table__income">{row.incomeFormatted} €</span>
+              </div>
+            ))}
+          </div>
+
+          <p className="prognose-table__footnote">
+            Einkommen aus Assets = Portfoliowert × {weightedReturnText}% p.a. (gewichtete Rendite)
+          </p>
+        </div>
+
+        {/* ── Disclaimer ── */}
+        <div className="prognose-disclaimer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" strokeWidth="3" strokeLinecap="round" />
+          </svg>
+          <p className="prognose-disclaimer__text">
+            Diese Prognose dient zur Orientierung. Berechnungen erfolgen inflationsbereinigt (Realwerte).
+            Tatsächliche Marktvolatilität kann zu Abweichungen führen. Überprüfen Sie Ihre Annahmen
+            regelmäßig in den <strong>Scenarios</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}

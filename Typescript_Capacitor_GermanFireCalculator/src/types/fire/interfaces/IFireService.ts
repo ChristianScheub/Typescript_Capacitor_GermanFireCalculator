@@ -24,6 +24,7 @@ export interface IFireService {
     fireYear:        number,
     targetYears:     number[],
     annualReturn?:   number,
+    pensionYear?:    number,
   ): ChartDataPoint[];
   getDefaultState(): FireState;
 }

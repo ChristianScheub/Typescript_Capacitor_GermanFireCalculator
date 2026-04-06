@@ -1,15 +1,9 @@
-import { useMemo } from 'react';
-import { useFireContext }                      from '../context/FireContext';
-import { fireService, fmtCurrency, FIRE_CONSTANTS } from '../services/fire';
-import type { PrognoseConfig }                 from '../types/prognose/PrognoseConfig';
-import type { ChartDataPoint }                 from '../types/fire/models/ChartDataPoint';
-
-interface Props {
-  config: PrognoseConfig;
-  onBack: () => void;
-}
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+import { useMemo }                                        from 'react';
+import { useTranslation }                                from 'react-i18next';
+import { useFireContext }                                from '../../context/FireContext';
+import { fireService, fmtCurrency, FIRE_CONSTANTS }      from '../../services/fire';
+import type { PrognoseConfig }                           from '../../types/prognose/PrognoseConfig';
+import type { PrognoseTableRow }                         from '../../types/prognose/PrognoseTableRow';
 
 function fmtCompactK(v: number): string {
   if (v >= 1_000_000) return (v / 1_000_000).toFixed(1).replace('.', ',') + ' Mio.';
@@ -17,14 +11,12 @@ function fmtCompactK(v: number): string {
   return String(Math.round(v));
 }
 
-function fmtAssetIncome(portfolioValue: number, weightedReturn: number): string {
-  const annual = portfolioValue * weightedReturn;
-  return fmtCurrency(Math.round(annual)) + ' €';
+interface Props {
+  config: PrognoseConfig;
 }
 
-// ─── Shared content (used inline in Szenarien and standalone in PrognoseScreen) ──
-
-export function PrognoseContent({ config }: { config: PrognoseConfig }) {
+export function PrognoseContentContainer({ config }: Props) {
+  const { t } = useTranslation();
   const { state: baseState, fireDate: baseFIREDate } = useFireContext();
 
   const state = useMemo(
@@ -32,51 +24,56 @@ export function PrognoseContent({ config }: { config: PrognoseConfig }) {
     [baseState, config.stateOverride],
   );
 
-  const netWorth        = useMemo(() => fireService.calcNetWorth(state),                                    [state]);
-  const fireTarget      = useMemo(() => fireService.calcFireTarget(state),                                   [state]);
-  const firePercentage  = useMemo(() => fireService.calcFirePercentage(netWorth, fireTarget),               [netWorth, fireTarget]);
-  const monthlySavings  = useMemo(() => fireService.calcMonthlySavings(state),                              [state]);
-  const weightedReturn  = useMemo(() => fireService.calcWeightedReturn(state),                              [state]);
+  const netWorth        = useMemo(() => fireService.calcNetWorth(state),                                                [state]);
+  const fireTarget      = useMemo(() => fireService.calcFireTarget(state),                                              [state]);
+  const firePercentage  = useMemo(() => fireService.calcFirePercentage(netWorth, fireTarget),                           [netWorth, fireTarget]);
+  const monthlySavings  = useMemo(() => fireService.calcMonthlySavings(state),                                          [state]);
+  const weightedReturn  = useMemo(() => fireService.calcWeightedReturn(state),                                          [state]);
   const fireDate        = useMemo(() => fireService.calcFIREDate(netWorth, monthlySavings, fireTarget, weightedReturn), [netWorth, monthlySavings, fireTarget, weightedReturn]);
-  const grossSWR        = useMemo(() => fireService.calcGrossSWR(netWorth),                                 [netWorth]);
-  const netSWR          = useMemo(() => fireService.calcNetSWR(state, grossSWR),                            [state, grossSWR]);
+  const grossSWR        = useMemo(() => fireService.calcGrossSWR(netWorth),                                             [netWorth]);
+  const netSWR          = useMemo(() => fireService.calcNetSWR(state, grossSWR),                                        [state, grossSWR]);
 
-  const currentYear  = new Date().getFullYear();
-  const pensionYear  = fireDate.year + FIRE_CONSTANTS.YEARS_TO_PENSION;
-  const yearsToFIRE  = Math.max(0, fireDate.year - currentYear);
-  const isOnTrack    = fireDate.year <= baseFIREDate.year + 3;
+  const currentYear     = new Date().getFullYear();
+  const pensionYear     = currentYear + Math.max(0, state.pensionAge - state.currentAge);
+  const yearsToFIRE     = Math.max(0, fireDate.year - currentYear);
+  const isOnTrack       = fireDate.year <= baseFIREDate.year + 3;
+  const realReturnPct   = Math.round((weightedReturn - FIRE_CONSTANTS.ANNUAL_INFLATION) * 100);
+  const monthlyWithdraw = state.fixedExpenses + state.pkvContribution + state.variableExpenses;
 
   const tableYears = useMemo(() => {
     const raw = [
-      currentYear,
-      currentYear + 1,
-      currentYear + 2,
-      currentYear + 6,
-      currentYear + 11,
-      fireDate.year,
-      fireDate.year + 4,
-      fireDate.year + 9,
-      pensionYear,
+      currentYear, currentYear + 1, currentYear + 2, currentYear + 6, currentYear + 11,
+      fireDate.year, fireDate.year + 4, fireDate.year + 9, pensionYear,
     ];
     return [...new Set(raw)].filter(y => y >= currentYear).sort((a, b) => a - b);
   }, [currentYear, fireDate.year, pensionYear]);
 
   const tableData = useMemo(
     () => fireService.calcProjectedWealth(
-      netWorth, monthlySavings, state.pensionExpenses, fireDate.year, tableYears, weightedReturn,
+      netWorth, monthlySavings, monthlyWithdraw, fireDate.year, tableYears, weightedReturn,
     ),
-    [netWorth, monthlySavings, state.pensionExpenses, fireDate.year, tableYears, weightedReturn],
+    [netWorth, monthlySavings, monthlyWithdraw, fireDate.year, tableYears, weightedReturn],
   );
 
-  const realReturnPct = Math.round(
-    (weightedReturn - FIRE_CONSTANTS.ANNUAL_INFLATION) * 100,
-  );
+  const tableRows: PrognoseTableRow[] = tableData.map(row => {
+    const isFire    = row.year === fireDate.year;
+    const isPension = row.year === pensionYear;
+    return {
+      year:            row.year,
+      valueFormatted:  fmtCurrency(row.value),
+      incomeFormatted: fmtCurrency(Math.round(row.value * weightedReturn)),
+      rowClassName:    ['prognose-table__row', isFire ? 'prognose-table__row--fire' : '', isPension ? 'prognose-table__row--pension' : ''].join(' ').trim(),
+      isToday:         row.year === currentYear,
+      isFire,
+      isPension,
+    };
+  });
 
   return (
     <>
       {/* ── Hero Card ── */}
       <div className="prognose-hero">
-        <p className="prognose-hero__overline">GESAMTZIEL &amp; VISION</p>
+        <p className="prognose-hero__overline">{t('prognosis.wealth')}</p>
         <h1 className="prognose-hero__title">
           Ziel-Vermögen:<br />
           {fmtCompactK(fireTarget)} € bis {fireDate.year}
@@ -94,7 +91,7 @@ export function PrognoseContent({ config }: { config: PrognoseConfig }) {
         </div>
         <div className={`prognose-hero__status${isOnTrack ? ' prognose-hero__status--on-track' : ''}`}>
           <span className="prognose-hero__status-icon">{isOnTrack ? '⚡' : '⚠'}</span>
-          <span>{isOnTrack ? 'Auf Kurs' : 'Leicht verzögert'}</span>
+          <span>{isOnTrack ? t('prognosis.onTrack') : t('prognosis.slightlyDelayed')}</span>
         </div>
         <div className="prognose-hero__bar">
           <div className="prognose-hero__bar-fill" style={{ width: `${Math.min(100, firePercentage)}%` }} />
@@ -139,7 +136,7 @@ export function PrognoseContent({ config }: { config: PrognoseConfig }) {
           <div className="milestone-info">
             <p className="milestone-label">RENTE</p>
             <p className="milestone-year">{pensionYear}</p>
-            <p className="milestone-sub">Zusatz-Einkommen · +{fmtCurrency(FIRE_CONSTANTS.STATUTORY_PENSION_MONTHLY)} € / Monat</p>
+            <p className="milestone-sub">Zusatz-Einkommen · +{fmtCurrency(state.pensionMonthly)} € / Monat</p>
           </div>
         </div>
       </div>
@@ -154,39 +151,22 @@ export function PrognoseContent({ config }: { config: PrognoseConfig }) {
         <div className="prognose-table">
           <div className="prognose-table__row prognose-table__row--header">
             <span>JAHR</span>
-            <span>VERMÖGEN</span>
-            <span>EINK. AUS ASSETS</span>
+            <span>{t('prognosis.wealth')}</span>
+            <span>{t('prognosis.incomeFromAssets')}</span>
           </div>
 
-          {tableData.map(row => {
-            const isFire    = row.year === fireDate.year;
-            const isPension = row.year === pensionYear;
-            return (
-              <div
-                key={row.year}
-                className={[
-                  'prognose-table__row',
-                  isFire    ? 'prognose-table__row--fire'    : '',
-                  isPension ? 'prognose-table__row--pension'  : '',
-                ].join(' ').trim()}
-              >
-                <span className="prognose-table__year">
-                  {row.year}
-                  {row.year === currentYear && (
-                    <span className="prognose-table__tag prognose-table__tag--heute">HEUTE</span>
-                  )}
-                  {isFire && (
-                    <span className="prognose-table__tag prognose-table__tag--fire">FIRE</span>
-                  )}
-                  {isPension && (
-                    <span className="prognose-table__tag prognose-table__tag--rente">RENTE</span>
-                  )}
-                </span>
-                <span className="prognose-table__value">{fmtCurrency(row.value)} €</span>
-                <span className="prognose-table__income">{fmtAssetIncome(row.value, weightedReturn)}</span>
-              </div>
-            );
-          })}
+          {tableRows.map(row => (
+            <div key={row.year} className={row.rowClassName}>
+              <span className="prognose-table__year">
+                {row.year}
+                {row.isToday   && <span className="prognose-table__tag prognose-table__tag--heute">HEUTE</span>}
+                {row.isFire    && <span className="prognose-table__tag prognose-table__tag--fire">FIRE</span>}
+                {row.isPension && <span className="prognose-table__tag prognose-table__tag--rente">RENTE</span>}
+              </span>
+              <span className="prognose-table__value">{row.valueFormatted} €</span>
+              <span className="prognose-table__income">{row.incomeFormatted} €</span>
+            </div>
+          ))}
         </div>
 
         <p className="prognose-table__footnote">
@@ -208,36 +188,5 @@ export function PrognoseContent({ config }: { config: PrognoseConfig }) {
         </p>
       </div>
     </>
-  );
-}
-
-// ─── Full Screen (with header + back navigation) ──────────────────────────────
-
-export function PrognoseScreen({ config, onBack }: Props) {
-  return (
-    <div className="screen">
-      {/* ── Header ── */}
-      <header className="app-header">
-        <button className="icon-btn prognose-back" onClick={onBack} aria-label="Zurück">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-        </button>
-        <div className="app-header__brand">
-          <span>PROGNOSE</span>
-          {config.badge && <span className="prognose-header-badge">{config.badge}</span>}
-        </div>
-        <button className="icon-btn" aria-label="Hilfe">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-            <line x1="12" y1="17" x2="12.01" y2="17" strokeWidth="3" strokeLinecap="round" />
-          </svg>
-        </button>
-      </header>
-
-      <div className="screen__content">
-        <PrognoseContent config={config} />
-      </div>
-    </div>
   );
 }

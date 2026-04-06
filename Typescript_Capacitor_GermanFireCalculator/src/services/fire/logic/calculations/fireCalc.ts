@@ -2,7 +2,8 @@ import type { FireState } from '../../../../types/fire/models/FireState';
 import { FIRE_CONSTANTS }  from '../fireConfig';
 
 export function calcFireTarget(state: FireState): number {
-  return (state.pensionExpenses * 12) / FIRE_CONSTANTS.SWR_RATE;
+  const totalMonthlyExpenses = state.fixedExpenses + state.pkvContribution + state.variableExpenses;
+  return (totalMonthlyExpenses * 12) / FIRE_CONSTANTS.SWR_RATE;
 }
 
 export function calcFirePercentage(netWorth: number, fireTarget: number): number {
