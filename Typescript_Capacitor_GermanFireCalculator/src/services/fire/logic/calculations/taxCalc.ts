@@ -1,4 +1,4 @@
-import type { FireState } from '../../../types/fire/models/FireState';
+import type { FireState } from '../../../../types/fire/models/FireState';
 import { FIRE_CONSTANTS }  from '../fireConfig';
 
 /**
@@ -14,7 +14,7 @@ export function calcAbgabenQuote(state: FireState, grossMonthly: number): number
     : grossMonthly * FIRE_CONSTANTS.GKV_RATE;
 
   // Kapitalertragsteuer (Simulationsannahme: 50 % Gewinnanteil)
-  const gainPortion      = grossMonthly * 0.5;
+  const gainPortion      = grossMonthly * FIRE_CONSTANTS.GAIN_RATIO;
   const taxableGain      = gainPortion * (1 - FIRE_CONSTANTS.ETF_TEILFREISTELLUNG);
   const monthlyPausch    = FIRE_CONSTANTS.SPARER_PAUSCHBETRAG / 12;
   const taxBase          = Math.max(0, taxableGain - monthlyPausch);

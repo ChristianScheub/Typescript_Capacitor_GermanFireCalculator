@@ -6,17 +6,18 @@ import { fireService }         from '../services/fire';
 // ─── Context Shape ─────────────────────────────────────────────────────────────
 
 interface FireContextType {
-  state:         FireState;
-  updateField:   <K extends keyof FireState>(key: K, value: FireState[K]) => void;
-  netWorth:      number;
-  grossSWR:      number;
-  netSWR:        number;
-  fireTarget:    number;
+  state:          FireState;
+  updateField:    <K extends keyof FireState>(key: K, value: FireState[K]) => void;
+  netWorth:       number;
+  grossSWR:       number;
+  netSWR:         number;
+  fireTarget:     number;
   firePercentage: number;
-  abgabenQuote:  number;
+  abgabenQuote:   number;
   monthlySavings: number;
-  fireDate:      { year: number; month: string };
-  chartData:     ChartDataPoint[];
+  weightedReturn: number;
+  fireDate:       { year: number; month: string };
+  chartData:      ChartDataPoint[];
 }
 
 const FireContext = createContext<FireContextType | null>(null);
@@ -38,7 +39,8 @@ export function FireProvider({ children }: { children: React.ReactNode }) {
     const firePercentage  = fireService.calcFirePercentage(netWorth, fireTarget);
     const abgabenQuote    = fireService.calcAbgabenQuote(state, grossSWR);
     const monthlySavings  = fireService.calcMonthlySavings(state);
-    const fireDate        = fireService.calcFIREDate(netWorth, monthlySavings, fireTarget);
+    const weightedReturn  = fireService.calcWeightedReturn(state);
+    const fireDate        = fireService.calcFIREDate(netWorth, monthlySavings, fireTarget, weightedReturn);
 
     const currentYear  = new Date().getFullYear();
     const uniqueYears  = [...new Set([
@@ -55,9 +57,10 @@ export function FireProvider({ children }: { children: React.ReactNode }) {
       state.pensionExpenses,
       fireDate.year,
       uniqueYears,
+      weightedReturn,
     );
 
-    return { netWorth, grossSWR, netSWR, fireTarget, firePercentage, abgabenQuote, monthlySavings, fireDate, chartData };
+    return { netWorth, grossSWR, netSWR, fireTarget, firePercentage, abgabenQuote, monthlySavings, weightedReturn, fireDate, chartData };
   }, [state]);
 
   return (

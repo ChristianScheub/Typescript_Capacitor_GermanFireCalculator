@@ -1,4 +1,4 @@
-import type { FireState } from '../../../types/fire/models/FireState';
+import type { FireState } from '../../../../types/fire/models/FireState';
 import { FIRE_CONSTANTS }  from '../fireConfig';
 
 export function calcMonthlySavings(state: FireState): number {
@@ -9,8 +9,9 @@ export function calcFIREDate(
   startCapital:   number,
   monthlySavings: number,
   fireTarget:     number,
+  annualReturn:   number = FIRE_CONSTANTS.ANNUAL_RETURN,
 ): { year: number; month: string } {
-  const monthlyReturn = FIRE_CONSTANTS.ANNUAL_RETURN / 12;
+  const monthlyReturn = annualReturn / 12;
   let capital = startCapital;
   let months  = 0;
 

@@ -9,10 +9,13 @@ export interface IFireService {
   calcFireTarget(state: FireState): number;
   calcFirePercentage(netWorth: number, fireTarget: number): number;
   calcMonthlySavings(state: FireState): number;
+  calcWeightedReturn(state: FireState): number;
+  calcAssetIncome(portfolioValue: number, weightedReturn: number): number;
   calcFIREDate(
     startCapital:   number,
     monthlySavings: number,
     fireTarget:     number,
+    annualReturn?:  number,
   ): { year: number; month: string };
   calcProjectedWealth(
     startCapital:    number,
@@ -20,6 +23,7 @@ export interface IFireService {
     monthlyWithdraw: number,
     fireYear:        number,
     targetYears:     number[],
+    annualReturn?:   number,
   ): ChartDataPoint[];
   getDefaultState(): FireState;
 }

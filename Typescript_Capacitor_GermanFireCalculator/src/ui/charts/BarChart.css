@@ -1,0 +1,6 @@
+.bar--pre-fire  { fill: #C5D5CC; }
+.bar--post-fire { fill: var(--fire-primary); }
+.bar-dot        { fill: var(--fire-accent); }
+.bar-fire-label { fill: var(--fire-accent); }
+.bar-x-label      { fill: var(--fire-text-muted); }
+.bar-value-label  { fill: var(--fire-text-secondary); font-weight: 600; }

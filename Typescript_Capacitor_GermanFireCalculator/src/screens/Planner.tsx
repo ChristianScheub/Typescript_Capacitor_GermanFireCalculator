@@ -1,5 +1,5 @@
 import { useFireContext }   from '../context/FireContext';
-import { fmtPercent }       from '../services/fire/formatters';
+import { fmtPercent, FIRE_CONSTANTS } from '../services/fire';
 
 function NumericInput({
   label, value, unit, onChange, hint,
@@ -79,7 +79,7 @@ export function Planner() {
 
       <div className="screen__content screen__content--has-footer">
         <section className="page-title-section">
-          <p className="label-overline">EINGABE-MODUL</p>
+          <p className="label-overline">PLANER-MODUL</p>
           <h1 className="page-heading">Die Architektur Ihrer<br />finanziellen Freiheit.</h1>
         </section>
 
@@ -113,11 +113,14 @@ export function Planner() {
               </svg>
             </div>
           </div>
-          <NumericInput label="ETFs / AKTIEN"   value={state.etfBalance}    unit="€" onChange={v => updateField('etfBalance', v)}
+          <NumericInput label="ETFs / AKTIEN" value={state.etfBalance} unit="€" onChange={v => updateField('etfBalance', v)} />
+          <NumericInput label="ERWARTETE RENDITE ETF (P.A.)" value={state.etfRate} unit="%" onChange={v => updateField('etfRate', v)}
             hint="Steuer: 25% Abgeltungssteuer + Soli (Teilfreistellung 30% bei Aktien-ETFs)." />
-          <NumericInput label="CASH / TAGESGELD" value={state.cashBalance}   unit="€" onChange={v => updateField('cashBalance', v)}
+          <NumericInput label="CASH / TAGESGELD" value={state.cashBalance} unit="€" onChange={v => updateField('cashBalance', v)} />
+          <NumericInput label="ZINSSATZ TAGESGELD (P.A.)" value={state.cashRate} unit="%" onChange={v => updateField('cashRate', v)}
             hint="Steuer: Zinserträge unterliegen der Abgeltungssteuer. 1.000€ Freibetrag p.P." />
-          <NumericInput label="KRYPTO"           value={state.cryptoBalance} unit="€" onChange={v => updateField('cryptoBalance', v)}
+          <NumericInput label="KRYPTO" value={state.cryptoBalance} unit="€" onChange={v => updateField('cryptoBalance', v)} />
+          <NumericInput label="ERWARTETE RENDITE KRYPTO (P.A.)" value={state.cryptoRate} unit="%" onChange={v => updateField('cryptoRate', v)}
             hint="Steuer: Steuerfrei nach 1 Jahr Haltefrist. Unter 600€ Gewinn steuerfrei." />
         </div>
 
@@ -130,9 +133,94 @@ export function Planner() {
               </svg>
             </div>
           </div>
-          <NumericInput label="AKTUELLE AUSGABEN (MONAT)" value={state.currentExpenses} unit="€" onChange={v => updateField('currentExpenses', v)} />
           <NumericInput label="BUDGET IM RUHESTAND"       value={state.pensionExpenses} unit="€" onChange={v => updateField('pensionExpenses', v)}
             hint="Berücksichtigen Sie private Krankenversicherung &amp; Inflation." />
+        </div>
+
+        {/* ── KV-Check ── */}
+        <div className="section-card">
+          <div className="section-card__header">
+            <div>
+              <h2 className="section-card__title">KV-Check</h2>
+              <p className="section-card__subtitle">Krankenversicherungs-Status</p>
+            </div>
+            <div className="section-icon section-icon--teal">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+          </div>
+          <div className="segmented">
+            <button
+              className={`segmented__btn${!state.isPkvUser ? ' segmented__btn--active' : ''}`}
+              onClick={() => updateField('isPkvUser', false)}
+            >GKV</button>
+            <button
+              className={`segmented__btn${state.isPkvUser ? ' segmented__btn--active' : ''}`}
+              onClick={() => updateField('isPkvUser', true)}
+            >PKV</button>
+          </div>
+          {state.isPkvUser && (
+            <div className="field" style={{ marginTop: '16px' }}>
+              <label className="field__label">MONATLICHER BEITRAG PKV</label>
+              <div className="field__input-wrap">
+                <input
+                  className="field__input field__input--large-num"
+                  type="number"
+                  inputMode="numeric"
+                  value={state.pkvContribution}
+                  onChange={e => updateField('pkvContribution', Number(e.target.value))}
+                />
+                <span className="field__unit">€ / MONAT</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ── Steuer-Check ── */}
+        <div className="section-card">
+          <div className="section-card__header">
+            <div>
+              <h2 className="section-card__title">Steuer-Check</h2>
+              <p className="section-card__subtitle">Optimierung &amp; Freibeträge</p>
+            </div>
+            <div className="section-icon section-icon--orange">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="5" x2="5" y2="19"/>
+                <circle cx="6.5" cy="6.5" r="2.5"/>
+                <circle cx="17.5" cy="17.5" r="2.5"/>
+              </svg>
+            </div>
+          </div>
+          <div className="toggle-row">
+            <div>
+              <p className="toggle-row__title">Kirchensteuer</p>
+              <p className="toggle-row__hint">Regelsatz {FIRE_CONSTANTS.KIRCHENSTEUER_RATE * 100}% (BY/BW) bzw. 9%</p>
+            </div>
+            <button
+              className={`toggle${state.hasKirchensteuer ? ' toggle--on' : ''}`}
+              role="switch"
+              aria-checked={state.hasKirchensteuer}
+              onClick={() => updateField('hasKirchensteuer', !state.hasKirchensteuer)}
+              aria-label="Kirchensteuer"
+            >
+              <span className="toggle__thumb" />
+            </button>
+          </div>
+          <div className="info-card">
+            <div className="kpi-icon kpi-icon--green kpi-icon--sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+              </svg>
+            </div>
+            <div className="info-card__text">
+              <p className="info-card__title">Sparerpauschbetrag</p>
+              <p className="info-card__body">
+                Wir berücksichtigen automatisch den gesetzlichen Freibetrag von{' '}
+                <strong>1.000 €</strong> pro Jahr für Ihre Kapitalerträge.
+              </p>
+            </div>
+          </div>
         </div>
 
         <div style={{ height: '8px' }} />
@@ -140,14 +228,13 @@ export function Planner() {
 
       <div className="planner-footer">
         <div className="fire-status-bar">
-          <p className="fire-status-bar__label">FIRE-STATUS</p>
+          <p className="fire-status-bar__label">AKTUELLER STATUS</p>
           <p className="fire-status-bar__pct">{Math.round(firePercentage)}%</p>
           <p className="fire-status-bar__hint">Ihres finanziellen Fundaments ist gelegt.</p>
           <div className="progress-bar">
             <div className="progress-bar__fill" style={{ width: `${fmtPercent(firePercentage, 0)}%` }} />
           </div>
         </div>
-        <button className="btn btn--primary btn--full">SIMULATION BERECHNEN</button>
       </div>
     </div>
   );

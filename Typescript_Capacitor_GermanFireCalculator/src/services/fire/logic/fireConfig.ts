@@ -11,4 +11,9 @@ export const FIRE_CONSTANTS = {
   SWR_RATE:              0.04,   // Safe Withdrawal Rate (4 %-Regel)
   ANNUAL_RETURN:         0.07,   // 7 % nominale ETF-Jahresrendite
   GKV_RATE:              0.185,  // ~18,5 % GKV-Schätzung auf Kapitalerträge
+  GAIN_RATIO:            0.5,    // 50 % Gewinnanteil (Simulationsannahme Entnahme)
+  YEARS_TO_PENSION:          14,    // Abstand FIRE-Datum → gesetzliche Rente (Jahre)
+  STATUTORY_PENSION_MONTHLY: 1450,  // Geschätzte gesetzl. Rente p.m. (Orientierungswert)
+  CRASH_FACTOR:              0.8,   // Depot-Abschlag im Börsen-Sturm-Szenario
+  TEILZEIT_FACTOR:           0.8,   // Sparraten-Reduktion im Teilzeit-Turbo-Szenario
 } as const;

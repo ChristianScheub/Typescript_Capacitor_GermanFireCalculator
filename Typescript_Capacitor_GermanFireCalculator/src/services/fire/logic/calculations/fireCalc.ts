@@ -1,4 +1,4 @@
-import type { FireState } from '../../../types/fire/models/FireState';
+import type { FireState } from '../../../../types/fire/models/FireState';
 import { FIRE_CONSTANTS }  from '../fireConfig';
 
 export function calcFireTarget(state: FireState): number {

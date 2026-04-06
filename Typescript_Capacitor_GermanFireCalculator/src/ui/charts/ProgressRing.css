@@ -1,0 +1,4 @@
+.ring-track    { stroke: var(--fire-border); }
+.ring-progress { stroke: var(--fire-primary); }
+.ring-value    { fill: var(--fire-text); }
+.ring-sublabel { fill: var(--fire-text-muted); }

@@ -1,4 +1,4 @@
-import type { ChartDataPoint } from '../../../types/fire/models/ChartDataPoint';
+import type { ChartDataPoint } from '../../../../types/fire/models/ChartDataPoint';
 import { FIRE_CONSTANTS }       from '../fireConfig';
 
 export function calcProjectedWealth(
@@ -7,9 +7,10 @@ export function calcProjectedWealth(
   monthlyWithdraw: number,
   fireYear:        number,
   targetYears:     number[],
+  annualReturn:    number = FIRE_CONSTANTS.ANNUAL_RETURN,
 ): ChartDataPoint[] {
   const currentYear   = new Date().getFullYear();
-  const monthlyReturn = FIRE_CONSTANTS.ANNUAL_RETURN / 12;
+  const monthlyReturn = annualReturn / 12;
 
   return targetYears.map(year => {
     const months = Math.max(0, (year - currentYear) * 12);
@@ -27,7 +28,7 @@ export function calcProjectedWealth(
     const label    = year === currentYear ? 'HEUTE' : String(year);
     const sublabel = year === fireYear
       ? '(FIRE)'
-      : year === fireYear + 14
+      : year === fireYear + FIRE_CONSTANTS.YEARS_TO_PENSION
       ? '(RENTE)'
       : undefined;
 

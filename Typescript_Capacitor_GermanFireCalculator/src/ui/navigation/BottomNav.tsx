@@ -1,4 +1,5 @@
-import type { Tab } from '../../types/navigation/Tab';
+import type { ReactNode } from 'react';
+import type { Tab }       from '../../types/navigation/Tab';
 
 interface Props {
   active:      Tab;
@@ -12,7 +13,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'menu',      label: 'Menu'      },
 ];
 
-const ICONS: Record<Tab, JSX.Element> = {
+const ICONS: Record<Tab, ReactNode> = {
   dashboard: (
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>

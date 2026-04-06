@@ -1,14 +1,16 @@
 import { useFireContext }             from '../context/FireContext';
 import { ProgressRing }              from '../ui/charts/ProgressRing';
 import { BarChart }                  from '../ui/charts/BarChart';
-import { fmtCurrency, fmtPercent }   from '../services/fire/formatters';
+import { fmtCurrency, fmtPercent }   from '../services/fire';
 import type { Tab }                  from '../types/navigation/Tab';
+import type { PrognoseConfig }       from '../types/prognose/PrognoseConfig';
 
 interface DashboardProps {
-  onTabChange: (tab: Tab) => void;
+  onTabChange:          (tab: Tab) => void;
+  onNavigateToPrognose: (cfg: PrognoseConfig) => void;
 }
 
-export function Dashboard({ onTabChange }: DashboardProps) {
+export function Dashboard({ onTabChange, onNavigateToPrognose }: DashboardProps) {
   const {
     netWorth,
     netSWR,
@@ -17,6 +19,8 @@ export function Dashboard({ onTabChange }: DashboardProps) {
     chartData,
     monthlySavings,
   } = useFireContext();
+
+  // chartMode entfernt, da nur noch kumuliert angezeigt wird
 
   const growthBadge = netWorth > 0
     ? fmtPercent((monthlySavings / netWorth) * 100, 1)
@@ -102,19 +106,24 @@ export function Dashboard({ onTabChange }: DashboardProps) {
           </div>
         </div>
 
-        <div className="card chart-card">
+        <button
+          className="card chart-card chart-card--clickable"
+          onClick={() => onNavigateToPrognose({ title: 'Prognose', badge: 'BASIS' })}
+          aria-label="Prognose öffnen"
+        >
           <div className="chart-card__header">
-            <h2 className="chart-card__title">Prognostiziertes Vermögen</h2>
-            <p className="chart-card__subtitle">Wachstum inkl. Zinseszins und gesetzlicher Rente</p>
-          </div>
-          <div className="chart-tabs">
-            <button className="chart-tab chart-tab--active">Kumuliert</button>
-            <button className="chart-tab">Jährlich</button>
+            <div>
+              <h2 className="chart-card__title">Prognostiziertes Vermögen</h2>
+              <p className="chart-card__subtitle">Wachstum inkl. Zinseszins und gesetzlicher Rente</p>
+            </div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="chart-card__chevron">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
           </div>
           <div className="chart-wrap">
             <BarChart data={chartData} />
           </div>
-        </div>
+        </button>
 
         <div className="card tip-card">
           <div className="tip-card__header">
