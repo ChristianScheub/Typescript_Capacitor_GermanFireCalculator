@@ -1,0 +1,140 @@
+import { useFireContext }             from '../context/FireContext';
+import { ProgressRing }              from '../ui/charts/ProgressRing';
+import { BarChart }                  from '../ui/charts/BarChart';
+import { fmtCurrency, fmtPercent }   from '../services/fire/formatters';
+import type { Tab }                  from '../types/navigation/Tab';
+
+interface DashboardProps {
+  onTabChange: (tab: Tab) => void;
+}
+
+export function Dashboard({ onTabChange }: DashboardProps) {
+  const {
+    netWorth,
+    netSWR,
+    firePercentage,
+    fireDate,
+    chartData,
+    monthlySavings,
+  } = useFireContext();
+
+  const growthBadge = netWorth > 0
+    ? fmtPercent((monthlySavings / netWorth) * 100, 1)
+    : '0,0';
+
+  return (
+    <div className="screen">
+      <header className="app-header">
+        <div className="app-header__brand">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="2" y1="22" x2="22" y2="22"/>
+            <rect x="3" y="14" width="4" height="8"/><rect x="10" y="10" width="4" height="12"/><rect x="17" y="6" width="4" height="16"/>
+            <line x1="4" y1="9" x2="20" y2="3"/>
+          </svg>
+          <span>FIRE LEDGER</span>
+        </div>
+        <button className="icon-btn" aria-label="Hilfe">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17" strokeWidth="3" strokeLinecap="round"/>
+          </svg>
+        </button>
+      </header>
+
+      <div className="screen__content">
+        <section className="hero-section">
+          <p className="label-overline">FINANZIELLE UNABHÄNGIGKEIT</p>
+          <h1 className="hero-heading">{Math.round(firePercentage)}% bereit für<br />FIRE.</h1>
+          <p className="hero-subtitle">
+            Voraussichtliche Freiheit:&nbsp;<strong>{fireDate.month} {fireDate.year}</strong>
+          </p>
+        </section>
+
+        <div className="btn-row">
+          <button className="btn btn--primary" onClick={() => onTabChange('planner')}>
+            Plan<br />anpassen
+          </button>
+          <button className="btn btn--ghost" onClick={() => onTabChange('scenarios')}>
+            Details<br />ansehen
+          </button>
+        </div>
+
+        <div className="card card--ring">
+          <ProgressRing percentage={firePercentage} />
+        </div>
+
+        <div className="kpi-grid">
+          <div className="card kpi-card">
+            <div className="kpi-card__header">
+              <div className="kpi-icon kpi-icon--green">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+                </svg>
+              </div>
+              <span className="badge badge--positive">+{growthBadge}%</span>
+            </div>
+            <p className="kpi-card__label">NETTOVERMÖGEN</p>
+            <p className="kpi-card__value">{fmtCurrency(netWorth)}&thinsp;€</p>
+          </div>
+
+          <div className="card kpi-card">
+            <div className="kpi-card__header">
+              <div className="kpi-icon kpi-icon--teal">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                </svg>
+              </div>
+            </div>
+            <p className="kpi-card__label">SPARRATE</p>
+            <p className="kpi-card__value">{fmtCurrency(monthlySavings)}&thinsp;€<span className="kpi-card__unit">/Monat</span></p>
+          </div>
+
+          <div className="card kpi-card">
+            <div className="kpi-card__header">
+              <div className="kpi-icon kpi-icon--red">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/>
+                </svg>
+              </div>
+            </div>
+            <p className="kpi-card__label">SICHERE ENTNAHME</p>
+            <p className="kpi-card__value">{fmtCurrency(netSWR)}&thinsp;€<span className="kpi-card__unit">/Monat</span></p>
+          </div>
+        </div>
+
+        <div className="card chart-card">
+          <div className="chart-card__header">
+            <h2 className="chart-card__title">Prognostiziertes Vermögen</h2>
+            <p className="chart-card__subtitle">Wachstum inkl. Zinseszins und gesetzlicher Rente</p>
+          </div>
+          <div className="chart-tabs">
+            <button className="chart-tab chart-tab--active">Kumuliert</button>
+            <button className="chart-tab">Jährlich</button>
+          </div>
+          <div className="chart-wrap">
+            <BarChart data={chartData} />
+          </div>
+        </div>
+
+        <div className="card tip-card">
+          <div className="tip-card__header">
+            <span className="tip-icon">✦</span>
+            <span className="badge badge--neutral">KI-EINBLICK</span>
+          </div>
+          <h3 className="tip-card__title">Sparrate um 50€ erhöhen?</h3>
+          <p className="tip-card__body">
+            Dies würde Ihren FIRE-Termin um 7 Monate nach vorne verschieben (Oktober&nbsp;{fireDate.year - 1}).
+          </p>
+        </div>
+
+        <div className="card scenario-card" onClick={() => onTabChange('scenarios')}>
+          <h3 className="scenario-card__title">Szenarien testen</h3>
+          <p className="scenario-card__body">Simulieren Sie Marktschwankungen oder Erbschaften.</p>
+          <button className="scenario-card__btn">EXPLORER ÖFFNEN</button>
+        </div>
+      </div>
+
+      <button className="fab" aria-label="Neu" onClick={() => onTabChange('planner')}>+</button>
+    </div>
+  );
+}
