@@ -134,42 +134,47 @@ export function PrognoseView({
           </div>
         </div>
 
-        {/* ── Table ── */}
+        {/* ── Cards ── */}
         <div className="prognose-table-section">
           <h2 className="prognose-table-title">Vermögensentwicklung</h2>
           <p className="prognose-table-subtitle">
             Projektion basierend auf {realReturnPct}% Realrendite p.a. (gewichtet)
           </p>
 
-          <div className="prognose-table prognose-table--4col">
-            <div className="prognose-table__row prognose-table__row--header">
-              <span>JAHR</span>
-              <span>{t('prognosis.wealth')}</span>
-              <span>{t('prognosis.incomeFromAssets')}</span>
-              <span>{t('prognosis.annualWithdrawal')}</span>
-            </div>
-
+          <div className="prognose-cards">
             {tableRows.map(row => (
-              <div key={row.year} className={row.rowClassName}>
-                <span className="prognose-table__year">
-                  {row.year}
-                  {row.isToday  && <span className="prognose-table__tag prognose-table__tag--heute">HEUTE</span>}
-                  {row.isFire   && <span className="prognose-table__tag prognose-table__tag--fire">FIRE</span>}
-                  {row.isPension && <span className="prognose-table__tag prognose-table__tag--rente">RENTE</span>}
-                </span>
-                <span className="prognose-table__value">
-                  <span className="prognose-table__value-total">{row.totalValueFormatted} €</span>
-                  <span className="prognose-table__value-sub">ETF {row.etfValueFormatted} €</span>
-                  <span className="prognose-table__value-sub">Cash {row.cashValueFormatted} €</span>
-                </span>
-                <span className="prognose-table__income">{row.incomeFormatted} €</span>
-                <span className="prognose-table__withdrawal">{row.withdrawalFormatted}</span>
+              <div key={row.year} className={`prognose-card${row.isFeatured ? ' prognose-card--featured' : ''}`}>
+                <div className="prognose-card__header">
+                  <span className="prognose-card__year">
+                    {row.year}
+                    {row.isToday   && <span className="prognose-card__tag prognose-card__tag--heute">HEUTE</span>}
+                  </span>
+                  <span className="prognose-card__badge">{row.badge}</span>
+                </div>
+
+                <div className="prognose-card__section">
+                  <p className="prognose-card__label">ENTNAHME</p>
+                  <p className="prognose-card__value">{row.entnahmeTotalFormatted}</p>
+                  <p className="prognose-card__sub">ETF {row.entnahmeEtfFormatted} · Cash {row.entnahmeCashFormatted}</p>
+                </div>
+
+                <div className="prognose-card__section">
+                  <p className="prognose-card__label">VERMÖGEN</p>
+                  <p className="prognose-card__value">{row.totalValueFormatted}</p>
+                  <p className="prognose-card__sub">ETF {row.etfValueFormatted} · Cash {row.cashValueFormatted}</p>
+                </div>
+
+                <div className="prognose-card__section">
+                  <p className="prognose-card__label">RENDITE</p>
+                  <p className="prognose-card__value">{row.renditeTotalFormatted}</p>
+                  <p className="prognose-card__sub">ETF {row.etfRateDisplay} · Cash {row.cashRateDisplay}</p>
+                </div>
               </div>
             ))}
           </div>
 
           <p className="prognose-table__footnote">
-            Einkommen aus Assets = Portfoliowert × {weightedReturnText}% p.a. (gewichtete Rendite)
+            Rendite = Portfoliowert × {weightedReturnText}% p.a. (gewichtete Rendite)
           </p>
         </div>
 

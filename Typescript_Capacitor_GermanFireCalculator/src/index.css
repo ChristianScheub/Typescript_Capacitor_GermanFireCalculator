@@ -1263,6 +1263,116 @@ input, select { font: inherit; }
   font-style: italic;
 }
 
+/* ── Prognose Cards ──────────────────────────────────────────────────────── */
+.prognose-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.prognose-card {
+  background: var(--fire-card);
+  border-radius: var(--fire-radius);
+  padding: 12px;
+  box-shadow: var(--fire-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.prognose-card--featured {
+  background: var(--fire-primary);
+  color: #fff;
+}
+
+.prognose-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  padding-bottom: 8px;
+}
+
+.prognose-card:not(.prognose-card--featured) .prognose-card__header {
+  border-bottom-color: var(--fire-border);
+}
+
+.prognose-card__year {
+  font-size: 18px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1;
+}
+
+.prognose-card__badge {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--fire-text-muted);
+}
+
+.prognose-card--featured .prognose-card__badge {
+  color: rgba(255,255,255,0.75);
+}
+
+.prognose-card__tag {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  border-radius: 3px;
+  padding: 2px 4px;
+}
+
+.prognose-card__tag--heute {
+  background: var(--fire-bg);
+  color: var(--fire-text-muted);
+}
+
+.prognose-card--featured .prognose-card__tag--heute {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
+.prognose-card__section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.prognose-card__label {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--fire-text-muted);
+  margin: 0;
+}
+
+.prognose-card--featured .prognose-card__label {
+  color: rgba(255,255,255,0.65);
+}
+
+.prognose-card__value {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.prognose-card__sub {
+  font-size: 10px;
+  color: var(--fire-text-muted);
+  margin: 0;
+}
+
+.prognose-card--featured .prognose-card__sub {
+  color: rgba(255,255,255,0.7);
+}
+
 /* ── Disclaimer ──────────────────────────────────────────────────────────── */
 .prognose-disclaimer {
   display: flex;

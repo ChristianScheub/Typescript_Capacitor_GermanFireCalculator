@@ -5,10 +5,11 @@ import { PrognoseView }                                  from '../../views/Progn
 import type { PrognoseConfig }                           from '../../types/prognose/PrognoseConfig';
 import type { PrognoseTableRow }                         from '../../types/prognose/PrognoseTableRow';
 
-function fmtCompactK(v: number): string {
-  if (v >= 1_000_000) return (v / 1_000_000).toFixed(1).replace('.', ',') + ' Mio.';
-  if (v >= 1_000)     return Math.round(v / 1_000) + '.000';
-  return String(Math.round(v));
+function fmtK(v: number): string {
+  const abs = Math.abs(v);
+  if (abs >= 1_000_000) return '€' + (v / 1_000_000).toFixed(1).replace('.', ',') + ' Mio.';
+  if (abs >= 1_000)     return '€' + Math.round(v / 1_000) + 'k';
+  return '€' + Math.round(v);
 }
 
 interface Props {
@@ -58,28 +59,38 @@ export function PrognoseContainer({ config, onBack }: Props) {
     [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, monthlyWithdraw, state.assetTaxRate, fireDate.year, tableYears, pensionYear],
   );
 
+  const grossNeededAnnual = Math.round(monthlyWithdraw * 12 / (1 - state.assetTaxRate / 100));
+
   const tableRows: PrognoseTableRow[] = tableData.map(row => {
     const isFire    = row.year === fireDate.year;
     const isPension = row.year === pensionYear;
+    const isPost    = row.year >= fireDate.year;
 
-    let withdrawalFormatted = '—';
-    if (row.year >= fireDate.year) {
-      const cashInterestAnnual  = Math.round(row.cashValue * state.cashRate / 100);
-      const grossNeededAnnual   = Math.round(monthlyWithdraw * 12 / (1 - state.assetTaxRate / 100));
-      const cashUsedAnnual      = Math.min(cashInterestAnnual, grossNeededAnnual);
-      const etfWithdrawalAnnual = Math.max(0, grossNeededAnnual - cashUsedAnnual);
-      withdrawalFormatted = `${fmtCurrency(grossNeededAnnual)} € (ETF: ${fmtCurrency(etfWithdrawalAnnual)} €, Cash-Zinsen: ${fmtCurrency(cashUsedAnnual)} €)`;
-    }
+    const badge = isFire    ? 'FIRE BEGINN'
+      : isPension           ? 'STAATLICHE RENTE BEGINN'
+      : isPost              ? 'FIRE-RENTE'
+      : 'ANSPAREN';
+
+    const cashInterestAnnual  = isPost ? Math.round(row.cashValue * state.cashRate / 100) : 0;
+    const cashUsedAnnual      = isPost ? Math.min(cashInterestAnnual, grossNeededAnnual)  : 0;
+    const etfWithdrawalAnnual = isPost ? Math.max(0, grossNeededAnnual - cashUsedAnnual)  : 0;
+
+    const annualIncome = Math.round(row.etfValue * state.etfRate / 100 + row.cashValue * state.cashRate / 100);
 
     return {
-      year:                row.year,
-      totalValueFormatted: fmtCurrency(row.value),
-      etfValueFormatted:   fmtCurrency(row.etfValue),
-      cashValueFormatted:  fmtCurrency(row.cashValue),
-      incomeFormatted:     fmtCurrency(Math.round(row.etfValue * state.etfRate / 100 + row.cashValue * state.cashRate / 100)),
-      withdrawalFormatted,
-      rowClassName:        ['prognose-table__row', isFire ? 'prognose-table__row--fire' : '', isPension ? 'prognose-table__row--pension' : ''].join(' ').trim(),
-      isToday:             row.year === currentYear,
+      year:       row.year,
+      badge,
+      isFeatured: isFire,
+      entnahmeTotalFormatted: isPost ? fmtK(grossNeededAnnual) : '€0',
+      entnahmeEtfFormatted:   isPost ? fmtK(etfWithdrawalAnnual) : '€0',
+      entnahmeCashFormatted:  isPost ? fmtK(cashUsedAnnual) : '€0',
+      totalValueFormatted:    fmtK(row.value),
+      etfValueFormatted:      fmtK(row.etfValue),
+      cashValueFormatted:     fmtK(row.cashValue),
+      renditeTotalFormatted:  '+' + fmtK(annualIncome),
+      etfRateDisplay:         `${state.etfRate}%`,
+      cashRateDisplay:        `${state.cashRate}%`,
+      isToday:   row.year === currentYear,
       isFire,
       isPension,
     };
@@ -89,7 +100,7 @@ export function PrognoseContainer({ config, onBack }: Props) {
     <PrognoseView
       config={config}
       onBack={onBack}
-      fireTargetText={`${fmtCompactK(fireTarget)} € bis ${fireDate.year}`}
+      fireTargetText={`${fmtK(fireTarget)} bis ${fireDate.year}`}
       firePercentageText={firePercentage.toFixed(1).replace('.', ',')}
       yearsToFIRE={yearsToFIRE}
       isOnTrack={isOnTrack}

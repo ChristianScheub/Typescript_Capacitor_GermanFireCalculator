@@ -1,15 +1,21 @@
 export interface PrognoseTableRow {
-  year: number;
-  // Wealth sub-lines
+  year:      number;
+  badge:     string;     // ANSPAREN | FIRE BEGINN | FIRE-RENTE | STAATLICHE RENTE BEGINN
+  isFeatured: boolean;   // FIRE year gets highlighted card
+  // Entnahme
+  entnahmeTotalFormatted: string;
+  entnahmeEtfFormatted:   string;
+  entnahmeCashFormatted:  string;
+  // Vermögen
   totalValueFormatted: string;
   etfValueFormatted:   string;
   cashValueFormatted:  string;
-  // Income / withdrawal columns
-  incomeFormatted:     string;
-  withdrawalFormatted: string;
-  // Display helpers
-  rowClassName: string;
-  isToday:  boolean;
-  isFire:   boolean;
+  // Rendite
+  renditeTotalFormatted: string;
+  etfRateDisplay:        string;
+  cashRateDisplay:       string;
+  // State helpers
+  isToday:   boolean;
+  isFire:    boolean;
   isPension: boolean;
 }

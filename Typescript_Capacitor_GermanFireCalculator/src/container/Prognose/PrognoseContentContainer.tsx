@@ -1,14 +1,15 @@
 import { useMemo }                                        from 'react';
 import { useTranslation }                                from 'react-i18next';
 import { useFireContext }                                from '../../context/FireContext';
-import { fireService, fmtCurrency, FIRE_CONSTANTS }      from '../../services/fire';
+import { fireService, fmtCurrency, FIRE_CONSTANTS }      from '../../services/fire'; // fmtCurrency used in milestone cards
 import type { PrognoseConfig }                           from '../../types/prognose/PrognoseConfig';
 import type { PrognoseTableRow }                         from '../../types/prognose/PrognoseTableRow';
 
-function fmtCompactK(v: number): string {
-  if (v >= 1_000_000) return (v / 1_000_000).toFixed(1).replace('.', ',') + ' Mio.';
-  if (v >= 1_000)     return Math.round(v / 1_000) + '.000';
-  return String(Math.round(v));
+function fmtK(v: number): string {
+  const abs = Math.abs(v);
+  if (abs >= 1_000_000) return '€' + (v / 1_000_000).toFixed(1).replace('.', ',') + ' Mio.';
+  if (abs >= 1_000)     return '€' + Math.round(v / 1_000) + 'k';
+  return '€' + Math.round(v);
 }
 
 interface Props {
@@ -58,28 +59,37 @@ export function PrognoseContentContainer({ config }: Props) {
     [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, monthlyWithdraw, state.assetTaxRate, fireDate.year, tableYears, pensionYear],
   );
 
+  const grossNeededAnnual = Math.round(monthlyWithdraw * 12 / (1 - state.assetTaxRate / 100));
+
   const tableRows: PrognoseTableRow[] = tableData.map(row => {
     const isFire    = row.year === fireDate.year;
     const isPension = row.year === pensionYear;
+    const isPost    = row.year >= fireDate.year;
 
-    let withdrawalFormatted = '—';
-    if (row.year >= fireDate.year) {
-      const cashInterestAnnual  = Math.round(row.cashValue * state.cashRate / 100);
-      const grossNeededAnnual   = Math.round(monthlyWithdraw * 12 / (1 - state.assetTaxRate / 100));
-      const cashUsedAnnual      = Math.min(cashInterestAnnual, grossNeededAnnual);
-      const etfWithdrawalAnnual = Math.max(0, grossNeededAnnual - cashUsedAnnual);
-      withdrawalFormatted = `${fmtCurrency(grossNeededAnnual)} € (ETF: ${fmtCurrency(etfWithdrawalAnnual)} €, Cash-Zinsen: ${fmtCurrency(cashUsedAnnual)} €)`;
-    }
+    const badge = isFire    ? 'FIRE BEGINN'
+      : isPension           ? 'STAATLICHE RENTE BEGINN'
+      : isPost              ? 'FIRE-RENTE'
+      : 'ANSPAREN';
+
+    const cashInterestAnnual  = isPost ? Math.round(row.cashValue * state.cashRate / 100) : 0;
+    const cashUsedAnnual      = isPost ? Math.min(cashInterestAnnual, grossNeededAnnual)  : 0;
+    const etfWithdrawalAnnual = isPost ? Math.max(0, grossNeededAnnual - cashUsedAnnual)  : 0;
+    const annualIncome        = Math.round(row.etfValue * state.etfRate / 100 + row.cashValue * state.cashRate / 100);
 
     return {
-      year:                row.year,
-      totalValueFormatted: fmtCurrency(row.value),
-      etfValueFormatted:   fmtCurrency(row.etfValue),
-      cashValueFormatted:  fmtCurrency(row.cashValue),
-      incomeFormatted:     fmtCurrency(Math.round(row.etfValue * state.etfRate / 100 + row.cashValue * state.cashRate / 100)),
-      withdrawalFormatted,
-      rowClassName:        ['prognose-table__row', isFire ? 'prognose-table__row--fire' : '', isPension ? 'prognose-table__row--pension' : ''].join(' ').trim(),
-      isToday:             row.year === currentYear,
+      year:       row.year,
+      badge,
+      isFeatured: isFire,
+      entnahmeTotalFormatted: isPost ? fmtK(grossNeededAnnual) : '€0',
+      entnahmeEtfFormatted:   isPost ? fmtK(etfWithdrawalAnnual) : '€0',
+      entnahmeCashFormatted:  isPost ? fmtK(cashUsedAnnual) : '€0',
+      totalValueFormatted:    fmtK(row.value),
+      etfValueFormatted:      fmtK(row.etfValue),
+      cashValueFormatted:     fmtK(row.cashValue),
+      renditeTotalFormatted:  '+' + fmtK(annualIncome),
+      etfRateDisplay:         `${state.etfRate}%`,
+      cashRateDisplay:        `${state.cashRate}%`,
+      isToday:   row.year === currentYear,
       isFire,
       isPension,
     };
@@ -92,7 +102,7 @@ export function PrognoseContentContainer({ config }: Props) {
         <p className="prognose-hero__overline">{t('prognosis.wealth')}</p>
         <h1 className="prognose-hero__title">
           Ziel-Vermögen:<br />
-          {fmtCompactK(fireTarget)} € bis {fireDate.year}
+          {fmtK(fireTarget)} bis {fireDate.year}
         </h1>
         <div className="prognose-hero__stats">
           <div className="prognose-hero__stat">
@@ -157,42 +167,47 @@ export function PrognoseContentContainer({ config }: Props) {
         </div>
       </div>
 
-      {/* ── Table ── */}
+      {/* ── Cards ── */}
       <div className="prognose-table-section">
         <h2 className="prognose-table-title">Vermögensentwicklung</h2>
         <p className="prognose-table-subtitle">
           Projektion basierend auf {realReturnPct}% Realrendite p.a. (gewichtet)
         </p>
 
-        <div className="prognose-table prognose-table--4col">
-          <div className="prognose-table__row prognose-table__row--header">
-            <span>JAHR</span>
-            <span>{t('prognosis.wealth')}</span>
-            <span>{t('prognosis.incomeFromAssets')}</span>
-            <span>{t('prognosis.annualWithdrawal')}</span>
-          </div>
-
+        <div className="prognose-cards">
           {tableRows.map(row => (
-            <div key={row.year} className={row.rowClassName}>
-              <span className="prognose-table__year">
-                {row.year}
-                {row.isToday   && <span className="prognose-table__tag prognose-table__tag--heute">HEUTE</span>}
-                {row.isFire    && <span className="prognose-table__tag prognose-table__tag--fire">FIRE</span>}
-                {row.isPension && <span className="prognose-table__tag prognose-table__tag--rente">RENTE</span>}
-              </span>
-              <span className="prognose-table__value">
-                <span className="prognose-table__value-total">{row.totalValueFormatted} €</span>
-                <span className="prognose-table__value-sub">ETF {row.etfValueFormatted} €</span>
-                <span className="prognose-table__value-sub">Cash {row.cashValueFormatted} €</span>
-              </span>
-              <span className="prognose-table__income">{row.incomeFormatted} €</span>
-              <span className="prognose-table__withdrawal">{row.withdrawalFormatted}</span>
+            <div key={row.year} className={`prognose-card${row.isFeatured ? ' prognose-card--featured' : ''}`}>
+              <div className="prognose-card__header">
+                <span className="prognose-card__year">
+                  {row.year}
+                  {row.isToday && <span className="prognose-card__tag prognose-card__tag--heute">HEUTE</span>}
+                </span>
+                <span className="prognose-card__badge">{row.badge}</span>
+              </div>
+
+              <div className="prognose-card__section">
+                <p className="prognose-card__label">ENTNAHME</p>
+                <p className="prognose-card__value">{row.entnahmeTotalFormatted}</p>
+                <p className="prognose-card__sub">ETF {row.entnahmeEtfFormatted} · Cash {row.entnahmeCashFormatted}</p>
+              </div>
+
+              <div className="prognose-card__section">
+                <p className="prognose-card__label">VERMÖGEN</p>
+                <p className="prognose-card__value">{row.totalValueFormatted}</p>
+                <p className="prognose-card__sub">ETF {row.etfValueFormatted} · Cash {row.cashValueFormatted}</p>
+              </div>
+
+              <div className="prognose-card__section">
+                <p className="prognose-card__label">RENDITE</p>
+                <p className="prognose-card__value">{row.renditeTotalFormatted}</p>
+                <p className="prognose-card__sub">ETF {row.etfRateDisplay} · Cash {row.cashRateDisplay}</p>
+              </div>
             </div>
           ))}
         </div>
 
         <p className="prognose-table__footnote">
-          Einkommen aus Assets = Portfoliowert × {(weightedReturn * 100).toFixed(1).replace('.', ',')}% p.a. (gewichtete Rendite)
+          Rendite = Portfoliowert × {(weightedReturn * 100).toFixed(1).replace('.', ',')}% p.a. (gewichtete Rendite)
         </p>
       </div>
 
