@@ -18,10 +18,12 @@ interface SteuerViewProps {
   isTeilzeitSelected:      boolean;
   isCrashSelected:         boolean;
   isHardcoreSelected:      boolean;
+  isMonteCarloSelected:    boolean;
   // Handlers
   onSelectTeilzeit:        () => void;
   onSelectCrash:           () => void;
   onSelectHardcore:        () => void;
+  onSelectMonteCarlo:      () => void;
   // Inline prognose
   inlinePrognose:          ReactNode;
 }
@@ -41,9 +43,11 @@ export function SteuerView({
   isTeilzeitSelected,
   isCrashSelected,
   isHardcoreSelected,
+  isMonteCarloSelected,
   onSelectTeilzeit,
   onSelectCrash,
   onSelectHardcore,
+  onSelectMonteCarlo,
   inlinePrognose,
 }: SteuerViewProps) {
   const { t } = useTranslation();
@@ -185,6 +189,42 @@ export function SteuerView({
             </span>
             <span className="scenario-analysis-card__result-text">
               {t('tax.hardcoreFireHint')}
+            </span>
+          </div>
+        </button>
+
+        {/* ── Card 4: Monte-Carlo Simulation ── */}
+        <button
+          className={`card scenario-analysis-card${isMonteCarloSelected ? ' scenario-analysis-card--selected' : ''}`}
+          onClick={onSelectMonteCarlo}
+        >
+          <div className="scenario-analysis-card__type-row">
+            <div className="scenario-analysis-card__icon scenario-analysis-card__icon--teal">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="9" height="9" rx="1"/>
+                <rect x="13" y="2" width="9" height="9" rx="1"/>
+                <rect x="2" y="13" width="9" height="9" rx="1"/>
+                <rect x="13" y="13" width="9" height="9" rx="1"/>
+                <circle cx="6.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                <circle cx="20.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                <circle cx="6.5" cy="17.5" r="1" fill="currentColor" stroke="none"/>
+                <circle cx="17.5" cy="17.5" r="1" fill="currentColor" stroke="none"/>
+                <circle cx="17.5" cy="20.5" r="1" fill="currentColor" stroke="none"/>
+              </svg>
+            </div>
+            <span className="scenario-analysis-card__type-badge scenario-analysis-card__type-badge--risk">SIMULATION</span>
+          </div>
+          <div className="scenario-analysis-card__title-wrap">
+            <p className="scenario-analysis-card__title">Monte-Carlo Simulation</p>
+            <p className="scenario-analysis-card__sub">Wie wahrscheinlich reicht mein Kapital bis zum 100. Lebensjahr?</p>
+          </div>
+          <div className="scenario-analysis-card__result">
+            <span className="scenario-analysis-card__result-badge scenario-analysis-card__result-badge--positive">
+              1.000 Marktszenarien
+            </span>
+            <span className="scenario-analysis-card__result-text">
+              Stochastische Analyse mit Inflations-Bandbreite &amp; Volatilität.
             </span>
           </div>
         </button>

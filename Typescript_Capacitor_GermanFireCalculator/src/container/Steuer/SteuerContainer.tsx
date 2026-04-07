@@ -4,6 +4,7 @@ import { useFireContext }                                  from '../../context/F
 import { fireService, fmtCurrency, fmtPercent, FIRE_CONSTANTS } from '../../services/fire';
 import { SteuerView }                                     from '../../views/SteuerView';
 import { PrognoseContentContainer }                       from '../Prognose/PrognoseContentContainer';
+import { MonteCarloContainer }                            from '../MonteCarlo/MonteCarloContainer';
 import type { PrognoseConfig }                            from '../../types/prognose/PrognoseConfig';
 
 export function SteuerContainer() {
@@ -11,6 +12,7 @@ export function SteuerContainer() {
   const { state, firePercentage, netWorth, fireDate, monthlySavings, fireTarget } = useFireContext();
 
   const [selectedBadge, setSelectedBadge] = useState<string | null>(null);
+  const [isMonteCarloSelected, setIsMonteCarloSelected] = useState(false);
 
   // ── Scenario configs ──────────────────────────────────────────────────────────
 
@@ -68,9 +70,10 @@ export function SteuerContainer() {
 
   // ── Handlers ──────────────────────────────────────────────────────────────────
 
-  const handleSelectTeilzeit  = () => setSelectedBadge(prev => prev === 'TEILZEIT'  ? null : 'TEILZEIT');
-  const handleSelectCrash     = () => setSelectedBadge(prev => prev === 'CRASH'     ? null : 'CRASH');
-  const handleSelectHardcore  = () => setSelectedBadge(prev => prev === 'HARDCORE'  ? null : 'HARDCORE');
+  const handleSelectTeilzeit   = () => { setSelectedBadge(prev => prev === 'TEILZEIT' ? null : 'TEILZEIT'); setIsMonteCarloSelected(false); };
+  const handleSelectCrash      = () => { setSelectedBadge(prev => prev === 'CRASH'    ? null : 'CRASH');    setIsMonteCarloSelected(false); };
+  const handleSelectHardcore   = () => { setSelectedBadge(prev => prev === 'HARDCORE' ? null : 'HARDCORE'); setIsMonteCarloSelected(false); };
+  const handleSelectMonteCarlo = () => { setIsMonteCarloSelected(prev => !prev); setSelectedBadge(null); };
 
   const selectedConfig = selectedBadge === 'TEILZEIT' ? teilzeitConfig
     : selectedBadge === 'CRASH'    ? crashConfig
@@ -80,6 +83,10 @@ export function SteuerContainer() {
   const inlinePrognose = selectedConfig ? (
     <div className="scenario-inline-prognose">
       <PrognoseContentContainer config={selectedConfig} />
+    </div>
+  ) : isMonteCarloSelected ? (
+    <div className="scenario-inline-prognose">
+      <MonteCarloContainer />
     </div>
   ) : null;
 
@@ -99,9 +106,11 @@ export function SteuerContainer() {
       isTeilzeitSelected={selectedBadge === 'TEILZEIT'}
       isCrashSelected={selectedBadge === 'CRASH'}
       isHardcoreSelected={selectedBadge === 'HARDCORE'}
+      isMonteCarloSelected={isMonteCarloSelected}
       onSelectTeilzeit={handleSelectTeilzeit}
       onSelectCrash={handleSelectCrash}
       onSelectHardcore={handleSelectHardcore}
+      onSelectMonteCarlo={handleSelectMonteCarlo}
       inlinePrognose={inlinePrognose}
     />
   );
