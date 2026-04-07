@@ -1,6 +1,7 @@
 export interface FireState {
   // I. Sparrate (direkt in €)
   monthlySavingsAmount: number;  // € / Monat
+  savingsGrowthRate:    number;  // % p.a. — jährliche Steigerung der Sparrate
 
   // II. Portfolio
   etfBalance:        number;  // €
@@ -12,6 +13,7 @@ export interface FireState {
   // III. Ruhestand Budget
   fixedExpenses:    number;  // € / Monat (Fixkosten OHNE Krankenversicherung)
   variableExpenses: number;  // € / Monat (variable Kosten)
+  inflationRate:    number;  // % p.a. — jährliche Kostensteigerung im Ruhestand
 
   // IV. KV & Steuer
   isPkvUser:        boolean;

@@ -30,7 +30,7 @@ export function PrognoseContentContainer({ config }: Props) {
   const fireTarget      = useMemo(() => fireService.calcFireTarget(state, weightedReturn),                              [state, weightedReturn]);
   const firePercentage  = useMemo(() => fireService.calcFirePercentage(netWorth, fireTarget),                           [netWorth, fireTarget]);
   const monthlySavings  = useMemo(() => fireService.calcMonthlySavings(state),                                          [state]);
-  const fireDate        = useMemo(() => fireService.calcFIREDate(state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, fireTarget), [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, fireTarget]);
+  const fireDate        = useMemo(() => fireService.calcFIREDate(state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, fireTarget, state.savingsGrowthRate), [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, fireTarget, state.savingsGrowthRate]);
   const grossSWR        = useMemo(() => fireService.calcGrossSWR(state),                                               [state]);
   const netSWR          = useMemo(() => fireService.calcNetSWR(state, grossSWR),                                        [state, grossSWR]);
 
@@ -55,11 +55,12 @@ export function PrognoseContentContainer({ config }: Props) {
       state.etfBalance, state.cashBalance, state.etfRate, state.cashRate,
       monthlySavings, monthlyWithdraw, state.assetTaxRate,
       fireDate.year, tableYears, pensionYear,
+      state.savingsGrowthRate, state.inflationRate,
     ),
-    [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, monthlyWithdraw, state.assetTaxRate, fireDate.year, tableYears, pensionYear],
+    [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, monthlyWithdraw, state.assetTaxRate, fireDate.year, tableYears, pensionYear, state.savingsGrowthRate, state.inflationRate],
   );
 
-  const grossNeededAnnual = Math.round(monthlyWithdraw * 12 / (1 - state.assetTaxRate / 100));
+  const baseGrossNeededAnnual = monthlyWithdraw * 12 / (1 - state.assetTaxRate / 100);
 
   const tableRows: PrognoseTableRow[] = tableData.map(row => {
     const isFire    = row.year === fireDate.year;
@@ -71,6 +72,8 @@ export function PrognoseContentContainer({ config }: Props) {
       : isPost              ? 'FIRE-RENTE'
       : 'ANSPAREN';
 
+    const yearsPostFire       = isPost ? Math.max(0, row.year - fireDate.year) : 0;
+    const grossNeededAnnual   = isPost ? Math.round(baseGrossNeededAnnual * Math.pow(1 + state.inflationRate / 100, yearsPostFire)) : 0;
     const cashInterestAnnual  = isPost ? Math.round(row.cashValue * state.cashRate / 100) : 0;
     const cashUsedAnnual      = isPost ? Math.min(cashInterestAnnual, grossNeededAnnual)  : 0;
     const etfWithdrawalAnnual = isPost ? Math.max(0, grossNeededAnnual - cashUsedAnnual)  : 0;

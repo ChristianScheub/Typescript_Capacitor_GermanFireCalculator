@@ -1,13 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import type { FireState }  from '../types/fire/models/FireState';
 
-const SPAR_DYNAMIK = [
-  { value: '0', label: 'planner.noAdjustment' },
-  { value: '1', label: 'planner.onePercent' },
-  { value: '2', label: 'planner.twoPercent' },
-  { value: '3', label: 'planner.threePercent' },
-];
-
 function NumericInput({
   label, value, unit, onChange, hint,
 }: {
@@ -33,27 +26,6 @@ function NumericInput({
   );
 }
 
-function SelectInput({
-  label, value, options, onChange,
-}: {
-  label: string; value: string;
-  options: { value: string; label: string }[];
-  onChange: (v: string) => void;
-}) {
-  return (
-    <div className="field">
-      <label className="field__label">{label}</label>
-      <div className="field__select-wrap">
-        <select className="field__select" value={value} onChange={e => onChange(e.target.value)}>
-          {options.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
-        </select>
-        <svg className="field__select-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="6 9 12 15 18 9"/>
-        </svg>
-      </div>
-    </div>
-  );
-}
 
 interface PlannerViewProps {
   state:                    FireState;
@@ -121,11 +93,12 @@ export function PlannerView({
             onChange={v => updateField('monthlySavingsAmount', v)}
             hint={t('planner.monthlySavingsHint')}
           />
-          <SelectInput
-            label={t('planner.savingsDynamic')}
-            value="2"
-            options={SPAR_DYNAMIK.map(o => ({ ...o, label: t(o.label) }))}
-            onChange={() => undefined}
+          <NumericInput
+            label={t('planner.savingsGrowthRate')}
+            value={state.savingsGrowthRate}
+            unit="%"
+            onChange={v => updateField('savingsGrowthRate', v)}
+            hint={t('planner.savingsGrowthRateHint')}
           />
         </div>
 
@@ -201,6 +174,13 @@ export function PlannerView({
             unit="€"
             onChange={v => updateField('variableExpenses', v)}
             hint={t('planner.variableExpensesNote')}
+          />
+          <NumericInput
+            label={t('planner.inflationRate')}
+            value={state.inflationRate}
+            unit="%"
+            onChange={v => updateField('inflationRate', v)}
+            hint={t('planner.inflationRateHint')}
           />
         </div>
 

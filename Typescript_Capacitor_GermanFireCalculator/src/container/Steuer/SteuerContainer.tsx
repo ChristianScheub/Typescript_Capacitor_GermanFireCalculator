@@ -39,8 +39,8 @@ export function SteuerContainer() {
 
   const teilzeitFIREDate = useMemo(() => {
     const savings = state.monthlySavingsAmount * FIRE_CONSTANTS.TEILZEIT_FACTOR;
-    return fireService.calcFIREDate(state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, savings, fireTarget);
-  }, [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, state.monthlySavingsAmount, fireTarget]);
+    return fireService.calcFIREDate(state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, savings, fireTarget, state.savingsGrowthRate);
+  }, [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, state.monthlySavingsAmount, state.savingsGrowthRate, fireTarget]);
 
   const teilzeitDeltaYears = teilzeitFIREDate.year - fireDate.year;
 
@@ -48,9 +48,9 @@ export function SteuerContainer() {
     return fireService.calcFIREDate(
       state.etfBalance * FIRE_CONSTANTS.CRASH_FACTOR,
       state.cashBalance * FIRE_CONSTANTS.CRASH_FACTOR,
-      state.etfRate, state.cashRate, monthlySavings, fireTarget,
+      state.etfRate, state.cashRate, monthlySavings, fireTarget, state.savingsGrowthRate,
     );
-  }, [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, fireTarget]);
+  }, [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, state.savingsGrowthRate, fireTarget]);
 
   const crashDeltaMonths = Math.round(
     (crashFIREDate.year - fireDate.year) * 12
@@ -61,8 +61,8 @@ export function SteuerContainer() {
     const hardcoreExpenses = state.fixedExpenses + state.pkvContribution
       + state.variableExpenses * FIRE_CONSTANTS.HARDCORE_FIRE_FACTOR;
     const hardcoreTarget = (hardcoreExpenses * 12) / (state.etfWithdrawalRate / 100);
-    return fireService.calcFIREDate(state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, hardcoreTarget);
-  }, [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, state.fixedExpenses, state.pkvContribution, state.variableExpenses, state.etfWithdrawalRate, monthlySavings]);
+    return fireService.calcFIREDate(state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, hardcoreTarget, state.savingsGrowthRate);
+  }, [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, state.fixedExpenses, state.pkvContribution, state.variableExpenses, state.etfWithdrawalRate, monthlySavings, state.savingsGrowthRate]);
 
   const hardcoreDeltaYears = hardcoreFIREDate.year - fireDate.year;
 

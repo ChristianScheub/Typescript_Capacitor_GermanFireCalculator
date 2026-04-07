@@ -6,7 +6,6 @@ import type { Tab }            from '../types/navigation/Tab';
 import type { PrognoseConfig } from '../types/prognose/PrognoseConfig';
 
 interface DashboardViewProps {
-  firePercentageRounded:   number;
   firePercentage:          number;
   fireDateMonth:           string;
   fireDateYear:            number;
@@ -21,7 +20,6 @@ interface DashboardViewProps {
 }
 
 export function DashboardView({
-  firePercentageRounded,
   firePercentage,
   fireDateMonth,
   fireDateYear,
@@ -58,7 +56,6 @@ export function DashboardView({
       <div className="screen__content">
         <section className="hero-section">
           <p className="label-overline">FINANZIELLE UNABHÄNGIGKEIT</p>
-          <h1 className="hero-heading">{firePercentageRounded}% bereit für<br />FIRE.</h1>
           <p className="hero-subtitle">
             Voraussichtliche Freiheit:&nbsp;<strong>{fireDateMonth} {fireDateYear}</strong>
           </p>

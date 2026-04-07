@@ -25,7 +25,7 @@ export function ProgressRing({ percentage }: Props) {
   const progressPath = `M ${START_X},${START_Y} A ${R},${R} 0 0,1 ${px.toFixed(2)},${py.toFixed(2)}`;
 
   return (
-    <svg viewBox="0 10 200 100" className="progress-ring">
+    <svg viewBox="0 10 200 116" className="progress-ring">
       <path d={BG_PATH}       fill="none" strokeWidth={SW} strokeLinecap="round" className="ring-track" />
       {percentage > 0 && (
         <path d={progressPath} fill="none" strokeWidth={SW} strokeLinecap="round" className="ring-progress" />

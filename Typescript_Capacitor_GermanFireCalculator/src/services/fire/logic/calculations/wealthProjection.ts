@@ -26,13 +26,15 @@ export function calcProjectedWealth(
   fireYear:          number,
   targetYears:       number[],
   pensionYear?:      number,
+  savingsGrowthRate: number = 0,      // % p.a. — annual savings increase pre-FIRE
+  inflationRate:     number = 0,      // % p.a. — annual cost increase post-FIRE
 ): ChartDataPoint[] {
   const currentYear       = new Date().getFullYear();
   const etfGrowthMonthly  = etfRate  / 100 / 12;
   const cashGrowthMonthly = cashRate / 100 / 12;
 
-  // After FIRE: how much gross must be generated each month to net out to monthlyWithdraw
-  const monthlyGrossNeeded = monthlyWithdraw / (1 - assetTaxRate / 100);
+  // Base gross needed before inflation (increases each year post-FIRE)
+  const baseMonthlyGrossNeeded = monthlyWithdraw / (1 - assetTaxRate / 100);
 
   return targetYears.map(year => {
     const months = Math.max(0, (year - currentYear) * 12);
@@ -40,21 +42,26 @@ export function calcProjectedWealth(
     let cash = cashBalance;
 
     for (let m = 0; m < months; m++) {
+      const yearOffset   = Math.floor(m / 12);
       const calendarYear = currentYear + m / 12;
+
       if (calendarYear < fireYear) {
-        // Accumulation phase
-        etf  = etf  * (1 + etfGrowthMonthly) + monthlySavings;
+        // Accumulation phase: savings grow each year
+        const currentMonthlySavings = monthlySavings * Math.pow(1 + savingsGrowthRate / 100, yearOffset);
+        etf  = etf  * (1 + etfGrowthMonthly) + currentMonthlySavings;
         cash = cash * (1 + cashGrowthMonthly);
       } else {
-        // Withdrawal phase: use only as much cash interest as needed
-        const cashInterestThisMonth = cash * cashGrowthMonthly;
-        const cashUsedThisMonth     = Math.min(cashInterestThisMonth, monthlyGrossNeeded);
-        const cashSurplusThisMonth  = cashInterestThisMonth - cashUsedThisMonth;
-        const etfWithdrawThisMonth  = Math.max(0, monthlyGrossNeeded - cashUsedThisMonth);
+        // Withdrawal phase: expenses grow with inflation each year post-FIRE
+        const yearsPostFire          = Math.floor(calendarYear - fireYear);
+        const monthlyGrossNeeded     = baseMonthlyGrossNeeded * Math.pow(1 + inflationRate / 100, yearsPostFire);
+        const cashInterestThisMonth  = cash * cashGrowthMonthly;
+        const cashUsedThisMonth      = Math.min(cashInterestThisMonth, monthlyGrossNeeded);
+        const cashSurplusThisMonth   = cashInterestThisMonth - cashUsedThisMonth;
+        const etfWithdrawThisMonth   = Math.max(0, monthlyGrossNeeded - cashUsedThisMonth);
         etf  = etf * (1 + etfGrowthMonthly) - etfWithdrawThisMonth;
-        cash = cash + cashSurplusThisMonth;  // surplus interest stays in cash
+        cash = cash + cashSurplusThisMonth;
       }
-      etf  = Math.max(0, etf);
+      // ETF can go negative (portfolio depleted = debt); cash principal is never touched
       cash = Math.max(0, cash);
     }
 

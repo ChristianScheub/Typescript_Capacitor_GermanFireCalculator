@@ -12,24 +12,27 @@ export interface IFireService {
   calcWeightedReturn(state: FireState): number;
   calcAssetIncome(portfolioValue: number, weightedReturn: number): number;
   calcFIREDate(
-    etfBalance:     number,
-    cashBalance:    number,
-    etfRate:        number,
-    cashRate:       number,
-    monthlySavings: number,
-    fireTarget:     number,
+    etfBalance:        number,
+    cashBalance:       number,
+    etfRate:           number,
+    cashRate:          number,
+    monthlySavings:    number,
+    fireTarget:        number,
+    savingsGrowthRate?: number,
   ): { year: number; month: string };
   calcProjectedWealth(
-    etfBalance:      number,
-    cashBalance:     number,
-    etfRate:         number,
-    cashRate:        number,
-    monthlySavings:  number,
-    monthlyWithdraw: number,
-    assetTaxRate:    number,
-    fireYear:        number,
-    targetYears:     number[],
-    pensionYear?:    number,
+    etfBalance:         number,
+    cashBalance:        number,
+    etfRate:            number,
+    cashRate:           number,
+    monthlySavings:     number,
+    monthlyWithdraw:    number,
+    assetTaxRate:       number,
+    fireYear:           number,
+    targetYears:        number[],
+    pensionYear?:       number,
+    savingsGrowthRate?: number,
+    inflationRate?:     number,
   ): ChartDataPoint[];
   getDefaultState(): FireState;
 }

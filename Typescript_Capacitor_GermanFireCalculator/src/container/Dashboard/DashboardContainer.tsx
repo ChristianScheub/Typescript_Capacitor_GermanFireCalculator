@@ -29,7 +29,6 @@ export function DashboardContainer({ onTabChange, onNavigateToPrognose }: Props)
 
   return (
     <DashboardView
-      firePercentageRounded={Math.round(firePercentage)}
       firePercentage={firePercentage}
       fireDateMonth={fireDate.month}
       fireDateYear={fireDate.year}

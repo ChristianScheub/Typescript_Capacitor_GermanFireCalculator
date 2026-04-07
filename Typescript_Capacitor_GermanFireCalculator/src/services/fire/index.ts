@@ -12,6 +12,7 @@ export { FIRE_CONSTANTS }          from './logic/fireConfig';
 
 const DEFAULT_STATE: FireState = {
   monthlySavingsAmount: 950,
+  savingsGrowthRate:    3,
   etfBalance:           125000,
   etfRate:              7,
   etfWithdrawalRate:    4,
@@ -19,6 +20,7 @@ const DEFAULT_STATE: FireState = {
   cashRate:             2,
   fixedExpenses:        1500,
   variableExpenses:     800,
+  inflationRate:        2,
   isPkvUser:            false,
   pkvContribution:      0,
   assetTaxRate:         26.375,

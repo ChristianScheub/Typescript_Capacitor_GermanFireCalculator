@@ -73,6 +73,7 @@ export function FireProvider({ children }: { children: React.ReactNode }) {
       state.etfBalance, state.cashBalance,
       state.etfRate, state.cashRate,
       monthlySavings, fireTarget,
+      state.savingsGrowthRate,
     );
 
     const currentYear  = new Date().getFullYear();
@@ -91,6 +92,7 @@ export function FireProvider({ children }: { children: React.ReactNode }) {
       state.etfRate, state.cashRate,
       monthlySavings, monthlyWithdraw, state.assetTaxRate,
       fireDate.year, uniqueYears, pensionYear,
+      state.savingsGrowthRate, state.inflationRate,
     );
 
     return { netWorth, grossSWR, netSWR, fireTarget, firePercentage, abgabenQuote, monthlySavings, weightedReturn, fireDate, chartData };
