@@ -15,8 +15,8 @@ export function checkContainerComponents() {
   const { projectRoot, srcDir } = getProjectPaths();
 
   // 1. Component File Naming Convention Check
-  console.log('Checking components folder naming convention...');
-  const componentsDir = path.join(srcDir, 'components');
+  console.log('Checking container folder naming convention...');
+  const componentsDir = path.join(srcDir, 'container');
   if (fs.existsSync(componentsDir)) {
     walkDir(componentsDir, (file) => {
       const fileName = path.basename(file);

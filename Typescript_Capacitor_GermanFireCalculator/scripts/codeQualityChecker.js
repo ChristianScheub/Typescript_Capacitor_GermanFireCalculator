@@ -106,7 +106,7 @@ export function checkCodeQuality() {
   // 3. Style Tags & Div/P/Span Tag Count Check in UI components
   console.log('Checking for style tags in UI components...');
 
-  const STYLE_AND_TAG_CHECK_FOLDERS = ['ui', 'components'];
+  const STYLE_AND_TAG_CHECK_FOLDERS = ['ui', 'container'];
 
   STYLE_AND_TAG_CHECK_FOLDERS.forEach((folderName) => {
     const folderPath = path.join(srcDir, folderName);
