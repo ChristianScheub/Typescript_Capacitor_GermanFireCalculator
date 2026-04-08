@@ -15,7 +15,6 @@ function AppShell() {
   const [prognoseConfig, setPrognoseConfig] = useState<PrognoseConfig | null>(null);
 
   const navigateToPrognose = (cfg: PrognoseConfig) => setPrognoseConfig(cfg);
-  const closePrognose      = ()                    => setPrognoseConfig(null);
 
   const handleTabChange = (tab: Tab) => {
     setPrognoseConfig(null);
@@ -26,7 +25,7 @@ function AppShell() {
     <div className="app-shell">
       <main className="app-main">
         {prognoseConfig ? (
-          <PrognoseContainer config={prognoseConfig} onBack={closePrognose} />
+          <PrognoseContainer config={prognoseConfig} />
         ) : (
           <>
             {activeTab === 'dashboard' && (

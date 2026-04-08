@@ -14,10 +14,9 @@ function fmtK(v: number): string {
 
 interface Props {
   config: PrognoseConfig;
-  onBack: () => void;
 }
 
-export function PrognoseContainer({ config, onBack }: Props) {
+export function PrognoseContainer({ config }: Props) {
   const { state: baseState, fireDate: baseFIREDate } = useFireContext();
 
   const state = useMemo(
@@ -102,8 +101,6 @@ export function PrognoseContainer({ config, onBack }: Props) {
 
   return (
     <PrognoseView
-      config={config}
-      onBack={onBack}
       fireTargetText={`${fmtK(fireTarget)} bis ${fireDate.year}`}
       firePercentageText={firePercentage.toFixed(1).replace('.', ',')}
       yearsToFIRE={yearsToFIRE}

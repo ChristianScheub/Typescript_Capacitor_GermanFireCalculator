@@ -1,6 +1,7 @@
 import { useTranslation }     from 'react-i18next';
 import { ProgressRing }       from '../ui/charts/ProgressRing';
 import { BarChart }           from '../ui/charts/BarChart';
+import { KpiCard }            from '../ui/cards/KpiCard';
 import type { ChartDataPoint } from '../types/fire/models/ChartDataPoint';
 import type { Tab }            from '../types/navigation/Tab';
 import type { PrognoseConfig } from '../types/prognose/PrognoseConfig';
@@ -36,23 +37,6 @@ export function DashboardView({
 
   return (
     <div className="screen">
-      <header className="app-header">
-        <div className="app-header__brand">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="2" y1="22" x2="22" y2="22"/>
-            <rect x="3" y="14" width="4" height="8"/><rect x="10" y="10" width="4" height="12"/><rect x="17" y="6" width="4" height="16"/>
-            <line x1="4" y1="9" x2="20" y2="3"/>
-          </svg>
-          <span>{t('dashboard.title')}</span>
-        </div>
-        <button className="icon-btn" aria-label={t('dashboard.helpLabel')}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d={t('dashboard.icon1')} />
-            <line x1="12" y1="17" x2="12.01" y2="17" strokeWidth="3" strokeLinecap="round"/>
-          </svg>
-        </button>
-      </header>
-
       <div className="screen__content">
         <section className="hero-section">
           <p className="label-overline">{t('dashboard.financialIndependence')}</p>
@@ -75,54 +59,35 @@ export function DashboardView({
         </div>
 
         <div className="kpi-grid">
-          <div className="card kpi-card">
-            <div className="kpi-card__header">
-              <div className="kpi-icon kpi-icon--green">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
-                </svg>
-              </div>
-              <span className="badge badge--positive">+{growthBadge}%</span>
-            </div>
-            <p className="kpi-card__label">{t('dashboard.netWorth')}</p>
-            <p className="kpi-card__value">{netWorthFormatted}&thinsp;€</p>
-          </div>
-
-          <div className="card kpi-card">
-            <div className="kpi-card__header">
-              <div className="kpi-icon kpi-icon--teal">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d={t('dashboard.icon2')} />
-                </svg>
-              </div>
-            </div>
-            <p className="kpi-card__label">{t('planner.savingsRate')}</p>
-            <p className="kpi-card__value">{monthlySavingsFormatted}&thinsp;€<span className="kpi-card__unit">{t('dashboard.perMonth')}</span></p>
-          </div>
-
-          <div className="card kpi-card">
-            <div className="kpi-card__header">
-              <div className="kpi-icon kpi-icon--red">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/>
-                </svg>
-              </div>
-            </div>
-            <p className="kpi-card__label">{t('dashboard.assetIncome')}</p>
-            <p className="kpi-card__value">{assetIncomeFormatted}&thinsp;€<span className="kpi-card__unit">{t('dashboard.perMonth')}</span></p>
-          </div>
-
-          <div className="card kpi-card">
-            <div className="kpi-card__header">
-              <div className="kpi-icon kpi-icon--orange">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-                </svg>
-              </div>
-            </div>
-            <p className="kpi-card__label">{t('dashboard.safeWithdrawal')}</p>
-            <p className="kpi-card__value">{safeWithdrawalFormatted}&thinsp;€<span className="kpi-card__unit">{t('dashboard.perMonth')}</span></p>
-          </div>
+          <KpiCard
+            label={t('dashboard.netWorth')}
+            value={netWorthFormatted}
+            unit="€"
+            iconVariant="green"
+            badgeText={`+${growthBadge}%`}
+            icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>}
+          />
+          <KpiCard
+            label={t('planner.savingsRate')}
+            value={monthlySavingsFormatted}
+            unit={t('dashboard.perMonth')}
+            iconVariant="teal"
+            icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={t('dashboard.icon2')} /></svg>}
+          />
+          <KpiCard
+            label={t('dashboard.assetIncome')}
+            value={assetIncomeFormatted}
+            unit={t('dashboard.perMonth')}
+            iconVariant="red"
+            icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg>}
+          />
+          <KpiCard
+            label={t('dashboard.safeWithdrawal')}
+            value={safeWithdrawalFormatted}
+            unit={t('dashboard.perMonth')}
+            iconVariant="orange"
+            icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>}
+          />
         </div>
 
         <button

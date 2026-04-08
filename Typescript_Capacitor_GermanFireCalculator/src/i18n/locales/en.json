@@ -200,6 +200,7 @@
 		"monteCarloSub": "How likely is it that my capital will last until age 100?",
 		"monteCarloSimulations": "1,000 market scenarios",
 		"monteCarloHint": "Stochastic analysis with inflation range & volatility.",
+		"monteCarloTitle": "Monte Carlo Simulation",
 		"badgeLifestyle": "LIFESTYLE",
 		"badgeRisk": "MARKET RISK",
 		"badgeSimulation": "SIMULATION",

@@ -80,7 +80,7 @@ input, select { font: inherit; }
 .screen__content {
   flex: 1;
   overflow-y: auto;
-  padding: 0 16px 24px;
+  padding: 7vh 16px 24px; /* padding-top: 7vh – adjust here for all pages */
   -webkit-overflow-scrolling: touch;
 }
 

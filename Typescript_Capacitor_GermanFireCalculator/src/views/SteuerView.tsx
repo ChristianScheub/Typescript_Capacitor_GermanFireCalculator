@@ -1,5 +1,6 @@
-import { type ReactNode }    from 'react';
-import { useTranslation }   from 'react-i18next';
+import { type ReactNode }        from 'react';
+import { useTranslation }       from 'react-i18next';
+import { ScenarioAnalysisCard } from '../ui/cards/ScenarioAnalysisCard';
 
 interface SteuerViewProps {
   firePercentageRounded:   number;
@@ -54,23 +55,6 @@ export function SteuerView({
 
   return (
     <div className="screen">
-      <header className="app-header">
-        <div className="app-header__brand">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="2" y1="22" x2="22" y2="22"/>
-            <rect x="3" y="14" width="4" height="8"/><rect x="10" y="10" width="4" height="12"/><rect x="17" y="6" width="4" height="16"/>
-            <line x1="4" y1="9" x2="20" y2="3"/>
-          </svg>
-          <span>{t('tax.title')}</span>
-        </div>
-        <button className="icon-btn" aria-label="Hilfe">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d={t('tax.icon1')} />
-            <line x1="12" y1="17" x2="12.01" y2="17" strokeWidth="3" strokeLinecap="round"/>
-          </svg>
-        </button>
-      </header>
-
       <div className="screen__content">
         <section className="page-title-section">
           <p className="label-overline">{t('tax.currentStatus')}</p>
@@ -107,127 +91,60 @@ export function SteuerView({
           </div>
         </div>
 
-        {/* ── Card 1: Teilzeit-Turbo ── */}
-        <button
-          className={`card scenario-analysis-card${isTeilzeitSelected ? ' scenario-analysis-card--selected' : ''}`}
+        <ScenarioAnalysisCard
+          icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>}
+          iconVariant="teal"
+          typeBadge={t('tax.badgeLifestyle')}
+          typeBadgeVariant="lifestyle"
+          title={t('tax.partTime')}
+          subtitle={t('tax.partTimeSub')}
+          resultBadge={`+${teilzeitDeltaYears} ${teilzeitDeltaYears === 1 ? t('tax.yearSingular') : t('tax.yearPlural')} ${t('tax.untilFire')}`}
+          resultBadgeVariant="warn"
+          resultText={t('tax.partTimeHint')}
+          selected={isTeilzeitSelected}
           onClick={onSelectTeilzeit}
-        >
-          <div className="scenario-analysis-card__type-row">
-            <div className="scenario-analysis-card__icon scenario-analysis-card__icon--teal">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="4"/>
-                <line x1="12" y1="2" x2="12" y2="4"/>
-                <line x1="12" y1="20" x2="12" y2="22"/>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                <line x1="2" y1="12" x2="4" y2="12"/>
-                <line x1="20" y1="12" x2="22" y2="12"/>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-              </svg>
-            </div>
-            <span className="scenario-analysis-card__type-badge scenario-analysis-card__type-badge--lifestyle">{t('tax.badgeLifestyle')}</span>
-          </div>
-          <div className="scenario-analysis-card__title-wrap">
-            <p className="scenario-analysis-card__title">{t('tax.partTime')}</p>
-            <p className="scenario-analysis-card__sub">{t('tax.partTimeSub')}</p>
-          </div>
-          <div className="scenario-analysis-card__result">
-            <span className="scenario-analysis-card__result-badge scenario-analysis-card__result-badge--warn">
-              +{teilzeitDeltaYears} {teilzeitDeltaYears === 1 ? t('tax.yearSingular') : t('tax.yearPlural')} {t('tax.untilFire')}
-            </span>
-            <span className="scenario-analysis-card__result-text">
-              {t('tax.partTimeHint')}
-            </span>
-          </div>
-        </button>
+        />
 
-        {/* ── Card 2: Börsen-Sturm ── */}
-        <button
-          className={`card scenario-analysis-card${isCrashSelected ? ' scenario-analysis-card--selected' : ''}`}
+        <ScenarioAnalysisCard
+          icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>}
+          iconVariant="red"
+          typeBadge={t('tax.badgeRisk')}
+          typeBadgeVariant="risk"
+          title={t('tax.crash')}
+          subtitle={t('tax.crashSub')}
+          resultBadge={`${crashDeltaMonths > 0 ? `+${crashDeltaMonths}` : String(crashDeltaMonths)} ${t('tax.crashDeltaUnit')}`}
+          resultBadgeVariant="danger"
+          selected={isCrashSelected}
           onClick={onSelectCrash}
-        >
-          <div className="scenario-analysis-card__type-row">
-            <div className="scenario-analysis-card__icon scenario-analysis-card__icon--red">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-              </svg>
-            </div>
-            <span className="scenario-analysis-card__type-badge scenario-analysis-card__type-badge--risk">{t('tax.badgeRisk')}</span>
-          </div>
-          <div className="scenario-analysis-card__title-wrap">
-            <p className="scenario-analysis-card__title">{t('tax.crash')}</p>
-            <p className="scenario-analysis-card__sub">{t('tax.crashSub')}</p>
-          </div>
-          <div className="scenario-analysis-card__result">
-            <span className="scenario-analysis-card__result-badge scenario-analysis-card__result-badge--danger">
-              {crashDeltaMonths > 0 ? `+${crashDeltaMonths}` : String(crashDeltaMonths)} {t('tax.crashDeltaUnit')}
-            </span>
-          </div>
-        </button>
+        />
 
-        {/* ── Card 3: Hardcore FIRE ── */}
-        <button
-          className={`card scenario-analysis-card${isHardcoreSelected ? ' scenario-analysis-card--selected' : ''}`}
+        <ScenarioAnalysisCard
+          icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={t('tax.icon2')}/></svg>}
+          iconVariant="orange"
+          typeBadge={t('tax.badgeSavings')}
+          typeBadgeVariant="lifestyle"
+          title={t('tax.hardcoreFire')}
+          subtitle={t('tax.hardcoreFireSub')}
+          resultBadge={`${hardcoreDeltaYears} ${Math.abs(hardcoreDeltaYears) === 1 ? t('tax.yearSingular') : t('tax.yearPlural')} ${hardcoreDeltaYears <= 0 ? t('tax.earlier') : t('tax.later')}`}
+          resultBadgeVariant="positive"
+          resultText={t('tax.hardcoreFireHint')}
+          selected={isHardcoreSelected}
           onClick={onSelectHardcore}
-        >
-          <div className="scenario-analysis-card__type-row">
-            <div className="scenario-analysis-card__icon scenario-analysis-card__icon--orange">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d={t('tax.icon2')}/>
-              </svg>
-            </div>
-            <span className="scenario-analysis-card__type-badge scenario-analysis-card__type-badge--lifestyle">{t('tax.badgeSavings')}</span>
-          </div>
-          <div className="scenario-analysis-card__title-wrap">
-            <p className="scenario-analysis-card__title">{t('tax.hardcoreFire')}</p>
-            <p className="scenario-analysis-card__sub">{t('tax.hardcoreFireSub')}</p>
-          </div>
-          <div className="scenario-analysis-card__result">
-            <span className="scenario-analysis-card__result-badge scenario-analysis-card__result-badge--positive">
-              {hardcoreDeltaYears} {Math.abs(hardcoreDeltaYears) === 1 ? t('tax.yearSingular') : t('tax.yearPlural')} {hardcoreDeltaYears <= 0 ? t('tax.earlier') : t('tax.later')}
-            </span>
-            <span className="scenario-analysis-card__result-text">
-              {t('tax.hardcoreFireHint')}
-            </span>
-          </div>
-        </button>
+        />
 
-        {/* ── Card 4: Monte-Carlo Simulation ── */}
-        <button
-          className={`card scenario-analysis-card${isMonteCarloSelected ? ' scenario-analysis-card--selected' : ''}`}
+        <ScenarioAnalysisCard
+          icon={<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="9" height="9" rx="1"/><rect x="13" y="2" width="9" height="9" rx="1"/><rect x="2" y="13" width="9" height="9" rx="1"/><rect x="13" y="13" width="9" height="9" rx="1"/><circle cx="6.5" cy="6.5" r="1" fill="currentColor" stroke="none"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/><circle cx="20.5" cy="6.5" r="1" fill="currentColor" stroke="none"/><circle cx="6.5" cy="17.5" r="1" fill="currentColor" stroke="none"/><circle cx="17.5" cy="17.5" r="1" fill="currentColor" stroke="none"/><circle cx="17.5" cy="20.5" r="1" fill="currentColor" stroke="none"/></svg>}
+          iconVariant="teal"
+          typeBadge={t('tax.badgeSimulation')}
+          typeBadgeVariant="risk"
+          title={t('tax.monteCarloTitle')}
+          subtitle={t('tax.monteCarloSub')}
+          resultBadge={t('tax.monteCarloSimulations')}
+          resultBadgeVariant="positive"
+          resultText={t('tax.monteCarloHint')}
+          selected={isMonteCarloSelected}
           onClick={onSelectMonteCarlo}
-        >
-          <div className="scenario-analysis-card__type-row">
-            <div className="scenario-analysis-card__icon scenario-analysis-card__icon--teal">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="9" height="9" rx="1"/>
-                <rect x="13" y="2" width="9" height="9" rx="1"/>
-                <rect x="2" y="13" width="9" height="9" rx="1"/>
-                <rect x="13" y="13" width="9" height="9" rx="1"/>
-                <circle cx="6.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
-                <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
-                <circle cx="20.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
-                <circle cx="6.5" cy="17.5" r="1" fill="currentColor" stroke="none"/>
-                <circle cx="17.5" cy="17.5" r="1" fill="currentColor" stroke="none"/>
-                <circle cx="17.5" cy="20.5" r="1" fill="currentColor" stroke="none"/>
-              </svg>
-            </div>
-            <span className="scenario-analysis-card__type-badge scenario-analysis-card__type-badge--risk">{t('tax.badgeSimulation')}</span>
-          </div>
-          <div className="scenario-analysis-card__title-wrap">
-            <p className="scenario-analysis-card__title">Monte-Carlo Simulation</p>
-            <p className="scenario-analysis-card__sub">{t('tax.monteCarloSub')}</p>
-          </div>
-          <div className="scenario-analysis-card__result">
-            <span className="scenario-analysis-card__result-badge scenario-analysis-card__result-badge--positive">
-              {t('tax.monteCarloSimulations')}
-            </span>
-            <span className="scenario-analysis-card__result-text">
-              {t('tax.monteCarloHint')}
-            </span>
-          </div>
-        </button>
+        />
 
         {inlinePrognose}
       </div>

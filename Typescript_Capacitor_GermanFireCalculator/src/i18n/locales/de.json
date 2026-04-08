@@ -200,6 +200,7 @@
 		"monteCarloSub": "Wie wahrscheinlich reicht mein Kapital bis zum 100. Lebensjahr?",
 		"monteCarloSimulations": "1.000 Marktszenarien",
 		"monteCarloHint": "Stochastische Analyse mit Inflations-Bandbreite & Volatilität.",
+		"monteCarloTitle": "Monte-Carlo Simulation",
 		"badgeLifestyle": "LIFESTYLE",
 		"badgeRisk": "MARKT-RISIKO",
 		"badgeSimulation": "SIMULATION",

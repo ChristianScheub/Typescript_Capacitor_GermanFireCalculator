@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { NumericInput } from '../ui/inputs/NumericInput';
+import { NumericInput }   from '../ui/inputs/NumericInput';
 import type { FireState }  from '../types/fire/models/FireState';
 
 
@@ -26,23 +26,6 @@ export function PlannerView({
 
   return (
     <div className="screen">
-      <header className="app-header">
-        <div className="app-header__brand">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="2" y1="22" x2="22" y2="22"/>
-            <rect x="3" y="14" width="4" height="8"/><rect x="10" y="10" width="4" height="12"/><rect x="17" y="6" width="4" height="16"/>
-            <line x1="4" y1="9" x2="20" y2="3"/>
-          </svg>
-          <span>{t('planner.title')}</span>
-        </div>
-        <button className="icon-btn" aria-label="Hilfe">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10"/><path d={t('planner.icon1')} />
-            <line x1="12" y1="17" x2="12.01" y2="17" strokeWidth="3" strokeLinecap="round"/>
-          </svg>
-        </button>
-      </header>
-
       <div className="screen__content screen__content--has-footer">
         <section className="page-title-section">
           <p className="label-overline">{t('planner.plannerModule')}</p>
