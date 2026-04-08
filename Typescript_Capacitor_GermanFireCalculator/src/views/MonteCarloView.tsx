@@ -2,6 +2,7 @@ import { useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { FanChart } from "../ui/charts/FanChart";
 import { KpiBar } from "../ui/monteCarloChart/KpiBar";
+import { RefNumericInput } from "../ui/inputs/RefNumericInput";
 import { fmtM } from "../services/monteCarloCalculator";
 import type { MonteCarloResult } from "../services/monteCarloCalculator";
 
@@ -285,34 +286,26 @@ export function MonteCarloView({
           </div>
           <div className="mc-inflation-row">
             <div className="mc-inflation-field">
-              <label className="mc-inflation-label">{t('monteCarlo.minInflation')}</label>
-              <div className="mc-inflation-input-wrap">
-                <input
-                  ref={minInflationRef}
-                  type="number"
-                  className="mc-inflation-input"
-                  min={0}
-                  max={simConfig.maxInflation - 0.1}
-                  step={0.1}
-                  defaultValue={simConfig.minInflation}
-                />
-                <span className="mc-inflation-unit">%</span>
-              </div>
+              <RefNumericInput
+                ref={minInflationRef}
+                label={t('monteCarlo.minInflation')}
+                unit="%"
+                min={0}
+                max={simConfig.maxInflation - 0.1}
+                step={0.1}
+                defaultValue={simConfig.minInflation}
+              />
             </div>
             <div className="mc-inflation-field">
-              <label className="mc-inflation-label">{t('monteCarlo.maxInflation')}</label>
-              <div className="mc-inflation-input-wrap">
-                <input
-                  ref={maxInflationRef}
-                  type="number"
-                  className="mc-inflation-input"
-                  min={simConfig.minInflation + 0.1}
-                  max={15}
-                  step={0.1}
-                  defaultValue={simConfig.maxInflation}
-                />
-                <span className="mc-inflation-unit">%</span>
-              </div>
+              <RefNumericInput
+                ref={maxInflationRef}
+                label={t('monteCarlo.maxInflation')}
+                unit="%"
+                min={simConfig.minInflation + 0.1}
+                max={15}
+                step={0.1}
+                defaultValue={simConfig.maxInflation}
+              />
             </div>
           </div>
         </div>
@@ -337,48 +330,38 @@ export function MonteCarloView({
           </div>
           <div className="mc-inflation-row">
             <div className="mc-inflation-field">
-              <label className="mc-inflation-label">{t('monteCarlo.startCapital')}</label>
-              <div className="mc-inflation-input-wrap">
-                <input
-                  ref={startCapitalRef}
-                  type="number"
-                  className="mc-inflation-input"
-                  min={1000}
-                  step={1000}
-                  defaultValue={simRange.startCapital}
-                />
-                <span className="mc-inflation-unit">€</span>
-              </div>
+              <RefNumericInput
+                ref={startCapitalRef}
+                label={t('monteCarlo.startCapital')}
+                unit="€"
+                min={1000}
+                step={1000}
+                defaultValue={simRange.startCapital}
+              />
             </div>
             <div className="mc-inflation-field">
-              <label className="mc-inflation-label">{t('monteCarlo.startYear')}</label>
-              <div className="mc-inflation-input-wrap">
-                <input
-                  ref={startYearRef}
-                  type="number"
-                  className="mc-inflation-input"
-                  min={currentYear}
-                  max={simRange.endYear - 1}
-                  step={1}
-                  defaultValue={simRange.startYear}
-                />
-              </div>
+              <RefNumericInput
+                ref={startYearRef}
+                label={t('monteCarlo.startYear')}
+                unit=""
+                min={currentYear}
+                max={simRange.endYear - 1}
+                step={1}
+                defaultValue={simRange.startYear}
+              />
             </div>
           </div>
           <div className="mc-inflation-row mc-inflation-row--top">
             <div className="mc-inflation-field">
-              <label className="mc-inflation-label">{t('monteCarlo.endYear')}</label>
-              <div className="mc-inflation-input-wrap">
-                <input
-                  ref={endYearRef}
-                  type="number"
-                  className="mc-inflation-input"
-                  min={simRange.startYear + 1}
-                  max={2150}
-                  step={1}
-                  defaultValue={simRange.endYear}
-                />
-              </div>
+              <RefNumericInput
+                ref={endYearRef}
+                label={t('monteCarlo.endYear')}
+                unit=""
+                min={simRange.startYear + 1}
+                max={2150}
+                step={1}
+                defaultValue={simRange.endYear}
+              />
             </div>
           </div>
         </div>
@@ -403,22 +386,15 @@ export function MonteCarloView({
           </div>
           <div className="mc-inflation-row">
             <div className="mc-inflation-field">
-              <label className="mc-inflation-label">{t('monteCarlo.amountPerMonth')}</label>
-
-              <div className="mc-inflation-input-wrap">
-                <input
-                  ref={monthlyWithdrawalRef}
-                  type="number"
-                  className="mc-inflation-input"
-                  min={0}
-                  step={100}
-                  defaultValue={monthlyWithdrawal}
-                />
-                <span className="mc-inflation-unit">€</span>
-              </div>
-              <p className="mc-sub mc-sub--secondary">
-                {t('monteCarlo.expensesInfo')}
-              </p>
+              <RefNumericInput
+                ref={monthlyWithdrawalRef}
+                label={t('monteCarlo.amountPerMonth')}
+                unit="€"
+                min={0}
+                step={100}
+                defaultValue={monthlyWithdrawal}
+                hint={t('monteCarlo.expensesInfo')}
+              />
             </div>
           </div>
         </div>
