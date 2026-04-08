@@ -3,7 +3,6 @@ const SETTINGS_ITEMS = [
   { icon: '👤', label: 'menu.profileInfo' },
   { icon: '🔔', label: 'Benachrichtigungen' },
   { icon: '🔒', label: 'menu.privacy' },
-  { icon: '💳', label: 'menu.subscription' },
 ];
 
 const HELP_ITEMS = [
@@ -55,20 +54,6 @@ export function Menu() {
           <h1 className="page-heading page-heading--menu">Menü</h1>
           <p className="page-desc">Verwalten Sie Ihre FIRE-Strategie und Kontoeinstellungen.</p>
         </section>
-
-        <div className="card profile-card">
-          <div className="profile-card__avatar">MM</div>
-          <div className="profile-card__info">
-            <p className="profile-card__name">Maximilian Muster</p>
-            <p className="profile-card__meta">Standard Plan&nbsp;•&nbsp;Aktiv seit 2023</p>
-          </div>
-          <button className="icon-btn" aria-label="Bearbeiten">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d={t('menu.icon2')}/>
-              <path d={t('menu.icon3')}/>
-            </svg>
-          </button>
-        </div>
 
         <p className="section-label">EINSTELLUNGEN</p>
         <NavList items={SETTINGS_ITEMS} />

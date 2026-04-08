@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { useFireContext } from '../../context/FireContext';
-import { fireService } from '../../services/fire';
 import { calcMonteCarlo, getRisiko, fmtEuro } from '../../services/monteCarloCalculator';
 import type { MonteCarloResult } from '../../services/monteCarloCalculator';
 import { FullscreenMonteCarloView } from '../../views/FullscreenMonteCarloView';
@@ -16,6 +15,7 @@ interface FullscreenMonteCarloContainerProps {
     startYear: number;
     endYear: number;
   };
+  monthlyWithdrawal: number;
   runKey: number;
   isOpen: boolean;
   onClose: () => void;
@@ -24,6 +24,7 @@ interface FullscreenMonteCarloContainerProps {
 export function FullscreenMonteCarloContainer({
   simConfig,
   simRange,
+  monthlyWithdrawal,
   runKey,
   isOpen,
   onClose,
@@ -35,8 +36,7 @@ export function FullscreenMonteCarloContainer({
   const currentYear = new Date().getFullYear();
 
   const result: MonteCarloResult = useMemo(() => {
-    const grossSWR = fireService.calcGrossSWR(state);
-    const annualWithdrawal = grossSWR * 12;
+    const annualWithdrawal = monthlyWithdrawal * 12;
     const pensionAnnualNet = state.pensionMonthly * 12;
     const yearsToFIRE = Math.max(0, simRange.startYear - currentYear);
     const simFireAge = state.currentAge + yearsToFIRE;
@@ -58,7 +58,7 @@ export function FullscreenMonteCarloContainer({
       },
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [simRange, simConfig, state.etfRate, state.pensionAge, state.pensionMonthly, state.currentAge, runKey]);
+  }, [simRange, simConfig, state.etfRate, state.pensionAge, state.pensionMonthly, state.currentAge, monthlyWithdrawal, runKey]);
 
   const risiko = getRisiko(result.successRate);
 

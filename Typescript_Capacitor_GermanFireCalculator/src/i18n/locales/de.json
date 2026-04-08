@@ -8,7 +8,6 @@
 	"menu": {
 		"profileInfo": "Profil-Informationen",
 		"privacy": "Sicherheit & Datenschutz",
-		"subscription": "Abonnement verwalten",
 		"fireMethod": "FIRE Methodik",
 		"faq": "Häufig gestellte Fragen",
 		"support": "Support kontaktieren",
@@ -45,7 +44,7 @@
 		"expectedReturnEtf": "ERWARTETE RENDITE ETF (P.A.)",
 		"taxEtf": "Für die Vermögensprojektion. Die tatsächliche Entnahmerate legen Sie unten fest.",
 		"etfWithdrawalRate": "SICHERE ENTNAHMERATE (%)",
-		"etfWithdrawalRateHint": "Anteil des ETF-Vermögens, den Sie jährlich entnehmen. Klassisch: 4% (Trinity-Studie). Wird unabhängig von der Rendite für die FIRE-Berechnung verwendet.",
+		"etfWithdrawalRateHint": "Anteil des ETF-Vermögens, den Sie jährlich entnehmen. Klassisch: 4% (Trinity-Studie). Wird unabhängig von der Rendite für die FIRE-Berechnung verwendet. Sprich falls diese zu hoch ist, kann es auch sein das ihr Depot auf 0 fällt.",
 		"cash": "CASH / TAGESGELD",
 		"interestRateCash": "ZINSSATZ TAGESGELD (P.A.)",
 		"taxCash": "Bei Cash wird nur der Zinsertrag berücksichtigt – kein Kapitalverzehr. 1.000 € Freibetrag p.P.",

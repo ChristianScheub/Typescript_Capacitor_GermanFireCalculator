@@ -144,17 +144,6 @@ export function DashboardView({
           </div>
         </button>
 
-        <div className="card tip-card">
-          <div className="tip-card__header">
-            <span className="tip-icon">✦</span>
-            <span className="badge badge--neutral">KI-EINBLICK</span>
-          </div>
-          <h3 className="tip-card__title">Sparrate um 50€ erhöhen?</h3>
-          <p className="tip-card__body">
-            Dies würde Ihren FIRE-Termin um 7 Monate nach vorne verschieben (Oktober&nbsp;{fireDateYear - 1}).
-          </p>
-        </div>
-
         <div className="card scenario-card" onClick={() => onTabChange('scenarios')}>
           <h3 className="scenario-card__title">Szenarien testen</h3>
           <p className="scenario-card__body">Simulieren Sie Marktschwankungen oder Erbschaften.</p>

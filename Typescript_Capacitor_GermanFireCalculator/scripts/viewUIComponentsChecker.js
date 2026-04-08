@@ -91,6 +91,7 @@ export function checkViewUIComponents() {
   const HOOK_CHECK_FILE_ALLOWLIST = {
     'src/views/settings/SettingsView.tsx': new Set(['useNavigate', 'NavigateFunction']),
     'src/ui/charts/FanChart.tsx': new Set(['useState']), // Interactive tooltip tracking requires local state
+    'src/views/MonteCarloView.tsx': new Set(['useEffect']), // Form input synchronization with props
   };
 
   const foldersToCheck = ['ui', 'views'];

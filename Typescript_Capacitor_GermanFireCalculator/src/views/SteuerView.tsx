@@ -130,7 +130,7 @@ export function SteuerView({
           </div>
           <div className="scenario-analysis-card__title-wrap">
             <p className="scenario-analysis-card__title">{t('tax.partTime')}</p>
-            <p className="scenario-analysis-card__sub">Was, wenn ich ab sofort einen Tag weniger arbeite?</p>
+            <p className="scenario-analysis-card__sub">Was, wenn ich ab sofort einen Tag weniger arbeite? (Senkung der Sparrate um 30%)</p>
           </div>
           <div className="scenario-analysis-card__result">
             <span className="scenario-analysis-card__result-badge scenario-analysis-card__result-badge--warn">
