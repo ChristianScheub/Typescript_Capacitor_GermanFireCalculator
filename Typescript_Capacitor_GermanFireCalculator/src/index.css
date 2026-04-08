@@ -1705,7 +1705,7 @@ input, select { font: inherit; }
   font-size: 48px;
   font-weight: 800;
   line-height: 1;
-  color: var(--fire-primary);
+  color: var(--mc-risk-color, var(--fire-primary));
   margin-bottom: 8px;
   letter-spacing: -1px;
 }
@@ -1739,6 +1739,11 @@ input, select { font: inherit; }
   font-size: 13px;
   color: var(--fire-text-secondary);
   line-height: 1.5;
+}
+
+.mc-sub--secondary {
+  margin-top: 0.5rem;
+  opacity: 0.75;
 }
 
 /* ── Fan Chart ── */
@@ -1786,6 +1791,8 @@ input, select { font: inherit; }
 .mc-fan-chart {
   width: 100%;
   display: block;
+  touch-action: none;
+  overflow: visible;
 }
 
 .mc-fan-band--95 {
@@ -1894,6 +1901,10 @@ input, select { font: inherit; }
   gap: 12px;
 }
 
+.mc-inflation-row--top {
+  margin-top: 0.75rem;
+}
+
 .mc-inflation-field {
   flex: 1;
   display: flex;
@@ -1976,6 +1987,11 @@ input, select { font: inherit; }
 
 .mc-disclaimer svg {
   color: rgba(255,255,255,0.7);
+}
+
+.mc-disclaimer__icon {
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
 /* ── Chart card ── */

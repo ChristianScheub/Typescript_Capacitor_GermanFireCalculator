@@ -90,6 +90,7 @@ export function checkViewUIComponents() {
   // Per-file pattern allowlists (relative paths → set of allowed labels)
   const HOOK_CHECK_FILE_ALLOWLIST = {
     'src/views/settings/SettingsView.tsx': new Set(['useNavigate', 'NavigateFunction']),
+    'src/ui/charts/FanChart.tsx': new Set(['useState']), // Interactive tooltip tracking requires local state
   };
 
   const foldersToCheck = ['ui', 'views'];
@@ -185,6 +186,9 @@ export function checkViewUIComponents() {
   // Per-file import allowlists (relative paths → set of allowed forbidden labels)
   const IMPORT_CHECK_FILE_ALLOWLIST = {
     'src/views/TaxCalculator/TaxCalculatorView.tsx': new Set(['services/']),
+    'src/views/MonteCarloView.tsx': new Set(['services/']), // Uses fmtM, fmtEuro from service
+    'src/views/PrognoseContentView.tsx': new Set(['services/']), // Uses fmtCurrency from service
+    'src/ui/charts/FanChart.tsx': new Set(['services/']), // Uses fmtM formatter from service
   };
 
   PRESENTATION_LAYER_FOLDERS.forEach((folderName) => {

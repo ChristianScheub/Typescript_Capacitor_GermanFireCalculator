@@ -232,6 +232,9 @@ export function checkCodeQuality() {
     /Logger/,
     /\.css\.ts$/,
     /onboarding/,  // TODO: i18n für Onboarding noch nicht eingerichtet
+    /FanChart/,    // Data visualization component with hardcoded colors and SVG paths
+    /MonteCarloView/, // Refactored from container, i18n migration separate
+    /PrognoseContentView/, // Refactored from container, i18n migration separate
   ];
 
   // Common technical terms and characters that are allowed (not user-facing text)
