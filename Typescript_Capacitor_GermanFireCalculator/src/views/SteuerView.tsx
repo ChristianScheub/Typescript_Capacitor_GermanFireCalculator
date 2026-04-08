@@ -73,19 +73,19 @@ export function SteuerView({
 
       <div className="screen__content">
         <section className="page-title-section">
-          <p className="label-overline">AKTUELLER STATUS</p>
+          <p className="label-overline">{t('tax.currentStatus')}</p>
           <div className="page-title-row">
-            <h1 className="page-heading" style={{ marginBottom: 0 }}>Szenarien</h1>
+            <h1 className="page-heading" style={{ marginBottom: 0 }}>{t('tax.scenarios')}</h1>
             <span className="page-title-pct">{firePercentageRounded}% zum Ziel</span>
           </div>
         </section>
 
         {/* ── FIRE-Datum Hero Card ── */}
         <div className="card scenario-hero-card">
-          <p className="scenario-hero-card__overline">Voraussichtliches FIRE-Datum</p>
+          <p className="scenario-hero-card__overline">{t('tax.expectedFireDate')}</p>
           <p className="scenario-hero-card__date">{fireDateMonth} {fireDateYear}</p>
           <div className="scenario-hero-card__progress-row">
-            <span className="scenario-hero-card__progress-label">Fortschritt</span>
+            <span className="scenario-hero-card__progress-label">{t('tax.progress')}</span>
             <span className="scenario-hero-card__progress-values">
               {netWorthFormatted} € / {fireTargetFormatted} €
             </span>
@@ -100,8 +100,8 @@ export function SteuerView({
             </svg>
             <span>
               <strong>{t('tax.baseScenario')}</strong><br />
-              Dein aktueller Plan basiert auf einer Sparrate von{' '}
-              <strong>{monthlySavingsFormatted} €</strong> und einer erwarteten Rendite von{' '}
+              {t('tax.baseScenarioInfo')}{' '}
+              <strong>{monthlySavingsFormatted} €</strong> {t('tax.baseScenarioInfoReturn')}{' '}
               <strong>{annualReturnFormatted}% p.a.</strong>
             </span>
           </div>
@@ -126,18 +126,18 @@ export function SteuerView({
                 <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
               </svg>
             </div>
-            <span className="scenario-analysis-card__type-badge scenario-analysis-card__type-badge--lifestyle">LIFESTYLE</span>
+            <span className="scenario-analysis-card__type-badge scenario-analysis-card__type-badge--lifestyle">{t('tax.badgeLifestyle')}</span>
           </div>
           <div className="scenario-analysis-card__title-wrap">
             <p className="scenario-analysis-card__title">{t('tax.partTime')}</p>
-            <p className="scenario-analysis-card__sub">Was, wenn ich ab sofort einen Tag weniger arbeite? (Senkung der Sparrate um 30%)</p>
+            <p className="scenario-analysis-card__sub">{t('tax.partTimeSub')}</p>
           </div>
           <div className="scenario-analysis-card__result">
             <span className="scenario-analysis-card__result-badge scenario-analysis-card__result-badge--warn">
-              +{teilzeitDeltaYears} {teilzeitDeltaYears === 1 ? 'Jahr' : 'Jahre'} bis FIRE
+              +{teilzeitDeltaYears} {teilzeitDeltaYears === 1 ? t('tax.yearSingular') : t('tax.yearPlural')} {t('tax.untilFire')}
             </span>
             <span className="scenario-analysis-card__result-text">
-              +1 freier Tag pro Woche ab jetzt.
+              {t('tax.partTimeHint')}
             </span>
           </div>
         </button>
@@ -153,15 +153,15 @@ export function SteuerView({
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
               </svg>
             </div>
-            <span className="scenario-analysis-card__type-badge scenario-analysis-card__type-badge--risk">MARKT-RISIKO</span>
+            <span className="scenario-analysis-card__type-badge scenario-analysis-card__type-badge--risk">{t('tax.badgeRisk')}</span>
           </div>
           <div className="scenario-analysis-card__title-wrap">
             <p className="scenario-analysis-card__title">{t('tax.crash')}</p>
-            <p className="scenario-analysis-card__sub">Hält mein Plan einen Crash im nächsten Jahr aus?</p>
+            <p className="scenario-analysis-card__sub">{t('tax.crashSub')}</p>
           </div>
           <div className="scenario-analysis-card__result">
             <span className="scenario-analysis-card__result-badge scenario-analysis-card__result-badge--danger">
-              {crashDeltaMonths > 0 ? `+${crashDeltaMonths}` : String(crashDeltaMonths)} Monate Verschiebung
+              {crashDeltaMonths > 0 ? `+${crashDeltaMonths}` : String(crashDeltaMonths)} {t('tax.crashDeltaUnit')}
             </span>
           </div>
         </button>
@@ -177,7 +177,7 @@ export function SteuerView({
                 <path d={t('tax.icon2')}/>
               </svg>
             </div>
-            <span className="scenario-analysis-card__type-badge scenario-analysis-card__type-badge--lifestyle">SPAREN</span>
+            <span className="scenario-analysis-card__type-badge scenario-analysis-card__type-badge--lifestyle">{t('tax.badgeSavings')}</span>
           </div>
           <div className="scenario-analysis-card__title-wrap">
             <p className="scenario-analysis-card__title">{t('tax.hardcoreFire')}</p>
@@ -213,18 +213,18 @@ export function SteuerView({
                 <circle cx="17.5" cy="20.5" r="1" fill="currentColor" stroke="none"/>
               </svg>
             </div>
-            <span className="scenario-analysis-card__type-badge scenario-analysis-card__type-badge--risk">SIMULATION</span>
+            <span className="scenario-analysis-card__type-badge scenario-analysis-card__type-badge--risk">{t('tax.badgeSimulation')}</span>
           </div>
           <div className="scenario-analysis-card__title-wrap">
             <p className="scenario-analysis-card__title">Monte-Carlo Simulation</p>
-            <p className="scenario-analysis-card__sub">Wie wahrscheinlich reicht mein Kapital bis zum 100. Lebensjahr?</p>
+            <p className="scenario-analysis-card__sub">{t('tax.monteCarloSub')}</p>
           </div>
           <div className="scenario-analysis-card__result">
             <span className="scenario-analysis-card__result-badge scenario-analysis-card__result-badge--positive">
-              1.000 Marktszenarien
+              {t('tax.monteCarloSimulations')}
             </span>
             <span className="scenario-analysis-card__result-text">
-              Stochastische Analyse mit Inflations-Bandbreite &amp; Volatilität.
+              {t('tax.monteCarloHint')}
             </span>
           </div>
         </button>

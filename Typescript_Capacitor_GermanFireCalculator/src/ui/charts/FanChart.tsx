@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { fmtM } from '../../services/monteCarloCalculator';
 import type { FanDataPoint } from '../../services/monteCarloCalculator';
 
@@ -8,6 +9,7 @@ interface FanChartProps {
 }
 
 export function FanChart({ fanData, landscape = false }: FanChartProps) {
+  const { t } = useTranslation();
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   if (fanData.length < 2) return null;
@@ -106,7 +108,7 @@ export function FanChart({ fanData, landscape = false }: FanChartProps) {
               fontWeight={active ? '800' : '600'}
               fill={active ? '#1C3826' : '#9CA3AF'}
             >
-              Age {d.age}
+              {t('fanChart.ageLabel', { age: d.age })}
             </text>
           </g>
         );
@@ -147,7 +149,7 @@ export function FanChart({ fanData, landscape = false }: FanChartProps) {
               fontWeight="800"
               fontFamily="inherit"
             >
-              Alter {hovered.age} ({hovered.year})
+              {t('fanChart.tooltipHeader', { age: hovered.age, year: hovered.year })}
             </text>
             <text
               x={tx + TW - 9}
@@ -159,7 +161,7 @@ export function FanChart({ fanData, landscape = false }: FanChartProps) {
               fontFamily="inherit"
               letterSpacing="0.5"
             >
-              SELECTION
+              {t('fanChart.selection')}
             </text>
 
             {/* Divider */}
@@ -180,7 +182,7 @@ export function FanChart({ fanData, landscape = false }: FanChartProps) {
               fontSize={8 * FS}
               fontFamily="inherit"
             >
-              Best Case
+              {t('fanChart.bestCase')}
             </text>
             <text
               x={tx + TW - 9}
@@ -202,7 +204,7 @@ export function FanChart({ fanData, landscape = false }: FanChartProps) {
               fontSize={8 * FS}
               fontFamily="inherit"
             >
-              Median
+              {t('fanChart.median')}
             </text>
             <text
               x={tx + TW - 9}
@@ -224,7 +226,7 @@ export function FanChart({ fanData, landscape = false }: FanChartProps) {
               fontSize={8 * FS}
               fontFamily="inherit"
             >
-              Worst Case
+              {t('fanChart.worstCase')}
             </text>
             <text
               x={tx + TW - 9}

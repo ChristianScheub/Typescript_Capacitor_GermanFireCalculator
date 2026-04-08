@@ -43,19 +43,19 @@ export function PrognoseContentView({
       <div className="prognose-hero">
         <p className="prognose-hero__overline">{t('prognosis.wealth')}</p>
         <h1 className="prognose-hero__title">
-          Ziel-Vermögen:
+          {t('prognosis.targetWealth')}
           <br />
-          {fmtK(fireTarget)} bis {fireYear}
+          {fmtK(fireTarget)} {t('prognosis.until')} {fireYear}
         </h1>
         <div className="prognose-hero__stats">
           <div className="prognose-hero__stat">
-            <p className="prognose-hero__stat-label">FORTSCHRITT</p>
+            <p className="prognose-hero__stat-label">{t('prognosis.progress')}</p>
             <p className="prognose-hero__stat-value">{firePercentage.toFixed(1).replace('.', ',')}%</p>
           </div>
           <div className="prognose-hero__divider" />
           <div className="prognose-hero__stat">
-            <p className="prognose-hero__stat-label">RESTZEIT</p>
-            <p className="prognose-hero__stat-value">{yearsToFIRE} Jahre</p>
+            <p className="prognose-hero__stat-label">{t('prognosis.timeLeft')}</p>
+            <p className="prognose-hero__stat-value">{yearsToFIRE} {t('prognosis.years')}</p>
           </div>
         </div>
         <div className={`prognose-hero__status${isOnTrack ? ' prognose-hero__status--on-track' : ''}`}>
@@ -88,9 +88,9 @@ export function PrognoseContentView({
             </svg>
           </div>
           <div className="milestone-info">
-            <p className="milestone-label">HEUTE</p>
+            <p className="milestone-label">{t('prognosis.today')}</p>
             <p className="milestone-year">{currentYear}</p>
-            <p className="milestone-sub">Startpunkt · {fmtCurrency(netWorth)} €</p>
+            <p className="milestone-sub">{t('prognosis.startpoint')} · {fmtCurrency(netWorth)} €</p>
           </div>
         </div>
 
@@ -111,9 +111,9 @@ export function PrognoseContentView({
             </svg>
           </div>
           <div className="milestone-info">
-            <p className="milestone-label">FIRE REACHED</p>
+            <p className="milestone-label">{t('prognosis.fireReached')}</p>
             <p className="milestone-year">{fireYear}</p>
-            <p className="milestone-sub">Entnahme möglich · {fmtCurrency(netSWR)} € / Monat</p>
+            <p className="milestone-sub">{t('prognosis.withdrawalPossible')} · {fmtCurrency(netSWR)} € / Monat</p>
           </div>
         </div>
 
@@ -134,17 +134,19 @@ export function PrognoseContentView({
             </svg>
           </div>
           <div className="milestone-info">
-            <p className="milestone-label">RENTE</p>
+            <p className="milestone-label">{t('prognosis.pension')}</p>
             <p className="milestone-year">{pensionYear}</p>
-            <p className="milestone-sub">Zusatz-Einkommen · +{fmtCurrency(pensionMonthly)} € / Monat</p>
+            <p className="milestone-sub">{t('prognosis.additionalIncome')} · +{fmtCurrency(pensionMonthly)} € / Monat</p>
           </div>
         </div>
       </div>
 
       {/* ── Cards ── */}
       <div className="prognose-table-section">
-        <h2 className="prognose-table-title">Vermögensentwicklung</h2>
-        <p className="prognose-table-subtitle">Projektion basierend auf {realReturnPct}% Realrendite p.a. (gewichtet)</p>
+        <h2 className="prognose-table-title">{t('prognosis.wealthDevelopment')}</h2>
+        <p className="prognose-table-subtitle">
+          {t('prognosis.projectionBased')} {realReturnPct}% {t('prognosis.realReturnPA')}
+        </p>
 
         <div className="prognose-cards">
           {tableRows.map(row => (
@@ -152,32 +154,32 @@ export function PrognoseContentView({
               <div className="prognose-card__header">
                 <span className="prognose-card__year">
                   {row.year}
-                  {row.isToday && <span className="prognose-card__tag prognose-card__tag--heute">HEUTE</span>}
+                  {row.isToday && <span className="prognose-card__tag prognose-card__tag--heute">{t('prognosis.today')}</span>}
                 </span>
                 <span className="prognose-card__badge">{row.badge}</span>
               </div>
 
               <div className="prognose-card__section">
-                <p className="prognose-card__label">ENTNAHME</p>
+                <p className="prognose-card__label">{t('prognosis.withdrawal')}</p>
                 <p className="prognose-card__value">{row.entnahmeTotalFormatted}</p>
                 <p className="prognose-card__sub">
-                  ETF {row.entnahmeEtfFormatted} · Cash {row.entnahmeCashFormatted}
+                  {t('prognosis.etf')} {row.entnahmeEtfFormatted} · {t('prognosis.cash')} {row.entnahmeCashFormatted}
                 </p>
               </div>
 
               <div className="prognose-card__section">
-                <p className="prognose-card__label">VERMÖGEN</p>
+                <p className="prognose-card__label">{t('prognosis.assets')}</p>
                 <p className="prognose-card__value">{row.totalValueFormatted}</p>
                 <p className="prognose-card__sub">
-                  ETF {row.etfValueFormatted} · Cash {row.cashValueFormatted}
+                  {t('prognosis.etf')} {row.etfValueFormatted} · {t('prognosis.cash')} {row.cashValueFormatted}
                 </p>
               </div>
 
               <div className="prognose-card__section">
-                <p className="prognose-card__label">RENDITE</p>
+                <p className="prognose-card__label">{t('prognosis.return')}</p>
                 <p className="prognose-card__value">{row.renditeTotalFormatted}</p>
                 <p className="prognose-card__sub">
-                  ETF {row.etfRateDisplay} · Cash {row.cashRateDisplay}
+                  {t('prognosis.etf')} {row.etfRateDisplay} · {t('prognosis.cash')} {row.cashRateDisplay}
                 </p>
               </div>
             </div>
@@ -185,7 +187,7 @@ export function PrognoseContentView({
         </div>
 
         <p className="prognose-table__footnote">
-          Rendite = Portfoliowert × {(weightedReturn * 100).toFixed(1).replace('.', ',')}% p.a. (gewichtete Rendite)
+          {t('prognosis.returnFormula')} {(weightedReturn * 100).toFixed(1).replace('.', ',')}% p.a. {t('prognosis.weightedReturn')}
         </p>
       </div>
 
@@ -206,9 +208,7 @@ export function PrognoseContentView({
           <line x1="12" y1="16" x2="12.01" y2="16" strokeWidth="3" strokeLinecap="round" />
         </svg>
         <p className="prognose-disclaimer__text">
-          Diese Prognose dient zur Orientierung. Berechnungen erfolgen inflationsbereinigt (Realwerte). Tatsächliche
-          Marktvolatilität kann zu Abweichungen führen. Überprüfen Sie Ihre Annahmen regelmäßig in den
-          <strong>Scenarios</strong>.
+          {t('prognosis.disclaimerText')} <strong>{t('prognosis.scenarios')}</strong>.
         </p>
       </div>
     </>

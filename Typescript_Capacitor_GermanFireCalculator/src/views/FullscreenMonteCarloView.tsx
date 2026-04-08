@@ -41,7 +41,7 @@ export function FullscreenMonteCarloView({
 
         {/* Header row */}
         <div className="mc-fullscreen-header">
-          <span className="mc-fullscreen-title">Monte-Carlo · Fächer-Diagramm</span>
+          <span className="mc-fullscreen-title">Monte-Carlo</span>
           <div className="mc-fan-legend">
             <span className="mc-legend-item mc-legend-item--95">95% KI</span>
             <span className="mc-legend-item mc-legend-item--50">50% KI</span>

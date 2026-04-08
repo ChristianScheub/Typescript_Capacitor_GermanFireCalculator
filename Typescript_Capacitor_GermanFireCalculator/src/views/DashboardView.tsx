@@ -45,7 +45,7 @@ export function DashboardView({
           </svg>
           <span>{t('dashboard.title')}</span>
         </div>
-        <button className="icon-btn" aria-label="Hilfe">
+        <button className="icon-btn" aria-label={t('dashboard.helpLabel')}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="10"/><path d={t('dashboard.icon1')} />
             <line x1="12" y1="17" x2="12.01" y2="17" strokeWidth="3" strokeLinecap="round"/>
@@ -55,18 +55,18 @@ export function DashboardView({
 
       <div className="screen__content">
         <section className="hero-section">
-          <p className="label-overline">FINANZIELLE UNABHÄNGIGKEIT</p>
+          <p className="label-overline">{t('dashboard.financialIndependence')}</p>
           <p className="hero-subtitle">
-            Voraussichtliche Freiheit:&nbsp;<strong>{fireDateMonth} {fireDateYear}</strong>
+            {t('dashboard.expectedFreedom')}&nbsp;<strong>{fireDateMonth} {fireDateYear}</strong>
           </p>
         </section>
 
         <div className="btn-row">
           <button className="btn btn--primary" onClick={() => onTabChange('planner')}>
-            Plan<br />anpassen
+            {t('dashboard.adjustPlan')}
           </button>
           <button className="btn btn--ghost" onClick={() => onTabChange('scenarios')}>
-            Details<br />ansehen
+            {t('dashboard.viewDetails')}
           </button>
         </div>
 
@@ -84,7 +84,7 @@ export function DashboardView({
               </div>
               <span className="badge badge--positive">+{growthBadge}%</span>
             </div>
-            <p className="kpi-card__label">NETTOVERMÖGEN</p>
+            <p className="kpi-card__label">{t('dashboard.netWorth')}</p>
             <p className="kpi-card__value">{netWorthFormatted}&thinsp;€</p>
           </div>
 
@@ -97,7 +97,7 @@ export function DashboardView({
               </div>
             </div>
             <p className="kpi-card__label">{t('planner.savingsRate')}</p>
-            <p className="kpi-card__value">{monthlySavingsFormatted}&thinsp;€<span className="kpi-card__unit">/Monat</span></p>
+            <p className="kpi-card__value">{monthlySavingsFormatted}&thinsp;€<span className="kpi-card__unit">{t('dashboard.perMonth')}</span></p>
           </div>
 
           <div className="card kpi-card">
@@ -108,8 +108,8 @@ export function DashboardView({
                 </svg>
               </div>
             </div>
-            <p className="kpi-card__label">EINK. AUS ASSETS</p>
-            <p className="kpi-card__value">{assetIncomeFormatted}&thinsp;€<span className="kpi-card__unit">/Monat</span></p>
+            <p className="kpi-card__label">{t('dashboard.assetIncome')}</p>
+            <p className="kpi-card__value">{assetIncomeFormatted}&thinsp;€<span className="kpi-card__unit">{t('dashboard.perMonth')}</span></p>
           </div>
 
           <div className="card kpi-card">
@@ -120,8 +120,8 @@ export function DashboardView({
                 </svg>
               </div>
             </div>
-            <p className="kpi-card__label">SICHERE ENTNAHME</p>
-            <p className="kpi-card__value">{safeWithdrawalFormatted}&thinsp;€<span className="kpi-card__unit">/Monat</span></p>
+            <p className="kpi-card__label">{t('dashboard.safeWithdrawal')}</p>
+            <p className="kpi-card__value">{safeWithdrawalFormatted}&thinsp;€<span className="kpi-card__unit">{t('dashboard.perMonth')}</span></p>
           </div>
         </div>
 
@@ -133,7 +133,7 @@ export function DashboardView({
           <div className="chart-card__header">
             <div>
               <h2 className="chart-card__title">{t('dashboard.title')}</h2>
-              <p className="chart-card__subtitle">Wachstum inkl. Zinseszins und gesetzlicher Rente</p>
+              <p className="chart-card__subtitle">{t('dashboard.chartSubtitle')}</p>
             </div>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="chart-card__chevron">
               <polyline points="9 18 15 12 9 6" />
@@ -145,13 +145,13 @@ export function DashboardView({
         </button>
 
         <div className="card scenario-card" onClick={() => onTabChange('scenarios')}>
-          <h3 className="scenario-card__title">Szenarien testen</h3>
-          <p className="scenario-card__body">Simulieren Sie Marktschwankungen oder Erbschaften.</p>
-          <button className="scenario-card__btn">EXPLORER ÖFFNEN</button>
+          <h3 className="scenario-card__title">{t('dashboard.scenariosTitle')}</h3>
+          <p className="scenario-card__body">{t('dashboard.scenariosBody')}</p>
+          <button className="scenario-card__btn">{t('dashboard.openExplorer')}</button>
         </div>
       </div>
 
-      <button className="fab" aria-label="Neu" onClick={() => onTabChange('planner')}>+</button>
+      <button className="fab" aria-label={t('dashboard.fabLabel')} onClick={() => onTabChange('planner')}>+</button>
     </div>
   );
 }

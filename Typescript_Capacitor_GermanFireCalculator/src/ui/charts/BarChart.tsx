@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import './BarChart.css';
 import type { ChartDataPoint } from '../../types/fire/models/ChartDataPoint';
 import type { BarChartMode }   from '../../types/navigation/BarChartMode';
@@ -24,6 +25,7 @@ function fmtCompact(v: number): string {
 }
 
 export function BarChart({ data, mode = 'cumulative' }: Props) {
+  const { t } = useTranslation();
   if (!data.length) return null;
 
   // In yearly mode: show the period-over-period delta between chart points
@@ -64,7 +66,7 @@ export function BarChart({ data, mode = 'cumulative' }: Props) {
                   letterSpacing="0.5" fontFamily="inherit"
                   className="bar-fire-label"
                 >
-                  RENTENBEGINN
+                  {t('prognosis.pensionStart')}
                 </text>
               </>
             )}

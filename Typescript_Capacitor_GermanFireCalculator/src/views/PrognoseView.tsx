@@ -53,7 +53,7 @@ export function PrognoseView({
           </svg>
         </button>
         <div className="app-header__brand">
-          <span>PROGNOSE</span>
+          <span>{t('prognosis.title')}</span>
           {config.badge && <span className="prognose-header-badge">{config.badge}</span>}
         </div>
         <button className="icon-btn" aria-label="Hilfe">
@@ -69,17 +69,17 @@ export function PrognoseView({
         <div className="prognose-hero">
           <p className="prognose-hero__overline">{t('prognosis.wealth')}</p>
           <h1 className="prognose-hero__title">
-            Ziel-Vermögen:<br />{fireTargetText}
+            {t('prognosis.targetWealth')}<br />{fireTargetText}
           </h1>
           <div className="prognose-hero__stats">
             <div className="prognose-hero__stat">
-              <p className="prognose-hero__stat-label">FORTSCHRITT</p>
+              <p className="prognose-hero__stat-label">{t('prognosis.progress')}</p>
               <p className="prognose-hero__stat-value">{firePercentageText}%</p>
             </div>
             <div className="prognose-hero__divider" />
             <div className="prognose-hero__stat">
-              <p className="prognose-hero__stat-label">RESTZEIT</p>
-              <p className="prognose-hero__stat-value">{yearsToFIRE} Jahre</p>
+              <p className="prognose-hero__stat-label">{t('prognosis.timeLeft')}</p>
+              <p className="prognose-hero__stat-value">{yearsToFIRE} {t('prognosis.years')}</p>
             </div>
           </div>
           <div className={`prognose-hero__status${isOnTrack ? ' prognose-hero__status--on-track' : ''}`}>
@@ -101,9 +101,9 @@ export function PrognoseView({
               </svg>
             </div>
             <div className="milestone-info">
-              <p className="milestone-label">HEUTE</p>
+              <p className="milestone-label">{t('prognosis.today')}</p>
               <p className="milestone-year">{currentYear}</p>
-              <p className="milestone-sub">Startpunkt · {netWorthFormatted} €</p>
+              <p className="milestone-sub">{t('prognosis.startpoint')} · {netWorthFormatted} €</p>
             </div>
           </div>
 
@@ -114,9 +114,9 @@ export function PrognoseView({
               </svg>
             </div>
             <div className="milestone-info">
-              <p className="milestone-label">FIRE REACHED</p>
+              <p className="milestone-label">{t('prognosis.fireReached')}</p>
               <p className="milestone-year">{fireYear}</p>
-              <p className="milestone-sub">Entnahme möglich · {netSWRFormatted} € / Monat</p>
+              <p className="milestone-sub">{t('prognosis.withdrawalPossible')} · {netSWRFormatted} € / Monat</p>
             </div>
           </div>
 
@@ -127,18 +127,18 @@ export function PrognoseView({
               </svg>
             </div>
             <div className="milestone-info">
-              <p className="milestone-label">RENTE</p>
+              <p className="milestone-label">{t('prognosis.pension')}</p>
               <p className="milestone-year">{pensionYear}</p>
-              <p className="milestone-sub">Zusatz-Einkommen · +{pensionMonthlyFormatted} € / Monat</p>
+              <p className="milestone-sub">{t('prognosis.additionalIncome')} · +{pensionMonthlyFormatted} € / Monat</p>
             </div>
           </div>
         </div>
 
         {/* ── Cards ── */}
         <div className="prognose-table-section">
-          <h2 className="prognose-table-title">Vermögensentwicklung</h2>
+          <h2 className="prognose-table-title">{t('prognosis.wealthDevelopment')}</h2>
           <p className="prognose-table-subtitle">
-            Projektion basierend auf {realReturnPct}% Realrendite p.a. (gewichtet)
+            {t('prognosis.projectionBased')} {realReturnPct}% {t('prognosis.realReturnPA')}
           </p>
 
           <div className="prognose-cards">
@@ -147,34 +147,34 @@ export function PrognoseView({
                 <div className="prognose-card__header">
                   <span className="prognose-card__year">
                     {row.year}
-                    {row.isToday   && <span className="prognose-card__tag prognose-card__tag--heute">HEUTE</span>}
+                    {row.isToday   && <span className="prognose-card__tag prognose-card__tag--heute">{t('prognosis.today')}</span>}
                   </span>
                   <span className="prognose-card__badge">{row.badge}</span>
                 </div>
 
                 <div className="prognose-card__section">
-                  <p className="prognose-card__label">ENTNAHME</p>
+                  <p className="prognose-card__label">{t('prognosis.withdrawal')}</p>
                   <p className="prognose-card__value">{row.entnahmeTotalFormatted}</p>
-                  <p className="prognose-card__sub">ETF {row.entnahmeEtfFormatted} · Cash {row.entnahmeCashFormatted}</p>
+                  <p className="prognose-card__sub">{t('prognosis.etf')} {row.entnahmeEtfFormatted} · {t('prognosis.cash')} {row.entnahmeCashFormatted}</p>
                 </div>
 
                 <div className="prognose-card__section">
-                  <p className="prognose-card__label">VERMÖGEN</p>
+                  <p className="prognose-card__label">{t('prognosis.assets')}</p>
                   <p className="prognose-card__value">{row.totalValueFormatted}</p>
-                  <p className="prognose-card__sub">ETF {row.etfValueFormatted} · Cash {row.cashValueFormatted}</p>
+                  <p className="prognose-card__sub">{t('prognosis.etf')} {row.etfValueFormatted} · {t('prognosis.cash')} {row.cashValueFormatted}</p>
                 </div>
 
                 <div className="prognose-card__section">
-                  <p className="prognose-card__label">RENDITE</p>
+                  <p className="prognose-card__label">{t('prognosis.return')}</p>
                   <p className="prognose-card__value">{row.renditeTotalFormatted}</p>
-                  <p className="prognose-card__sub">ETF {row.etfRateDisplay} · Cash {row.cashRateDisplay}</p>
+                  <p className="prognose-card__sub">{t('prognosis.etf')} {row.etfRateDisplay} · {t('prognosis.cash')} {row.cashRateDisplay}</p>
                 </div>
               </div>
             ))}
           </div>
 
           <p className="prognose-table__footnote">
-            Rendite = Portfoliowert × {weightedReturnText}% p.a. (gewichtete Rendite)
+            {t('prognosis.returnFormula')} {weightedReturnText}% p.a. {t('prognosis.weightedReturn')}
           </p>
         </div>
 
@@ -186,9 +186,7 @@ export function PrognoseView({
             <line x1="12" y1="16" x2="12.01" y2="16" strokeWidth="3" strokeLinecap="round" />
           </svg>
           <p className="prognose-disclaimer__text">
-            Diese Prognose dient zur Orientierung. Berechnungen erfolgen inflationsbereinigt (Realwerte).
-            Tatsächliche Marktvolatilität kann zu Abweichungen führen. Überprüfen Sie Ihre Annahmen
-            regelmäßig in den <strong>Scenarios</strong>.
+            {t('prognosis.disclaimerText')} <strong>{t('prognosis.scenarios')}</strong>.
           </p>
         </div>
       </div>

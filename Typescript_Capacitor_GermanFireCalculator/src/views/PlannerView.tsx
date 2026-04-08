@@ -69,8 +69,8 @@ export function PlannerView({
 
       <div className="screen__content screen__content--has-footer">
         <section className="page-title-section">
-          <p className="label-overline">PLANER-MODUL</p>
-          <h1 className="page-heading">Die Architektur Ihrer<br />finanziellen Freiheit.</h1>
+          <p className="label-overline">{t('planner.plannerModule')}</p>
+          <h1 className="page-heading">{t('planner.architectureTitle')}</h1>
         </section>
 
         {/* ── Sparrate ── */}
@@ -126,8 +126,8 @@ export function PlannerView({
         <div className="section-card">
           <div className="section-card__header">
             <div>
-              <h2 className="section-card__title">Portfolio-Mix</h2>
-              <p className="section-card__subtitle">Aktuelle Vermögensverteilung</p>
+              <h2 className="section-card__title">{t('planner.portfolioMix')}</h2>
+              <p className="section-card__subtitle">{t('planner.portfolioMixSub')}</p>
             </div>
             <div className="section-icon section-icon--teal">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -188,8 +188,8 @@ export function PlannerView({
         <div className="section-card">
           <div className="section-card__header">
             <div>
-              <h2 className="section-card__title">KV-Check</h2>
-              <p className="section-card__subtitle">Krankenversicherungs-Status</p>
+              <h2 className="section-card__title">{t('planner.kvCheck')}</h2>
+              <p className="section-card__subtitle">{t('planner.kvCheckSub')}</p>
             </div>
             <div className="section-icon section-icon--teal">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -201,20 +201,20 @@ export function PlannerView({
             <button
               className={`segmented__btn${!state.isPkvUser ? ' segmented__btn--active' : ''}`}
               onClick={() => updateField('isPkvUser', false)}
-            >GKV</button>
+            >{t('planner.gkv')}</button>
             <button
               className={`segmented__btn${state.isPkvUser ? ' segmented__btn--active' : ''}`}
               onClick={() => updateField('isPkvUser', true)}
-            >PKV</button>
+            >{t('planner.pkv')}</button>
           </div>
           {!state.isPkvUser && (
             <div className="info-card" style={{ marginTop: '16px' }}>
               <div className="info-card__text">
-                <p className="info-card__title">GKV-Beitrag im Ruhestand</p>
+                <p className="info-card__title">{t('planner.gkvContributionTitle')}</p>
                 <p className="info-card__body">
                   {isCapped
-                    ? `Es wird der GKV-Höchstbetrag von ${gkvMonthlyFormatted} € / Monat berücksichtigt (Beitragsdeckel).`
-                    : `Es werden ca. 21% Ihres Asset-Einkommens im FIRE-Jahr berücksichtigt (~${gkvMonthlyFormatted} € / Monat, max. 1.300 €).`
+                    ? t('planner.gkvCapped', { amount: gkvMonthlyFormatted })
+                    : t('planner.gkvUncapped', { amount: gkvMonthlyFormatted })
                   }
                 </p>
               </div>
@@ -222,7 +222,7 @@ export function PlannerView({
           )}
           {state.isPkvUser && (
             <div className="field" style={{ marginTop: '16px' }}>
-              <label className="field__label">MONATLICHER BEITRAG PKV</label>
+              <label className="field__label">{t('planner.pkvMonthlyContribution')}</label>
               <div className="field__input-wrap">
                 <input
                   className="field__input field__input--large-num"
@@ -231,7 +231,7 @@ export function PlannerView({
                   value={state.pkvContribution}
                   onChange={e => updateField('pkvContribution', Number(e.target.value))}
                 />
-                <span className="field__unit">€ / MONAT</span>
+                <span className="field__unit">{t('planner.perMonth')}</span>
               </div>
             </div>
           )}
@@ -241,8 +241,8 @@ export function PlannerView({
         <div className="section-card">
           <div className="section-card__header">
             <div>
-              <h2 className="section-card__title">Steuer-Check</h2>
-              <p className="section-card__subtitle">Optimierung &amp; Freibeträge</p>
+              <h2 className="section-card__title">{t('planner.taxCheck')}</h2>
+              <p className="section-card__subtitle">{t('planner.taxCheckSub')}</p>
             </div>
             <div className="section-icon section-icon--orange">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -277,9 +277,9 @@ export function PlannerView({
 
       <div className="planner-footer">
         <div className="fire-status-bar">
-          <p className="fire-status-bar__label">AKTUELLER STATUS</p>
+          <p className="fire-status-bar__label">{t('planner.currentStatus')}</p>
           <p className="fire-status-bar__pct">{firePercentageRounded}%</p>
-          <p className="fire-status-bar__hint">Ihres finanziellen Fundaments ist gelegt.</p>
+          <p className="fire-status-bar__hint">{t('planner.foundationLaid')}</p>
           <div className="progress-bar">
             <div className="progress-bar__fill" style={{ width: `${fireProgressWidth}` }} />
           </div>

@@ -68,8 +68,7 @@ export function Menu() {
             <a href="#">Nutzungsbedingungen</a>
             <a href="#">Haftungsausschluss</a>
           </div>
-          <p className="menu-footer__copy">© 2024 FIRE LEDGER FINANCIAL SYSTEMS GMBH</p>
-          <p className="menu-footer__tagline">Präzision in jeder Kalkulation.</p>
+          <p className="menu-footer__copy">© 2024 FIRE LEDGER PLATZHALTER FIRMA</p>
         </footer>
       </div>
     </div>

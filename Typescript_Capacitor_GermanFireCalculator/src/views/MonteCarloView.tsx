@@ -1,4 +1,5 @@
 import { useRef, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { FanChart } from "../ui/charts/FanChart";
 import { KpiBar } from "../ui/monteCarloChart/KpiBar";
 import { fmtM } from "../services/monteCarloCalculator";
@@ -59,6 +60,7 @@ export function MonteCarloView({
   onFullscreenOpen,
   onRerun,
 }: MonteCarloViewProps) {
+  const { t } = useTranslation();
   const minInflationRef = useRef<HTMLInputElement>(null);
   const maxInflationRef = useRef<HTMLInputElement>(null);
   const volatilityRef = useRef<HTMLInputElement>(null);
@@ -126,55 +128,48 @@ export function MonteCarloView({
         {/* ── Header ── */}
         <div className="mc-header">
           <h2 className="mc-title">
-            Monte-Carlo
+            {t('monteCarlo.title')}
             <br />
-            Simulation
           </h2>
-          <p className="mc-subtitle">FINANZIELLE AUSDAUER-ANALYSE</p>
+          <p className="mc-subtitle">{t('monteCarlo.subtitle')}</p>
         </div>
 
         {/* ── Success Rate ── */}
         <div
           className={`mc-card${isBadSuccess ? " mc-card--danger-border" : ""}`}
         >
-          <p className="mc-label">ERFOLGSWAHRSCHEINLICHKEIT</p>
+          <p className="mc-label">{t('monteCarlo.successLabel')}</p>
           <p
             className={`mc-big-value${isBadSuccess ? " mc-big-value--danger" : ""}`}
           >
             {successPct}%
           </p>
           <p className="mc-sub">
-            Ihr Kapital reicht bis zum 100. Lebensjahr in{" "}
-            <strong>{result.successCount}</strong> von{" "}
-            <strong>{result.numSimulations}</strong> simulierten Marktzyklen.
+            {t('monteCarlo.successInfo', { count: result.successCount, total: result.numSimulations })}
           </p>
           <p className="mc-sub mc-sub--secondary">
-            Die Simulation startet mit{" "}
-            <strong>{fmtM(simRange.startCapital)}</strong> Portfoliokapital im
-            Jahr <strong>{simRange.startYear}</strong> – basierend auf Ihrer
-            Konfiguration.
+            {t('monteCarlo.simulationStart', { capital: fmtM(simRange.startCapital), year: simRange.startYear })}
           </p>
         </div>
 
         {/* ── Pessimistic Case ── */}
         <div className="mc-card mc-card--pessimistic">
-          <p className="mc-label">PESSIMISTIC CASE</p>
+          <p className="mc-label">{t('monteCarlo.pessimisticCaseLabel')}</p>
           <p className="mc-pessimistic-line">
-            Geld aufgebraucht mit{" "}
+            {t('monteCarlo.pessimisticCase')}{" "}
             <span className="mc-pessimistic-age">{result.pessimisticAge}</span>
           </p>
           <p className="mc-sub">
-            Das ungünstigste Szenario bei hoher Inflation und geringem
-            Marktwachstum.
+            {t('monteCarlo.pessimisticDesc')}
           </p>
         </div>
 
         {/* ── Median Inheritance ── */}
         <div className="mc-card mc-card--positive">
-          <p className="mc-label">MEDIAN-ERBE</p>
+          <p className="mc-label">{t('monteCarlo.medianInheritanceLabel')}</p>
           <p className="mc-value">{fmtM(result.medianFinalWealth)}</p>
           <p className="mc-sub">
-            Erwarteter Vermögensüberschuss am Ende des Simulationszeitraums.
+            {t('monteCarlo.medianInheritanceDesc')}
           </p>
         </div>
 
@@ -182,24 +177,22 @@ export function MonteCarloView({
         <div className="mc-card mc-card--chart">
           <div className="mc-fan-header-row">
             <span className="mc-fan-title">
-              Vermögensentwicklung
-              <br />
-              (Fächer-Diagramm)
+              {t('monteCarlo.wealthChart')}
             </span>
             <div className="mc-fan-header-actions">
               <div className="mc-fan-legend">
                 <span className="mc-legend-item mc-legend-item--95">
-                  95% KI
+                  {t('monteCarlo.ci95')}
                 </span>
                 <span className="mc-legend-item mc-legend-item--50">
-                  50% KI
+                  {t('monteCarlo.ci50')}
                 </span>
               </div>
               {/* Fullscreen button */}
               <button
                 className="mc-fullscreen-btn"
                 onClick={onFullscreenOpen}
-                aria-label="Vollbild"
+                aria-label={t('monteCarlo.fullscreenLabel')}
               >
                 <svg
                   width="16"
@@ -220,7 +213,7 @@ export function MonteCarloView({
             </div>
           </div>
 
-          <p className="mc-chart-hint">Tippe auf den Graphen für Details</p>
+          <p className="mc-chart-hint">{t('monteCarlo.chartHint')}</p>
           <FanChart fanData={result.fanData} />
           <KpiBar
             zielwert={kpiZielwert}
@@ -245,10 +238,10 @@ export function MonteCarloView({
             >
               <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
             </svg>
-            <span className="mc-input-title">Börsen-Volatilität</span>
+            <span className="mc-input-title">{t('monteCarlo.volatilityTitle')}</span>
           </div>
           <div className="mc-slider-row">
-            <span className="mc-slider-label">STANDARDABWEICHUNG</span>
+            <span className="mc-slider-label">{t('monteCarlo.standardDeviation')}</span>
             <span className="mc-slider-value">
               {displayVolatility.toFixed(1)}%
             </span>
@@ -264,13 +257,11 @@ export function MonteCarloView({
             onChange={(e) => onVolatilityChange(parseFloat(e.target.value))}
           />
           <div className="mc-slider-hints">
-            <span>Konservativ (5%)</span>
-            <span>Extrem (50%)</span>
+            <span>{t('monteCarlo.conservative')}</span>
+            <span>{t('monteCarlo.extreme')}</span>
           </div>
           <p className="mc-sub mc-sub--secondary">
-            Hier können Sie die Volatilität der Börsenrenditen anpassen pro
-            Jahr. Eine höhere Volatilität führt zu größeren Schwankungen in der
-            Vermögensentwicklung, was sowohl Chancen als auch Risiken erhöht.
+            {t('monteCarlo.volatilityInfo')}
           </p>
         </div>
 
@@ -290,11 +281,11 @@ export function MonteCarloView({
               <path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z" />
               <path d="M12 6v6l4 2" />
             </svg>
-            <span className="mc-input-title">Inflations-Bandbreite</span>
+            <span className="mc-input-title">{t('monteCarlo.inflationRangeTitle')}</span>
           </div>
           <div className="mc-inflation-row">
             <div className="mc-inflation-field">
-              <label className="mc-inflation-label">MIN. INFLATION</label>
+              <label className="mc-inflation-label">{t('monteCarlo.minInflation')}</label>
               <div className="mc-inflation-input-wrap">
                 <input
                   ref={minInflationRef}
@@ -309,7 +300,7 @@ export function MonteCarloView({
               </div>
             </div>
             <div className="mc-inflation-field">
-              <label className="mc-inflation-label">MAX. INFLATION</label>
+              <label className="mc-inflation-label">{t('monteCarlo.maxInflation')}</label>
               <div className="mc-inflation-input-wrap">
                 <input
                   ref={maxInflationRef}
@@ -342,11 +333,11 @@ export function MonteCarloView({
               <rect x="3" y="3" width="18" height="18" rx="2" />
               <path d="M8 12h8M12 8v8" />
             </svg>
-            <span className="mc-input-title">Simulations-Parameter</span>
+            <span className="mc-input-title">{t('monteCarlo.simulationParamsTitle')}</span>
           </div>
           <div className="mc-inflation-row">
             <div className="mc-inflation-field">
-              <label className="mc-inflation-label">STARTKAPITAL</label>
+              <label className="mc-inflation-label">{t('monteCarlo.startCapital')}</label>
               <div className="mc-inflation-input-wrap">
                 <input
                   ref={startCapitalRef}
@@ -360,7 +351,7 @@ export function MonteCarloView({
               </div>
             </div>
             <div className="mc-inflation-field">
-              <label className="mc-inflation-label">STARTJAHR</label>
+              <label className="mc-inflation-label">{t('monteCarlo.startYear')}</label>
               <div className="mc-inflation-input-wrap">
                 <input
                   ref={startYearRef}
@@ -376,7 +367,7 @@ export function MonteCarloView({
           </div>
           <div className="mc-inflation-row mc-inflation-row--top">
             <div className="mc-inflation-field">
-              <label className="mc-inflation-label">BIS JAHR</label>
+              <label className="mc-inflation-label">{t('monteCarlo.endYear')}</label>
               <div className="mc-inflation-input-wrap">
                 <input
                   ref={endYearRef}
@@ -408,11 +399,11 @@ export function MonteCarloView({
               <rect x="2" y="5" width="20" height="14" rx="2" ry="2" />
               <line x1="2" y1="10" x2="22" y2="10" />
             </svg>
-            <span className="mc-input-title">Monatliche Ausgaben</span>
+            <span className="mc-input-title">{t('monteCarlo.monthlyExpensesTitle')}</span>
           </div>
           <div className="mc-inflation-row">
             <div className="mc-inflation-field">
-              <label className="mc-inflation-label">BETRAG PRO MONAT</label>
+              <label className="mc-inflation-label">{t('monteCarlo.amountPerMonth')}</label>
 
               <div className="mc-inflation-input-wrap">
                 <input
@@ -426,8 +417,7 @@ export function MonteCarloView({
                 <span className="mc-inflation-unit">€</span>
               </div>
               <p className="mc-sub mc-sub--secondary">
-                Hier müssen Sie alle Kosten berücksichtigen: variable Kosten,
-                Fixkosten (wie Krankenversicherung) und Kapitalertragssteuer.
+                {t('monteCarlo.expensesInfo')}
               </p>
             </div>
           </div>
@@ -435,7 +425,7 @@ export function MonteCarloView({
 
         {/* ── Run Button ── */}
         <button className="mc-run-btn" onClick={handleRerun}>
-          Simulation neu starten
+          {t('monteCarlo.runSimulation')}
         </button>
       </div>
     </>
