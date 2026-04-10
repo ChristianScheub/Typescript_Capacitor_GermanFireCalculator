@@ -2,6 +2,7 @@ import { useTranslation }     from 'react-i18next';
 import { ProgressRing }       from '../ui/charts/ProgressRing';
 import { BarChart }           from '../ui/charts/BarChart';
 import { KpiCard }            from '../ui/cards/KpiCard';
+import { Icon }               from '../ui/icons';
 import type { ChartDataPoint } from '../types/fire/models/ChartDataPoint';
 import type { Tab }            from '../types/navigation/Tab';
 import type { PrognoseConfig } from '../types/prognose/PrognoseConfig';
@@ -38,11 +39,12 @@ export function DashboardView({
   return (
     <div className="screen">
       <div className="screen__content">
-        <section className="hero-section">
+        <section className="page-title-section">
           <p className="label-overline">{t('dashboard.financialIndependence')}</p>
           <p className="hero-subtitle">
             {t('dashboard.expectedFreedom')}&nbsp;<strong>{fireDateMonth} {fireDateYear}</strong>
           </p>
+          <h1 className="page-heading">{t('dashboard.foundationTitle')}</h1>
         </section>
 
         <div className="btn-row">
@@ -65,7 +67,7 @@ export function DashboardView({
             unit="€"
             iconVariant="green"
             badgeText={`+${growthBadge}%`}
-            icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>}
+            icon={<Icon name="wallet" size="sm" />}
           />
           <KpiCard
             label={t('planner.savingsRate')}
@@ -79,14 +81,14 @@ export function DashboardView({
             value={assetIncomeFormatted}
             unit={t('dashboard.perMonth')}
             iconVariant="red"
-            icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/></svg>}
+            icon={<Icon name="wallet_2" size="sm" />}
           />
           <KpiCard
             label={t('dashboard.safeWithdrawal')}
             value={safeWithdrawalFormatted}
             unit={t('dashboard.perMonth')}
             iconVariant="orange"
-            icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>}
+            icon={<Icon name="trending" size="sm" />}
           />
         </div>
 
@@ -100,9 +102,7 @@ export function DashboardView({
               <h2 className="chart-card__title">{t('dashboard.title')}</h2>
               <p className="chart-card__subtitle">{t('dashboard.chartSubtitle')}</p>
             </div>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="chart-card__chevron">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
+            <Icon name="chevron_right" size="md" className="chart-card__chevron" />
           </div>
           <div className="chart-wrap">
             <BarChart data={chartData} />

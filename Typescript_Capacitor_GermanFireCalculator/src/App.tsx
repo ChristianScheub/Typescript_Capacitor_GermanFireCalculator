@@ -3,7 +3,7 @@ import { FireProvider }               from './context/FireContext';
 import { BottomNav }                  from './ui/navigation/BottomNav';
 import { DashboardContainer }         from './container/Dashboard/DashboardContainer';
 import { PlannerContainer }           from './container/Planner/PlannerContainer';
-import { SteuerContainer }            from './container/Steuer/SteuerContainer';
+import { SteuerContainer }            from './container/Scenario/ScenarioContainer';
 import { PrognoseContainer }          from './container/Prognose/PrognoseContainer';
 import { Menu }                       from './views/MenuView';
 import type { Tab }                   from './types/navigation/Tab';

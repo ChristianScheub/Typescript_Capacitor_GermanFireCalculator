@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { NumericInput }   from '../ui/inputs/NumericInput';
+import { ContentSection } from '../ui/cards/InputCard';
+import { Icon }           from '../ui/icons';
 import type { FireState }  from '../types/fire/models/FireState';
 
 
@@ -33,18 +35,13 @@ export function PlannerView({
         </section>
 
         {/* ── Sparrate ── */}
-        <div className="section-card">
-          <div className="section-card__header">
-            <div>
-              <h2 className="section-card__title">{t('planner.savingsSection')}</h2>
-              <p className="section-card__subtitle">{t('planner.savingsSectionSub')}</p>
-            </div>
-            <div className="section-icon section-icon--green">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
-              </svg>
-            </div>
-          </div>
+        <ContentSection
+          title={t('planner.savingsSection')}
+          subtitle={t('planner.savingsSectionSub')}
+          iconVariant="green"
+          icon={<Icon name="wallet" size="md" />}
+          variant="section"
+        >
           <NumericInput
             label={t('planner.monthlySavings')}
             value={state.monthlySavingsAmount}
@@ -59,41 +56,30 @@ export function PlannerView({
             onChange={v => updateField('savingsGrowthRate', v)}
             hint={t('planner.savingsGrowthRateHint')}
           />
-        </div>
+        </ContentSection>
 
         {/* ── Rente & Alter ── */}
-        <div className="section-card">
-          <div className="section-card__header">
-            <div>
-              <h2 className="section-card__title">{t('planner.pensionSection')}</h2>
-              <p className="section-card__subtitle">{t('planner.pensionSectionSub')}</p>
-            </div>
-            <div className="section-icon section-icon--teal">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/>
-                <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-              </svg>
-            </div>
-          </div>
+        <ContentSection
+          title={t('planner.pensionSection')}
+          subtitle={t('planner.pensionSectionSub')}
+          iconVariant="teal"
+          icon={<Icon name="calendar" size="md" />}
+          variant="section"
+        >
           <NumericInput label={t('planner.currentAge')}   value={state.currentAge}    unit={t('planner.years')} onChange={v => updateField('currentAge', v)} />
           <NumericInput label={t('planner.pensionAge')}   value={state.pensionAge}    unit={t('planner.years')} onChange={v => updateField('pensionAge', v)} />
           <NumericInput label={t('planner.pensionMonthly')} value={state.pensionMonthly} unit="€" onChange={v => updateField('pensionMonthly', v)}
             hint={t('planner.pensionMonthlyHint')} />
-        </div>
+        </ContentSection>
 
         {/* ── Portfolio-Mix ── */}
-        <div className="section-card">
-          <div className="section-card__header">
-            <div>
-              <h2 className="section-card__title">{t('planner.portfolioMix')}</h2>
-              <p className="section-card__subtitle">{t('planner.portfolioMixSub')}</p>
-            </div>
-            <div className="section-icon section-icon--teal">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d={t('planner.icon2')}/><path d={t('planner.icon3')}/>
-              </svg>
-            </div>
-          </div>
+        <ContentSection
+          title={t('planner.portfolioMix')}
+          subtitle={t('planner.portfolioMixSub')}
+          iconVariant="teal"
+          icon={<Icon name="grid" size="md" />}
+          variant="section"
+        >
           <NumericInput label={t('planner.etfStocks')} value={state.etfBalance} unit="€" onChange={v => updateField('etfBalance', v)} />
           <NumericInput label={t('planner.expectedReturnEtf')} value={state.etfRate} unit="%" onChange={v => updateField('etfRate', v)}
             hint={t('planner.taxEtf')} />
@@ -102,21 +88,16 @@ export function PlannerView({
           <NumericInput label={t('planner.cash')} value={state.cashBalance} unit="€" onChange={v => updateField('cashBalance', v)} />
           <NumericInput label={t('planner.interestRateCash')} value={state.cashRate} unit="%" onChange={v => updateField('cashRate', v)}
             hint={t('planner.taxCash')} />
-        </div>
+        </ContentSection>
 
         {/* ── Ruhestand Budget ── */}
-        <div className="section-card">
-          <div className="section-card__header">
-            <div>
-              <h2 className="section-card__title">{t('planner.retirementBudgetTitle')}</h2>
-              <p className="section-card__subtitle">{t('planner.retirementBudgetSub')}</p>
-            </div>
-            <div className="section-icon section-icon--orange">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/>
-              </svg>
-            </div>
-          </div>
+        <ContentSection
+          title={t('planner.retirementBudgetTitle')}
+          subtitle={t('planner.retirementBudgetSub')}
+          iconVariant="orange"
+          icon={<Icon name="wallet_2" size="md" />}
+          variant="section"
+        >
           <NumericInput
             label={t('planner.fixedExpenses')}
             value={state.fixedExpenses}
@@ -141,21 +122,16 @@ export function PlannerView({
             onChange={v => updateField('inflationRate', v)}
             hint={t('planner.inflationRateHint')}
           />
-        </div>
+        </ContentSection>
 
         {/* ── KV-Check ── */}
-        <div className="section-card">
-          <div className="section-card__header">
-            <div>
-              <h2 className="section-card__title">{t('planner.kvCheck')}</h2>
-              <p className="section-card__subtitle">{t('planner.kvCheckSub')}</p>
-            </div>
-            <div className="section-icon section-icon--teal">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d={t('planner.icon4')} />
-              </svg>
-            </div>
-          </div>
+        <ContentSection
+          title={t('planner.kvCheck')}
+          subtitle={t('planner.kvCheckSub')}
+          iconVariant="teal"
+          icon={<Icon name="info" size="md" />}
+          variant="section"
+        >
           <div className="segmented">
             <button
               className={`segmented__btn${!state.isPkvUser ? ' segmented__btn--active' : ''}`}
@@ -167,7 +143,7 @@ export function PlannerView({
             >{t('planner.pkv')}</button>
           </div>
           {!state.isPkvUser && (
-            <div className="info-card" style={{ marginTop: '16px' }}>
+            <div className="info-card mt-4">
               <div className="info-card__text">
                 <p className="info-card__title">{t('planner.gkvContributionTitle')}</p>
                 <p className="info-card__body">
@@ -180,7 +156,7 @@ export function PlannerView({
             </div>
           )}
           {state.isPkvUser && (
-            <div className="field" style={{ marginTop: '16px' }}>
+            <div className="field mt-4">
               <label className="field__label">{t('planner.pkvMonthlyContribution')}</label>
               <div className="field__input-wrap">
                 <input
@@ -194,23 +170,16 @@ export function PlannerView({
               </div>
             </div>
           )}
-        </div>
+        </ContentSection>
 
         {/* ── Steuer-Check ── */}
-        <div className="section-card">
-          <div className="section-card__header">
-            <div>
-              <h2 className="section-card__title">{t('planner.taxCheck')}</h2>
-              <p className="section-card__subtitle">{t('planner.taxCheckSub')}</p>
-            </div>
-            <div className="section-icon section-icon--orange">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="19" y1="5" x2="5" y2="19"/>
-                <circle cx="6.5" cy="6.5" r="2.5"/>
-                <circle cx="17.5" cy="17.5" r="2.5"/>
-              </svg>
-            </div>
-          </div>
+        <ContentSection
+          title={t('planner.taxCheck')}
+          subtitle={t('planner.taxCheckSub')}
+          iconVariant="orange"
+          icon={<Icon name="info" size="md" />}
+          variant="section"
+        >
           <NumericInput
             label={t('planner.assetTaxRate')}
             value={state.assetTaxRate}
@@ -229,9 +198,9 @@ export function PlannerView({
               <p className="info-card__body">{t('planner.assetTaxRateHint')}</p>
             </div>
           </div>
-        </div>
+        </ContentSection>
 
-        <div style={{ height: '8px' }} />
+        <div className="h-2" />
       </div>
 
       <div className="planner-footer">
@@ -240,7 +209,7 @@ export function PlannerView({
           <p className="fire-status-bar__pct">{firePercentageRounded}%</p>
           <p className="fire-status-bar__hint">{t('planner.foundationLaid')}</p>
           <div className="progress-bar">
-            <div className="progress-bar__fill" style={{ width: `${fireProgressWidth}` }} />
+            <div className="progress-bar__fill" style={{ "--width": `${fireProgressWidth}` } as React.CSSProperties} />
           </div>
         </div>
       </div>

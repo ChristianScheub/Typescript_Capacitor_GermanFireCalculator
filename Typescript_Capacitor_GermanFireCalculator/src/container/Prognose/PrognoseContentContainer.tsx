@@ -1,9 +1,11 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useFireContext } from '../../context/FireContext';
 import { fireService, FIRE_CONSTANTS } from '../../services/fire';
 import type { PrognoseConfig } from '../../types/prognose/PrognoseConfig';
 import type { PrognoseTableRow } from '../../types/prognose/PrognoseTableRow';
+import { usePrognoseChartData } from '../../hooks/prognose/usePrognoseChartData';
 import { PrognoseContentView } from '../../views/PrognoseContentView';
+import { FullscreenMonteCarloView } from '../../views/FullscreenMonteCarloView';
 
 // Display formatter
 function fmtK(v: number): string {
@@ -19,6 +21,7 @@ interface Props {
 
 export function PrognoseContentContainer({ config }: Props) {
   const { state: baseState, fireDate: baseFIREDate } = useFireContext();
+  const [isMcFullscreenOpen, setIsMcFullscreenOpen] = useState(false);
 
   // Merged state
   const state = useMemo(() => ({ ...baseState, ...config.stateOverride }), [baseState, config.stateOverride]);
@@ -138,22 +141,46 @@ export function PrognoseContentContainer({ config }: Props) {
     [tableData, fireDate.year, pensionYear, baseGrossNeededAnnual, state.inflationRate, state.etfRate, state.cashRate, currentYear],
   );
 
+  // Generate continuous year-by-year fan data for chart visualization
+  const { fanData } = usePrognoseChartData(
+    state,
+    currentYear,
+    fireDate.year,
+    pensionYear,
+    monthlySavings,
+    monthlyWithdraw,
+  );
+
   return (
-    <PrognoseContentView
-      fireTarget={fireTarget}
-      fireYear={fireDate.year}
-      firePercentage={firePercentage}
-      yearsToFIRE={yearsToFIRE}
-      isOnTrack={isOnTrack}
-      currentYear={currentYear}
-      netWorth={netWorth}
-      netSWR={netSWR}
-      pensionYear={pensionYear}
-      pensionMonthly={state.pensionMonthly}
-      tableRows={tableRows}
-      weightedReturn={weightedReturn}
-      realReturnPct={realReturnPct}
-      fmtK={fmtK}
-    />
+    <>
+      <PrognoseContentView
+        fireTarget={fireTarget}
+        fireYear={fireDate.year}
+        firePercentage={firePercentage}
+        yearsToFIRE={yearsToFIRE}
+        isOnTrack={isOnTrack}
+        currentYear={currentYear}
+        netWorth={netWorth}
+        netSWR={netSWR}
+        pensionYear={pensionYear}
+        pensionMonthly={state.pensionMonthly}
+        tableRows={tableRows}
+        weightedReturn={weightedReturn}
+        realReturnPct={realReturnPct}
+        fmtK={fmtK}
+        fanData={fanData}
+        onMcFullscreenOpen={() => setIsMcFullscreenOpen(true)}
+      />
+      {isMcFullscreenOpen && (
+        <FullscreenMonteCarloView
+          fanData={fanData}
+          zielwert={fmtK(fireTarget)}
+          erfolgsrate={firePercentage.toFixed(1).replace('.', ',')}
+          risikoLabel="Prognose"
+          risikoColor="#3DAA72"
+          onClose={() => setIsMcFullscreenOpen(false)}
+        />
+      )}
+    </>
   );
 }

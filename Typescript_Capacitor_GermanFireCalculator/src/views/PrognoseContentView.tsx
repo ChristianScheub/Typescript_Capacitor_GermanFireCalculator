@@ -1,7 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { MilestoneCard } from '../ui/cards/MilestoneCard';
+import { PrognoseCard } from '../ui/cards/PrognoseCard';
+import { MonteCarloChart } from '../ui/charts/MonteCarloChart';
 import { fmtCurrency } from '../services/fire';
 import type { PrognoseTableRow } from '../types/prognose/PrognoseTableRow';
+import type { FanDataPoint } from '../types/monteCarloCalculator/models/monteCarloTypes';
 
 interface PrognoseContentViewProps {
   fireTarget: number;
@@ -18,6 +21,8 @@ interface PrognoseContentViewProps {
   weightedReturn: number;
   realReturnPct: number;
   fmtK: (v: number) => string;
+  fanData: FanDataPoint[];
+  onMcFullscreenOpen: () => void;
 }
 
 export function PrognoseContentView({
@@ -35,6 +40,8 @@ export function PrognoseContentView({
   weightedReturn,
   realReturnPct,
   fmtK,
+  fanData,
+  onMcFullscreenOpen,
 }: PrognoseContentViewProps) {
   const { t } = useTranslation();
 
@@ -64,7 +71,7 @@ export function PrognoseContentView({
           <span>{isOnTrack ? t('prognosis.onTrack') : t('prognosis.slightlyDelayed')}</span>
         </div>
         <div className="prognose-hero__bar">
-          <div className="prognose-hero__bar-fill" style={{ width: `${Math.min(100, firePercentage)}%` }} />
+          <div className="prognose-hero__bar-fill" style={{ "--width": `${Math.min(100, firePercentage)}%` } as React.CSSProperties} />
         </div>
       </div>
 
@@ -93,6 +100,17 @@ export function PrognoseContentView({
         />
       </div>
 
+      {/* ── Wealth Development Chart ── */}
+      <MonteCarloChart
+        fanData={fanData}
+        zielwert={fmtK(fireTarget)}
+        erfolgsrate={firePercentage.toFixed(1).replace('.', ',')}
+        risikoLabel="Prognose"
+        risikoColor="#3DAA72"
+        onFullscreenOpen={onMcFullscreenOpen}
+        showBands={false}
+      />
+
       {/* ── Cards ── */}
       <div className="prognose-table-section">
         <h2 className="prognose-table-title">{t('prognosis.wealthDevelopment')}</h2>
@@ -102,39 +120,7 @@ export function PrognoseContentView({
 
         <div className="prognose-cards">
           {tableRows.map(row => (
-            <div key={row.year} className={`prognose-card${row.isFeatured ? ' prognose-card--featured' : ''}`}>
-              <div className="prognose-card__header">
-                <span className="prognose-card__year">
-                  {row.year}
-                  {row.isToday && <span className="prognose-card__tag prognose-card__tag--heute">{t('prognosis.today')}</span>}
-                </span>
-                <span className="prognose-card__badge">{row.badge}</span>
-              </div>
-
-              <div className="prognose-card__section">
-                <p className="prognose-card__label">{t('prognosis.withdrawal')}</p>
-                <p className="prognose-card__value">{row.entnahmeTotalFormatted}</p>
-                <p className="prognose-card__sub">
-                  {t('prognosis.etf')} {row.entnahmeEtfFormatted} · {t('prognosis.cash')} {row.entnahmeCashFormatted}
-                </p>
-              </div>
-
-              <div className="prognose-card__section">
-                <p className="prognose-card__label">{t('prognosis.assets')}</p>
-                <p className="prognose-card__value">{row.totalValueFormatted}</p>
-                <p className="prognose-card__sub">
-                  {t('prognosis.etf')} {row.etfValueFormatted} · {t('prognosis.cash')} {row.cashValueFormatted}
-                </p>
-              </div>
-
-              <div className="prognose-card__section">
-                <p className="prognose-card__label">{t('prognosis.return')}</p>
-                <p className="prognose-card__value">{row.renditeTotalFormatted}</p>
-                <p className="prognose-card__sub">
-                  {t('prognosis.etf')} {row.etfRateDisplay} · {t('prognosis.cash')} {row.cashRateDisplay}
-                </p>
-              </div>
-            </div>
+            <PrognoseCard key={row.year} row={row} />
           ))}
         </div>
 

@@ -6,9 +6,10 @@ import type { FanDataPoint } from '../../services/monteCarloCalculator';
 interface FanChartProps {
   fanData: FanDataPoint[];
   landscape?: boolean;
+  showBands?: boolean;
 }
 
-export function FanChart({ fanData, landscape = false }: FanChartProps) {
+export function FanChart({ fanData, landscape = false, showBands = true }: FanChartProps) {
   const { t } = useTranslation();
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
@@ -79,8 +80,12 @@ export function FanChart({ fanData, landscape = false }: FanChartProps) {
       aria-hidden="true"
     >
       {/* Confidence bands */}
-      <polygon points={poly95} className="mc-fan-band--95" />
-      <polygon points={poly50} className="mc-fan-band--50" />
+      {showBands && (
+        <>
+          <polygon points={poly95} className="mc-fan-band--95" />
+          <polygon points={poly50} className="mc-fan-band--50" />
+        </>
+      )}
       {/* Median line */}
       <polyline points={medianPts} className="mc-fan-median" fill="none" />
       {/* Baseline */}

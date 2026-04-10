@@ -6,6 +6,7 @@
 		"openPrognosis": "Open prognosis",
 		"helpLabel": "Help",
 		"financialIndependence": "FINANCIAL INDEPENDENCE",
+		"foundationTitle": "The foundation of your autonomy.",
 		"expectedFreedom": "Expected freedom:",
 		"adjustPlan": "Adjust plan",
 		"viewDetails": "View details",
@@ -176,7 +177,9 @@
 	"tax": {
 		"title": "FIRE LEDGER",
 		"icon1": "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3",
-		"baseScenario": "Base scenario active",
+		"fireCalculation": "Fire Calculation",
+		"fireCalculationSub": "The standard without special conditions – your baseline forecast.",
+		"standard": "Standard",
 		"partTime": "Part-time turbo (80%)",
 		"crash": "Stock market crash (-20%)",
 		"hardcoreFire": "Hardcore FIRE",
@@ -191,8 +194,6 @@
 		"scenarios": "Scenarios",
 		"expectedFireDate": "Expected FIRE Date",
 		"progress": "Progress",
-		"baseScenarioInfo": "Your current plan is based on a savings rate of",
-		"baseScenarioInfoReturn": "and an expected return of",
 		"partTimeSub": "What if I work one day less from now on? (Reduce savings rate by 30%)",
 		"partTimeHint": "+1 free day per week from now.",
 		"crashSub": "Will my plan withstand a crash next year?",
@@ -205,6 +206,14 @@
 		"badgeRisk": "MARKET RISK",
 		"badgeSimulation": "SIMULATION",
 		"untilFire": "until FIRE",
-		"badgeSavings": "SAVINGS"
+		"badgeSavings": "SAVINGS",
+		"panoramaTitle": "The panorama of your decisions.",
+		"viewAll": "See all",
+		"back": "Back",
+		"statusActive": "ACTIVE",
+		"statusInactive": "INACTIVE",
+		"editBtn": "Deactivate",
+		"activateBtn": "Activate",
+		"planBtn": "Plan"
 	}
 }

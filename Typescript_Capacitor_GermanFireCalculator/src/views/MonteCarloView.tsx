@@ -1,7 +1,9 @@
 import { useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { FanChart } from "../ui/charts/FanChart";
-import { KpiBar } from "../ui/monteCarloChart/KpiBar";
+import { MonteCarloChart } from "../ui/charts/MonteCarloChart";
+import { StatCard } from "../ui/cards/StatCard";
+import { ContentSection } from "../ui/cards/InputCard";
+import { Icon } from "../ui/icons";
 import { RefNumericInput } from "../ui/inputs/RefNumericInput";
 import { fmtM } from "../services/monteCarloCalculator";
 import type { MonteCarloResult } from "../services/monteCarloCalculator";
@@ -136,10 +138,7 @@ export function MonteCarloView({
         </div>
 
         {/* ── Success Rate ── */}
-        <div
-          className={`mc-card${isBadSuccess ? " mc-card--danger-border" : ""}`}
-        >
-          <p className="mc-label">{t('monteCarlo.successLabel')}</p>
+        <StatCard label="monteCarlo.successLabel" danger={isBadSuccess}>
           <p
             className={`mc-big-value${isBadSuccess ? " mc-big-value--danger" : ""}`}
           >
@@ -151,11 +150,10 @@ export function MonteCarloView({
           <p className="mc-sub mc-sub--secondary">
             {t('monteCarlo.simulationStart', { capital: fmtM(simRange.startCapital), year: simRange.startYear })}
           </p>
-        </div>
+        </StatCard>
 
         {/* ── Pessimistic Case ── */}
-        <div className="mc-card mc-card--pessimistic">
-          <p className="mc-label">{t('monteCarlo.pessimisticCaseLabel')}</p>
+        <StatCard label="monteCarlo.pessimisticCaseLabel" variant="pessimistic">
           <p className="mc-pessimistic-line">
             {t('monteCarlo.pessimisticCase')}{" "}
             <span className="mc-pessimistic-age">{result.pessimisticAge}</span>
@@ -163,84 +161,33 @@ export function MonteCarloView({
           <p className="mc-sub">
             {t('monteCarlo.pessimisticDesc')}
           </p>
-        </div>
+        </StatCard>
 
         {/* ── Median Inheritance ── */}
-        <div className="mc-card mc-card--positive">
-          <p className="mc-label">{t('monteCarlo.medianInheritanceLabel')}</p>
+        <StatCard label="monteCarlo.medianInheritanceLabel" variant="positive">
           <p className="mc-value">{fmtM(result.medianFinalWealth)}</p>
           <p className="mc-sub">
             {t('monteCarlo.medianInheritanceDesc')}
           </p>
-        </div>
+        </StatCard>
 
         {/* ── Fan Chart Card ── */}
         <div className="mc-card mc-card--chart">
-          <div className="mc-fan-header-row">
-            <span className="mc-fan-title">
-              {t('monteCarlo.wealthChart')}
-            </span>
-            <div className="mc-fan-header-actions">
-              <div className="mc-fan-legend">
-                <span className="mc-legend-item mc-legend-item--95">
-                  {t('monteCarlo.ci95')}
-                </span>
-                <span className="mc-legend-item mc-legend-item--50">
-                  {t('monteCarlo.ci50')}
-                </span>
-              </div>
-              {/* Fullscreen button */}
-              <button
-                className="mc-fullscreen-btn"
-                onClick={onFullscreenOpen}
-                aria-label={t('monteCarlo.fullscreenLabel')}
-              >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="15 3 21 3 21 9" />
-                  <polyline points="9 21 3 21 3 15" />
-                  <line x1="21" y1="3" x2="14" y2="10" />
-                  <line x1="3" y1="21" x2="10" y2="14" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
-          <p className="mc-chart-hint">{t('monteCarlo.chartHint')}</p>
-          <FanChart fanData={result.fanData} />
-          <KpiBar
+          <MonteCarloChart
+            fanData={result.fanData}
             zielwert={kpiZielwert}
             erfolgsrate={kpiErfolgsrate}
             risikoLabel={risikoLabel}
             risikoColor={risikoColor}
+            onFullscreenOpen={onFullscreenOpen}
           />
         </div>
 
         {/* ── Volatility Slider ── */}
-        <div className="mc-card">
-          <div className="mc-input-header">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-            </svg>
-            <span className="mc-input-title">{t('monteCarlo.volatilityTitle')}</span>
-          </div>
+        <ContentSection
+          icon={<Icon name="chart" size="sm" />}
+          title={t('monteCarlo.volatilityTitle')}
+        >
           <div className="mc-slider-row">
             <span className="mc-slider-label">{t('monteCarlo.standardDeviation')}</span>
             <span className="mc-slider-value">
@@ -264,26 +211,13 @@ export function MonteCarloView({
           <p className="mc-sub mc-sub--secondary">
             {t('monteCarlo.volatilityInfo')}
           </p>
-        </div>
+        </ContentSection>
 
         {/* ── Inflation Inputs ── */}
-        <div className="mc-card">
-          <div className="mc-input-header">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z" />
-              <path d="M12 6v6l4 2" />
-            </svg>
-            <span className="mc-input-title">{t('monteCarlo.inflationRangeTitle')}</span>
-          </div>
+        <ContentSection
+          icon={<Icon name="clock" size="sm" />}
+          title={t('monteCarlo.inflationRangeTitle')}
+        >
           <div className="mc-inflation-row">
             <div className="mc-inflation-field">
               <RefNumericInput
@@ -308,26 +242,13 @@ export function MonteCarloView({
               />
             </div>
           </div>
-        </div>
+        </ContentSection>
 
         {/* ── Simulation Parameter ── */}
-        <div className="mc-card">
-          <div className="mc-input-header">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="3" y="3" width="18" height="18" rx="2" />
-              <path d="M8 12h8M12 8v8" />
-            </svg>
-            <span className="mc-input-title">{t('monteCarlo.simulationParamsTitle')}</span>
-          </div>
+        <ContentSection
+          icon={<Icon name="add" size="sm" />}
+          title={t('monteCarlo.simulationParamsTitle')}
+        >
           <div className="mc-inflation-row">
             <div className="mc-inflation-field">
               <RefNumericInput
@@ -364,26 +285,13 @@ export function MonteCarloView({
               />
             </div>
           </div>
-        </div>
+        </ContentSection>
 
         {/* ── Monthly Withdrawal ── */}
-        <div className="mc-card">
-          <div className="mc-input-header">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <rect x="2" y="5" width="20" height="14" rx="2" ry="2" />
-              <line x1="2" y1="10" x2="22" y2="10" />
-            </svg>
-            <span className="mc-input-title">{t('monteCarlo.monthlyExpensesTitle')}</span>
-          </div>
+        <ContentSection
+          icon={<Icon name="wallet" size="sm" />}
+          title={t('monteCarlo.monthlyExpensesTitle')}
+        >
           <div className="mc-inflation-row">
             <div className="mc-inflation-field">
               <RefNumericInput
@@ -397,7 +305,7 @@ export function MonteCarloView({
               />
             </div>
           </div>
-        </div>
+        </ContentSection>
 
         {/* ── Run Button ── */}
         <button className="mc-run-btn" onClick={handleRerun}>

@@ -1,4 +1,4 @@
-type MilestoneVariant = 'default' | 'fire';
+import type { MilestoneVariant } from '../../types/ui/variants';
 
 interface MilestoneCardProps {
   icon: React.ReactNode;

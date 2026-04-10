@@ -6,6 +6,7 @@
 		"openPrognosis": "Prognose öffnen",
 		"helpLabel": "Hilfe",
 		"financialIndependence": "FINANZIELLE UNABHÄNGIGKEIT",
+		"foundationTitle": "Der Grundstein Ihrer Autonomie.",
 		"expectedFreedom": "Voraussichtliche Freiheit:",
 		"adjustPlan": "Plan anpassen",
 		"viewDetails": "Details ansehen",
@@ -176,7 +177,9 @@
 	"tax": {
 		"title": "FIRE LEDGER",
 		"icon1": "M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3",
-		"baseScenario": "Basis-Szenario aktiv",
+		"fireCalculation": "Fire Berechnung",
+		"fireCalculationSub": "Der Standard ohne spezielle Bedingungen – deine Basis-Prognose.",
+		"standard": "Standard",
 		"partTime": "Teilzeit-Turbo (80%)",
 		"crash": "Börsen-Sturm (-20%)",
 		"hardcoreFire": "Hardcore FIRE",
@@ -191,8 +194,6 @@
 		"scenarios": "Szenarien",
 		"expectedFireDate": "Voraussichtliches FIRE-Datum",
 		"progress": "Fortschritt",
-		"baseScenarioInfo": "Dein aktueller Plan basiert auf einer Sparrate von",
-		"baseScenarioInfoReturn": "und einer erwarteten Rendite von",
 		"partTimeSub": "Was, wenn ich ab sofort einen Tag weniger arbeite? (Senkung der Sparrate um 30%)",
 		"partTimeHint": "+1 freier Tag pro Woche ab jetzt.",
 		"crashSub": "Hält mein Plan einen Crash im nächsten Jahr aus?",
@@ -205,6 +206,14 @@
 		"badgeRisk": "MARKT-RISIKO",
 		"badgeSimulation": "SIMULATION",
 		"untilFire": "bis FIRE",
-		"badgeSavings": "SPAREN"
+		"badgeSavings": "SPAREN",
+		"panoramaTitle": "Das Panorama Ihrer Entscheidungen.",
+		"viewAll": "Alle ansehen",
+		"back": "Zurück",
+		"statusActive": "AKTIV",
+		"statusInactive": "INAKTIV",
+		"editBtn": "Deaktivieren",
+		"activateBtn": "Aktivieren",
+		"planBtn": "Planen"
 	}
 }

@@ -2,7 +2,7 @@ import { useState, useMemo }                                from 'react';
 import { useTranslation }                                  from 'react-i18next';
 import { useFireContext }                                  from '../../context/FireContext';
 import { fireService, fmtCurrency, fmtPercent, FIRE_CONSTANTS } from '../../services/fire';
-import { SteuerView }                                     from '../../views/SteuerView';
+import { SteuerView }                                     from '../../views/ScenarioView';
 import { PrognoseContentContainer }                       from '../Prognose/PrognoseContentContainer';
 import { MonteCarloContainer }                            from '../MonteCarlo/MonteCarloContainer';
 import type { PrognoseConfig }                            from '../../types/prognose/PrognoseConfig';
@@ -11,10 +11,17 @@ export function SteuerContainer() {
   const { t } = useTranslation();
   const { state, firePercentage, netWorth, fireDate, monthlySavings, fireTarget } = useFireContext();
 
-  const [selectedBadge, setSelectedBadge] = useState<string | null>(null);
+  const [selectedBadge, setSelectedBadge] = useState<string | null>('BASIS');
   const [isMonteCarloSelected, setIsMonteCarloSelected] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   // ── Scenario configs ──────────────────────────────────────────────────────────
+
+  const basisConfig: PrognoseConfig = useMemo(() => ({
+    title:         t('tax.fireCalculation'),
+    badge:         'BASIS',
+    stateOverride: {},
+  }), [t]);
 
   const teilzeitConfig: PrognoseConfig = useMemo(() => ({
     title:         t('tax.partTime'),
@@ -70,12 +77,14 @@ export function SteuerContainer() {
 
   // ── Handlers ──────────────────────────────────────────────────────────────────
 
+  const handleSelectBasis      = () => { setSelectedBadge(prev => prev === 'BASIS'    ? null : 'BASIS');    setIsMonteCarloSelected(false); };
   const handleSelectTeilzeit   = () => { setSelectedBadge(prev => prev === 'TEILZEIT' ? null : 'TEILZEIT'); setIsMonteCarloSelected(false); };
   const handleSelectCrash      = () => { setSelectedBadge(prev => prev === 'CRASH'    ? null : 'CRASH');    setIsMonteCarloSelected(false); };
   const handleSelectHardcore   = () => { setSelectedBadge(prev => prev === 'HARDCORE' ? null : 'HARDCORE'); setIsMonteCarloSelected(false); };
   const handleSelectMonteCarlo = () => { setIsMonteCarloSelected(prev => !prev); setSelectedBadge(null); };
 
-  const selectedConfig = selectedBadge === 'TEILZEIT' ? teilzeitConfig
+  const selectedConfig = selectedBadge === 'BASIS'    ? basisConfig
+    : selectedBadge === 'TEILZEIT' ? teilzeitConfig
     : selectedBadge === 'CRASH'    ? crashConfig
     : selectedBadge === 'HARDCORE' ? hardcoreConfig
     : null;
@@ -92,7 +101,6 @@ export function SteuerContainer() {
 
   return (
     <SteuerView
-      firePercentageRounded={Math.round(firePercentage)}
       firePercentage={firePercentage}
       fireDateMonth={fireDate.month}
       fireDateYear={fireDate.year}
@@ -103,14 +111,18 @@ export function SteuerContainer() {
       teilzeitDeltaYears={teilzeitDeltaYears}
       crashDeltaMonths={crashDeltaMonths}
       hardcoreDeltaYears={hardcoreDeltaYears}
+      isBasicSelected={selectedBadge === 'BASIS'}
       isTeilzeitSelected={selectedBadge === 'TEILZEIT'}
       isCrashSelected={selectedBadge === 'CRASH'}
       isHardcoreSelected={selectedBadge === 'HARDCORE'}
       isMonteCarloSelected={isMonteCarloSelected}
+      onSelectBasis={handleSelectBasis}
       onSelectTeilzeit={handleSelectTeilzeit}
       onSelectCrash={handleSelectCrash}
       onSelectHardcore={handleSelectHardcore}
       onSelectMonteCarlo={handleSelectMonteCarlo}
+      isExpanded={isExpanded}
+      onToggleExpanded={setIsExpanded}
       inlinePrognose={inlinePrognose}
     />
   );

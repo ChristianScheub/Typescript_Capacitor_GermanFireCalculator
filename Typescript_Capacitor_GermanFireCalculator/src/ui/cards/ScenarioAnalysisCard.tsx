@@ -1,19 +1,19 @@
-type IconVariant = 'teal' | 'red' | 'orange';
-type BadgeVariant = 'lifestyle' | 'risk' | 'simulation';
-type ResultBadgeVariant = 'warn' | 'danger' | 'positive';
+import type { IconVariant, ScenarioTypeBadgeVariant, ScenarioResultBadgeVariant } from '../../types/ui/variants';
 
 interface ScenarioAnalysisCardProps {
-  icon: React.ReactNode;
-  iconVariant: IconVariant;
+  icon?: React.ReactNode;
+  iconVariant?: IconVariant;
   typeBadge: string;
-  typeBadgeVariant: BadgeVariant;
+  typeBadgeVariant: ScenarioTypeBadgeVariant;
   title: string;
   subtitle: string;
   resultBadge: string;
-  resultBadgeVariant: ResultBadgeVariant;
+  resultBadgeVariant: ScenarioResultBadgeVariant;
   resultText?: string;
   selected?: boolean;
   onClick?: () => void;
+  variant?: 'default' | 'slider';
+  statusLabel?: 'AKTIV' | 'INAKTIV';
 }
 
 export function ScenarioAnalysisCard({
@@ -28,7 +28,36 @@ export function ScenarioAnalysisCard({
   resultText,
   selected = false,
   onClick,
+  variant = 'default',
+  statusLabel = 'INAKTIV',
 }: ScenarioAnalysisCardProps) {
+  // Slider variant — compact horizontal card
+  if (variant === 'slider') {
+    return (
+      <button
+        className={`scenario-slider-card${selected ? ' scenario-slider-card--active' : ''}`}
+        onClick={onClick}
+      >
+        <div className="scenario-slider-card__header">
+          <div className="scenario-slider-card__status">
+            <span className="scenario-slider-card__dot" />
+            <span className="scenario-slider-card__status-text">{statusLabel}</span>
+          </div>
+          <span className={`scenario-slider-card__type-badge scenario-slider-card__type-badge--${typeBadgeVariant}`}>
+            {typeBadge}
+          </span>
+        </div>
+        <p className="scenario-slider-card__title">{title}</p>
+        <p className="scenario-slider-card__sub">{subtitle}</p>
+        <div className="scenario-slider-card__footer">
+          <span className="scenario-slider-card__result">{resultBadge}</span>
+          <span className="scenario-slider-card__arrow">→</span>
+        </div>
+      </button>
+    );
+  }
+
+  // Default variant — traditional vertical card
   return (
     <button
       className={`card scenario-analysis-card${selected ? ' scenario-analysis-card--selected' : ''}`}

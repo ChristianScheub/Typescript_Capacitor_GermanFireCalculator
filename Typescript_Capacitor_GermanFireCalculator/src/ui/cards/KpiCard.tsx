@@ -1,5 +1,4 @@
-type IconVariant = 'green' | 'teal' | 'red' | 'orange';
-type BadgeVariant = 'positive' | 'warn' | 'danger';
+import type { IconVariant, BadgeVariant } from '../../types/ui/variants';
 
 interface KpiCardProps {
   label: string;
