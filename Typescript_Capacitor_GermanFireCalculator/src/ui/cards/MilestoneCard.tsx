@@ -3,7 +3,7 @@ import type { MilestoneVariant } from '../../types/ui/variants';
 interface MilestoneCardProps {
   icon: React.ReactNode;
   label: string;
-  year: number;
+  year?: number;
   subtitle: string;
   variant?: MilestoneVariant;
 }
@@ -22,7 +22,7 @@ export function MilestoneCard({
       </div>
       <div className="milestone-info">
         <p className="milestone-label">{label}</p>
-        <p className="milestone-year">{year}</p>
+        {year != null && year > 0 && <p className="milestone-year">{year}</p>}
         <p className="milestone-sub">{subtitle}</p>
       </div>
     </div>

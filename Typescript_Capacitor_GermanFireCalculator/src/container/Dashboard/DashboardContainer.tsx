@@ -11,32 +11,45 @@ interface Props {
 
 export function DashboardContainer({ onTabChange, onNavigateToPrognose }: Props) {
   const {
-    state,
     netWorth,
     firePercentage,
     fireDate,
     chartData,
     monthlySavings,
     weightedReturn,
+    fireTarget,
   } = useFireContext();
 
-  const growthBadge = netWorth > 0
-    ? fmtPercent((monthlySavings / netWorth) * 100, 1)
-    : '0,0';
-
+  const growthBadge        = netWorth > 0 ? fmtPercent((monthlySavings / netWorth) * 100, 1) : '0,0';
   const monthlyAssetIncome = fireService.calcAssetIncome(netWorth, weightedReturn) / 12;
-  const monthlySafeWithdrawal = fireService.calcGrossSWR(state);
+  const yearsToFire        = Math.max(0, fireDate.year - new Date().getFullYear());
+  const annualReturnFormatted = fmtPercent(weightedReturn * 100, 1);
+
+  // Next milestone: halfway (50%) or 75%
+  const milestoneRatio  = firePercentage < 50 ? 0.5 : 0.75;
+  const milestoneTarget = fireTarget * milestoneRatio;
+  const monthlyGrowth   = monthlySavings + (netWorth * weightedReturn) / 12;
+  const monthsToMilestone = monthlyGrowth > 0
+    ? Math.max(1, Math.round((milestoneTarget - netWorth) / monthlyGrowth))
+    : 0;
+  const milestoneLabel  = milestoneRatio === 0.5 ? 'Halbzeit' : '75%';
+  const milestoneTimeText = monthsToMilestone < 100
+    ? `${monthsToMilestone} Monaten`
+    : `${(monthsToMilestone / 12).toFixed(1)} Jahren`;
+  const nextMilestoneText = firePercentage < 100
+    ? `${milestoneLabel} erreicht in ${milestoneTimeText}`
+    : `FIRE-Ziel erreicht`;
 
   return (
     <DashboardView
       firePercentage={firePercentage}
-      fireDateMonth={fireDate.month}
-      fireDateYear={fireDate.year}
+      yearsToFire={yearsToFire}
       netWorthFormatted={fmtCurrency(netWorth)}
       growthBadge={growthBadge}
       monthlySavingsFormatted={fmtCurrency(monthlySavings)}
+      annualReturnFormatted={annualReturnFormatted}
       assetIncomeFormatted={fmtCurrency(monthlyAssetIncome)}
-      safeWithdrawalFormatted={fmtCurrency(monthlySafeWithdrawal)}
+      nextMilestoneText={nextMilestoneText}
       chartData={chartData}
       onTabChange={onTabChange}
       onNavigateToPrognose={onNavigateToPrognose}

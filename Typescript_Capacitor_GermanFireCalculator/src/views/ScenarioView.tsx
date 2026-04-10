@@ -5,26 +5,12 @@ import { ScenarioList }             from '../ui/cards/ScenarioList';
 import type { ScenarioSliderProps } from '../types/ui/scenarioProps';
 
 interface SteuerViewProps extends ScenarioSliderProps {
-  firePercentage:          number;
-  fireDateMonth:           string;
-  fireDateYear:            number;
-  netWorthFormatted:       string;
-  fireTargetFormatted:     string;
-  monthlySavingsFormatted: string;
-  annualReturnFormatted:   string;
-  isExpanded:              boolean;
-  onToggleExpanded:        (expanded: boolean) => void;
-  inlinePrognose:          ReactNode;
+  isExpanded:       boolean;
+  onToggleExpanded: (expanded: boolean) => void;
+  inlinePrognose:   ReactNode;
 }
 
 export function SteuerView({
-  firePercentage,
-  fireDateMonth,
-  fireDateYear,
-  netWorthFormatted,
-  fireTargetFormatted,
-  monthlySavingsFormatted,
-  annualReturnFormatted,
   teilzeitDeltaYears,
   crashDeltaMonths,
   hardcoreDeltaYears,

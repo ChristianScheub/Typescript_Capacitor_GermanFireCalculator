@@ -1,7 +1,7 @@
 import { useState, useMemo }                                from 'react';
 import { useTranslation }                                  from 'react-i18next';
 import { useFireContext }                                  from '../../context/FireContext';
-import { fireService, fmtCurrency, fmtPercent, FIRE_CONSTANTS } from '../../services/fire';
+import { fireService, FIRE_CONSTANTS } from '../../services/fire';
 import { SteuerView }                                     from '../../views/ScenarioView';
 import { PrognoseContentContainer }                       from '../Prognose/PrognoseContentContainer';
 import { MonteCarloContainer }                            from '../MonteCarlo/MonteCarloContainer';
@@ -9,7 +9,7 @@ import type { PrognoseConfig }                            from '../../types/prog
 
 export function SteuerContainer() {
   const { t } = useTranslation();
-  const { state, firePercentage, netWorth, fireDate, monthlySavings, fireTarget } = useFireContext();
+  const { state, fireDate, monthlySavings, fireTarget } = useFireContext();
 
   const [selectedBadge, setSelectedBadge] = useState<string | null>('BASIS');
   const [isMonteCarloSelected, setIsMonteCarloSelected] = useState(false);
@@ -101,13 +101,6 @@ export function SteuerContainer() {
 
   return (
     <SteuerView
-      firePercentage={firePercentage}
-      fireDateMonth={fireDate.month}
-      fireDateYear={fireDate.year}
-      netWorthFormatted={fmtCurrency(netWorth)}
-      fireTargetFormatted={fmtCurrency(fireTarget)}
-      monthlySavingsFormatted={fmtCurrency(monthlySavings)}
-      annualReturnFormatted={fmtPercent(FIRE_CONSTANTS.ANNUAL_RETURN * 100, 0)}
       teilzeitDeltaYears={teilzeitDeltaYears}
       crashDeltaMonths={crashDeltaMonths}
       hardcoreDeltaYears={hardcoreDeltaYears}

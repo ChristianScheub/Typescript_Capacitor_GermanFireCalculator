@@ -5,7 +5,6 @@ interface KpiCardProps {
   value: string | number;
   unit?: string;
   iconVariant: IconVariant;
-  badgeText?: string;
   badgeVariant?: BadgeVariant;
   icon: React.ReactNode;
 }
@@ -15,8 +14,6 @@ export function KpiCard({
   value,
   unit,
   iconVariant,
-  badgeText,
-  badgeVariant = 'positive',
   icon,
 }: KpiCardProps) {
   return (
@@ -25,7 +22,6 @@ export function KpiCard({
         <div className={`kpi-icon kpi-icon--${iconVariant}`}>
           {icon}
         </div>
-        {badgeText && <span className={`badge badge--${badgeVariant}`}>{badgeText}</span>}
       </div>
       <p className="kpi-card__label">{label}</p>
       <p className="kpi-card__value">
