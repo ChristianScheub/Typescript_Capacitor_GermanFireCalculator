@@ -4,38 +4,22 @@ import { BottomNav }                  from './ui/navigation/BottomNav';
 import { DashboardContainer }         from './container/Dashboard/DashboardContainer';
 import { PlannerContainer }           from './container/Planner/PlannerContainer';
 import { SteuerContainer }            from './container/Scenario/ScenarioContainer';
-import { PrognoseContainer }          from './container/Prognose/PrognoseContainer';
 import { Menu }                       from './views/MenuView';
 import type { Tab }                   from './types/navigation/Tab';
-import type { PrognoseConfig }        from './types/prognose/PrognoseConfig';
 import './App.css';
 
 function AppShell() {
-  const [activeTab,      setActiveTab]      = useState<Tab>('dashboard');
-  const [prognoseConfig, setPrognoseConfig] = useState<PrognoseConfig | null>(null);
+  const [activeTab, setActiveTab] = useState<Tab>('dashboard');
 
-  const navigateToPrognose = (cfg: PrognoseConfig) => setPrognoseConfig(cfg);
-
-  const handleTabChange = (tab: Tab) => {
-    setPrognoseConfig(null);
-    setActiveTab(tab);
-  };
+  const handleTabChange = (tab: Tab) => setActiveTab(tab);
 
   return (
     <div className="app-shell">
       <main className="app-main">
-        {prognoseConfig ? (
-          <PrognoseContainer config={prognoseConfig} />
-        ) : (
-          <>
-            {activeTab === 'dashboard' && (
-              <DashboardContainer onTabChange={handleTabChange} onNavigateToPrognose={navigateToPrognose} />
-            )}
-            {activeTab === 'planner'   && <PlannerContainer />}
-            {activeTab === 'scenarios' && <SteuerContainer />}
-            {activeTab === 'menu'      && <Menu />}
-          </>
-        )}
+        {activeTab === 'dashboard' && <DashboardContainer onTabChange={handleTabChange} />}
+        {activeTab === 'planner'   && <PlannerContainer />}
+        {activeTab === 'scenarios' && <SteuerContainer />}
+        {activeTab === 'menu'      && <Menu />}
       </main>
       <BottomNav active={activeTab} onTabChange={handleTabChange} />
     </div>

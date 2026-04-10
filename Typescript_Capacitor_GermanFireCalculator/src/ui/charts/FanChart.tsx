@@ -7,9 +7,10 @@ interface FanChartProps {
   fanData: FanDataPoint[];
   landscape?: boolean;
   showBands?: boolean;
+  simplifiedTooltip?: boolean;
 }
 
-export function FanChart({ fanData, landscape = false, showBands = true }: FanChartProps) {
+export function FanChart({ fanData, landscape = false, showBands = true, simplifiedTooltip = false }: FanChartProps) {
   const { t } = useTranslation();
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
@@ -68,7 +69,7 @@ export function FanChart({ fanData, landscape = false, showBands = true }: FanCh
 
   // Tooltip dimensions (in viewBox units)
   const TW = landscape ? 148 : 128;
-  const TH = landscape ? 86 : 78;
+  const TH = simplifiedTooltip ? (landscape ? 44 : 40) : (landscape ? 86 : 78);
   const FS = landscape ? 1.1 : 1; // font scale multiplier
 
   return (
@@ -156,18 +157,6 @@ export function FanChart({ fanData, landscape = false, showBands = true }: FanCh
             >
               {t('fanChart.tooltipHeader', { age: hovered.age, year: hovered.year })}
             </text>
-            <text
-              x={tx + TW - 9}
-              y={ty + 14}
-              fill="rgba(255,255,255,0.45)"
-              fontSize={7 * FS}
-              fontWeight="700"
-              textAnchor="end"
-              fontFamily="inherit"
-              letterSpacing="0.5"
-            >
-              {t('fanChart.selection')}
-            </text>
 
             {/* Divider */}
             <line
@@ -179,71 +168,88 @@ export function FanChart({ fanData, landscape = false, showBands = true }: FanCh
               strokeWidth="0.8"
             />
 
-            {/* Best Case */}
-            <text
-              x={tx + 9}
-              y={ty + 34}
-              fill="rgba(255,255,255,0.65)"
-              fontSize={8 * FS}
-              fontFamily="inherit"
-            >
-              {t('fanChart.bestCase')}
-            </text>
-            <text
-              x={tx + TW - 9}
-              y={ty + 34}
-              fill="white"
-              fontSize={9.5 * FS}
-              fontWeight="700"
-              textAnchor="end"
-              fontFamily="inherit"
-            >
-              {fmtM(hovered.p95)}
-            </text>
+            {simplifiedTooltip ? (
+              /* Simplified: just the amount */
+              <text
+                x={tx + TW - 9}
+                y={ty + 34}
+                fill="white"
+                fontSize={9.5 * FS}
+                fontWeight="700"
+                textAnchor="end"
+                fontFamily="inherit"
+              >
+                {fmtM(hovered.p50)}
+              </text>
+            ) : (
+              <>
+                {/* Best Case */}
+                <text
+                  x={tx + 9}
+                  y={ty + 34}
+                  fill="rgba(255,255,255,0.65)"
+                  fontSize={8 * FS}
+                  fontFamily="inherit"
+                >
+                  {t('fanChart.bestCase')}
+                </text>
+                <text
+                  x={tx + TW - 9}
+                  y={ty + 34}
+                  fill="white"
+                  fontSize={9.5 * FS}
+                  fontWeight="700"
+                  textAnchor="end"
+                  fontFamily="inherit"
+                >
+                  {fmtM(hovered.p95)}
+                </text>
 
-            {/* Median */}
-            <text
-              x={tx + 9}
-              y={ty + 52}
-              fill="rgba(255,255,255,0.65)"
-              fontSize={8 * FS}
-              fontFamily="inherit"
-            >
-              {t('fanChart.median')}
-            </text>
-            <text
-              x={tx + TW - 9}
-              y={ty + 52}
-              fill="white"
-              fontSize={9.5 * FS}
-              fontWeight="700"
-              textAnchor="end"
-              fontFamily="inherit"
-            >
-              {fmtM(hovered.p50)}
-            </text>
+                {/* Median */}
+                <text
+                  x={tx + 9}
+                  y={ty + 52}
+                  fill="rgba(255,255,255,0.65)"
+                  fontSize={8 * FS}
+                  fontFamily="inherit"
+                >
+                  {t('fanChart.median')}
+                </text>
+                <text
+                  x={tx + TW - 9}
+                  y={ty + 52}
+                  fill="white"
+                  fontSize={9.5 * FS}
+                  fontWeight="700"
+                  textAnchor="end"
+                  fontFamily="inherit"
+                >
+                  {fmtM(hovered.p50)}
+                </text>
 
-            {/* Worst Case */}
-            <text
-              x={tx + 9}
-              y={ty + 70}
-              fill="rgba(255,255,255,0.65)"
-              fontSize={8 * FS}
-              fontFamily="inherit"
-            >
-              {t('fanChart.worstCase')}
-            </text>
-            <text
-              x={tx + TW - 9}
-              y={ty + 70}
-              fill="white"
-              fontSize={9.5 * FS}
-              fontWeight="700"
-              textAnchor="end"
-              fontFamily="inherit"
-            >
-              {fmtM(hovered.p5)}
-            </text>
+                {/* Worst Case */}
+                <text
+                  x={tx + 9}
+                  y={ty + 70}
+                  fill="rgba(255,255,255,0.65)"
+                  fontSize={8 * FS}
+                  fontFamily="inherit"
+                >
+                  {t('fanChart.worstCase')}
+                </text>
+                <text
+                  x={tx + TW - 9}
+                  y={ty + 70}
+                  fill="white"
+                  fontSize={9.5 * FS}
+                  fontWeight="700"
+                  textAnchor="end"
+                  fontFamily="inherit"
+                >
+                  {fmtM(hovered.p5)}
+                </text>
+              </>
+            )}
           </g>
         );
       })()}

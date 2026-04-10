@@ -18,7 +18,11 @@ interface SimRange {
   endYear: number;
 }
 
-export function MonteCarloContainer() {
+interface MonteCarloContainerProps {
+  showChartKpis?: boolean;
+}
+
+export function MonteCarloContainer({ showChartKpis = true }: MonteCarloContainerProps) {
   const { state, fireDate, fireTarget } = useFireContext();
 
   const [simConfig, setSimConfig] = useState<SimConfig>({
@@ -106,6 +110,7 @@ export function MonteCarloContainer() {
         kpiZielwert={kpiZielwert}
         kpiErfolgsrate={kpiErfolgsrate}
         displayVolatility={displayVolatility}
+        showChartKpis={showChartKpis}
         onSimConfigChange={setSimConfig}
         onSimRangeChange={setSimRange}
         onMonthlyWithdrawalChange={setMonthlyWithdrawal}

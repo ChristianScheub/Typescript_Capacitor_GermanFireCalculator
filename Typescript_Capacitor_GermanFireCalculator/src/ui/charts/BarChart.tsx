@@ -9,11 +9,11 @@ interface Props {
 }
 
 const SVG_W     = 320;
-const SVG_H     = 210;   // extra height for value label row
-const BAR_W     = 44;
+const SVG_H     = 240;   // extra height for value label row
+const BAR_W     = 48;
 const BAR_GAP   = 10;
-const MAX_BAR_H = 110;
-const BASE_Y    = 145;
+const MAX_BAR_H = 140;
+const BASE_Y    = 178;
 
 // Compact DE number: >=1M → "1,3 Mio." | >=1k → "150 T" | else plain
 function fmtCompact(v: number): string {

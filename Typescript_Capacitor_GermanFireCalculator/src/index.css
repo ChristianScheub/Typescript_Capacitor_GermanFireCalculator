@@ -1151,7 +1151,7 @@ input, select { font: inherit; }
 
 .milestone-year {
   font-size: 20px;
-  font-weight: 800;
+  font-weight: 600;
   color: var(--fire-text);
   letter-spacing: -0.3px;
   line-height: 1.1;
@@ -1159,7 +1159,6 @@ input, select { font: inherit; }
 
 .milestone-sub {
   font-size: 14px;
-  font-weight: 600;
   color: var(--fire-text);
   margin-top: 1px;
 }

@@ -1,5 +1,4 @@
 import { useState, useMemo }                                from 'react';
-import { useTranslation }                                  from 'react-i18next';
 import { useFireContext }                                  from '../../context/FireContext';
 import { fireService, FIRE_CONSTANTS } from '../../services/fire';
 import { SteuerView }                                     from '../../views/ScenarioView';
@@ -8,7 +7,6 @@ import { MonteCarloContainer }                            from '../MonteCarlo/Mo
 import type { PrognoseConfig }                            from '../../types/prognose/PrognoseConfig';
 
 export function SteuerContainer() {
-  const { t } = useTranslation();
   const { state, fireDate, monthlySavings, fireTarget } = useFireContext();
 
   const [selectedBadge, setSelectedBadge] = useState<string | null>('BASIS');
@@ -18,31 +16,27 @@ export function SteuerContainer() {
   // ── Scenario configs ──────────────────────────────────────────────────────────
 
   const basisConfig: PrognoseConfig = useMemo(() => ({
-    title:         t('tax.fireCalculation'),
     badge:         'BASIS',
     stateOverride: {},
-  }), [t]);
+  }), []);
 
   const teilzeitConfig: PrognoseConfig = useMemo(() => ({
-    title:         t('tax.partTime'),
     badge:         'TEILZEIT',
     stateOverride: { monthlySavingsAmount: state.monthlySavingsAmount * FIRE_CONSTANTS.TEILZEIT_FACTOR },
-  }), [t, state.monthlySavingsAmount]);
+  }), [state.monthlySavingsAmount]);
 
   const crashConfig: PrognoseConfig = useMemo(() => ({
-    title:         t('tax.crash'),
     badge:         'CRASH',
     stateOverride: {
       etfBalance:  state.etfBalance  * FIRE_CONSTANTS.CRASH_FACTOR,
       cashBalance: state.cashBalance * FIRE_CONSTANTS.CRASH_FACTOR,
     },
-  }), [t, state.etfBalance, state.cashBalance]);
+  }), [state.etfBalance, state.cashBalance]);
 
   const hardcoreConfig: PrognoseConfig = useMemo(() => ({
-    title:         t('tax.hardcoreFire'),
     badge:         'HARDCORE',
     stateOverride: { variableExpenses: state.variableExpenses * FIRE_CONSTANTS.HARDCORE_FIRE_FACTOR },
-  }), [t, state.variableExpenses]);
+  }), [state.variableExpenses]);
 
   // ── Delta calculations ────────────────────────────────────────────────────────
 

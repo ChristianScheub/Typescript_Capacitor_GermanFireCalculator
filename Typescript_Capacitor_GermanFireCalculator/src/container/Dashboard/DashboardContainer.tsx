@@ -2,14 +2,12 @@ import { useFireContext }  from '../../context/FireContext';
 import { fireService, fmtCurrency, fmtPercent } from '../../services/fire';
 import { DashboardView }   from '../../views/DashboardView';
 import type { Tab }         from '../../types/navigation/Tab';
-import type { PrognoseConfig } from '../../types/prognose/PrognoseConfig';
 
 interface Props {
-  onTabChange:          (tab: Tab) => void;
-  onNavigateToPrognose: (cfg: PrognoseConfig) => void;
+  onTabChange: (tab: Tab) => void;
 }
 
-export function DashboardContainer({ onTabChange, onNavigateToPrognose }: Props) {
+export function DashboardContainer({ onTabChange }: Props) {
   const {
     netWorth,
     firePercentage,
@@ -20,7 +18,6 @@ export function DashboardContainer({ onTabChange, onNavigateToPrognose }: Props)
     fireTarget,
   } = useFireContext();
 
-  const growthBadge        = netWorth > 0 ? fmtPercent((monthlySavings / netWorth) * 100, 1) : '0,0';
   const monthlyAssetIncome = fireService.calcAssetIncome(netWorth, weightedReturn) / 12;
   const yearsToFire        = Math.max(0, fireDate.year - new Date().getFullYear());
   const annualReturnFormatted = fmtPercent(weightedReturn * 100, 1);
@@ -45,14 +42,12 @@ export function DashboardContainer({ onTabChange, onNavigateToPrognose }: Props)
       firePercentage={firePercentage}
       yearsToFire={yearsToFire}
       netWorthFormatted={fmtCurrency(netWorth)}
-      growthBadge={growthBadge}
       monthlySavingsFormatted={fmtCurrency(monthlySavings)}
       annualReturnFormatted={annualReturnFormatted}
       assetIncomeFormatted={fmtCurrency(monthlyAssetIncome)}
       nextMilestoneText={nextMilestoneText}
       chartData={chartData}
       onTabChange={onTabChange}
-      onNavigateToPrognose={onNavigateToPrognose}
     />
   );
 }

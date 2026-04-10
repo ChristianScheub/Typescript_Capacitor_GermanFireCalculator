@@ -33,6 +33,7 @@ interface MonteCarloViewProps {
   kpiZielwert: string;
   kpiErfolgsrate: string;
   displayVolatility: number;
+  showChartKpis?: boolean;
   onSimConfigChange: (c: SimConfig) => void;
   onSimRangeChange: (r: SimRange) => void;
   onMonthlyWithdrawalChange: (w: number) => void;
@@ -56,6 +57,7 @@ export function MonteCarloView({
   kpiZielwert,
   kpiErfolgsrate,
   displayVolatility,
+  showChartKpis = true,
   onSimConfigChange,
   onSimRangeChange,
   onMonthlyWithdrawalChange,
@@ -179,6 +181,8 @@ export function MonteCarloView({
             erfolgsrate={kpiErfolgsrate}
             risikoLabel={risikoLabel}
             risikoColor={risikoColor}
+            showLegend={showChartKpis}
+            showKpis={showChartKpis}
             onFullscreenOpen={onFullscreenOpen}
           />
         </div>

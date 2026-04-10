@@ -12,8 +12,10 @@ interface MonteCarloChartProps {
   risikoColor: string;
   onFullscreenOpen: () => void;
   showLegend?: boolean;
+  showKpis?: boolean;
   landscape?: boolean;
   showBands?: boolean;
+  simplifiedTooltip?: boolean;
 }
 
 export function MonteCarloChart({
@@ -24,8 +26,10 @@ export function MonteCarloChart({
   risikoColor,
   onFullscreenOpen,
   showLegend = true,
+  showKpis = true,
   landscape = false,
   showBands = true,
+  simplifiedTooltip = false,
 }: MonteCarloChartProps) {
   const { t } = useTranslation();
 
@@ -70,13 +74,15 @@ export function MonteCarloChart({
         </div>
       )}
 
-      <FanChart fanData={fanData} landscape={landscape} showBands={showBands} />
-      <KpiBar
-        zielwert={zielwert}
-        erfolgsrate={erfolgsrate}
-        risikoLabel={risikoLabel}
-        risikoColor={risikoColor}
-      />
+      <FanChart fanData={fanData} landscape={landscape} showBands={showBands} simplifiedTooltip={simplifiedTooltip} />
+      {showKpis && (
+        <KpiBar
+          zielwert={zielwert}
+          erfolgsrate={erfolgsrate}
+          risikoLabel={risikoLabel}
+          risikoColor={risikoColor}
+        />
+      )}
     </>
   );
 }

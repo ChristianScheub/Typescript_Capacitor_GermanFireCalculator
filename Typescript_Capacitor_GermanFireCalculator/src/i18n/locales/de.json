@@ -30,7 +30,8 @@
 		"openExplorer": "EXPLORER ÖFFNEN",
 		"fabLabel": "Neu",
 		"paUnit": "% p.a.",
-		"milestoneIcon": "M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"
+		"milestoneIcon": "M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z",
+		"sparkleIcon": "M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z"
 	},
 	"menu": {
 		"profileInfo": "Profil-Informationen",
@@ -181,7 +182,6 @@
 	"fanChart": {
 		"ageLabel": "Alter {{age}}",
 		"tooltipHeader": "Alter {{age}} ({{year}})",
-		"selection": "AUSWAHL",
 		"bestCase": "Bester Fall",
 		"median": "Median",
 		"worstCase": "Schlechtester Fall"
@@ -202,7 +202,6 @@
 		"yearPlural": "Jahre",
 		"earlier": "früher",
 		"later": "später",
-		"currentStatus": "AKTUELLER STATUS",
 		"scenarios": "Szenarien",
 		"expectedFireDate": "Voraussichtliches FIRE-Datum",
 		"progress": "Fortschritt",

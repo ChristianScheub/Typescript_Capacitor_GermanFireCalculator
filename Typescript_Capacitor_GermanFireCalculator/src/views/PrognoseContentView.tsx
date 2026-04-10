@@ -109,6 +109,9 @@ export function PrognoseContentView({
         risikoColor="#3DAA72"
         onFullscreenOpen={onMcFullscreenOpen}
         showBands={false}
+        showLegend={false}
+        showKpis={false}
+        simplifiedTooltip={true}
       />
 
       {/* ── Cards ── */}

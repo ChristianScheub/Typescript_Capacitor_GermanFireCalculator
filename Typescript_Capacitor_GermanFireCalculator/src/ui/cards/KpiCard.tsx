@@ -1,11 +1,10 @@
-import type { IconVariant, BadgeVariant } from '../../types/ui/variants';
+import type { IconVariant } from '../../types/ui/variants';
 
 interface KpiCardProps {
   label: string;
   value: string | number;
   unit?: string;
   iconVariant: IconVariant;
-  badgeVariant?: BadgeVariant;
   icon: React.ReactNode;
 }
 
