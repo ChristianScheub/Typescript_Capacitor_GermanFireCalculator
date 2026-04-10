@@ -1,0 +1,302 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   WELCOME SCREEN
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--fire-bg);
+  display: flex;
+  flex-direction: column;
+  max-width: 430px;
+  margin: 0 auto;
+}
+
+/* ── Scroll container ────────────────────────────────────────────────────── */
+.welcome-scroll {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.welcome-content {
+  padding: 48px 20px 0;
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+.welcome-hero {
+  margin-bottom: 28px;
+}
+
+.welcome-hero__overline {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: var(--fire-accent);
+  margin-bottom: 10px;
+}
+
+.welcome-hero__title {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.18;
+  color: var(--fire-text);
+  margin-bottom: 12px;
+}
+
+.welcome-hero__subtitle {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--fire-text-secondary);
+}
+
+/* ── Info section cards ──────────────────────────────────────────────────── */
+.welcome-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.welcome-card {
+  background: var(--fire-card);
+  border-radius: var(--fire-radius);
+  padding: 14px 16px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  box-shadow: var(--fire-shadow);
+  border: 1px solid var(--fire-border);
+}
+
+.welcome-card__icon-wrap {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--fire-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin-top: 1px;
+}
+
+.welcome-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.welcome-card__header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 5px;
+}
+
+.welcome-card__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--fire-text);
+}
+
+.welcome-card__badge {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--fire-accent);
+  background: rgba(61, 170, 114, 0.12);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.welcome-card__text {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--fire-text-secondary);
+}
+
+/* ── Tagline card ────────────────────────────────────────────────────────── */
+.welcome-tagline-card {
+  background: var(--fire-primary);
+  border-radius: var(--fire-radius);
+  padding: 22px 20px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.welcome-tagline-card__text {
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 5px;
+  letter-spacing: -0.01em;
+}
+
+.welcome-tagline-card__sub {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--fire-accent);
+}
+
+/* ── Consent checkboxes ──────────────────────────────────────────────────── */
+.welcome-consents {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.welcome-consent {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--fire-card);
+  border-radius: var(--fire-radius);
+  padding: 14px 16px;
+  border: 1.5px solid var(--fire-border);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.15s ease;
+  position: relative;
+}
+
+.welcome-consent:active {
+  transform: scale(0.985);
+}
+
+.welcome-consent--checked {
+  border-color: var(--fire-accent);
+  box-shadow: 0 0 0 3px rgba(61, 170, 114, 0.12);
+}
+
+.welcome-consent__icon-wrap {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: rgba(61, 170, 114, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fire-accent);
+  transition: background 0.22s ease;
+}
+
+.welcome-consent--checked .welcome-consent__icon-wrap {
+  background: rgba(61, 170, 114, 0.2);
+}
+
+.welcome-consent__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.welcome-consent__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fire-text);
+  margin-bottom: 3px;
+}
+
+.welcome-consent__desc {
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--fire-text-secondary);
+}
+
+/* ── Checkbox circle ─────────────────────────────────────────────────────── */
+.welcome-consent__check {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--fire-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.22s ease, border-color 0.22s ease, transform 0.18s ease;
+}
+
+.welcome-consent__check--on {
+  background: var(--fire-accent);
+  border-color: var(--fire-accent);
+  transform: scale(1.12);
+}
+
+/* ── Checkmark SVG pop-in animation ─────────────────────────────────────── */
+.welcome-consent__checkmark {
+  color: #fff;
+  animation: checkmark-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes checkmark-pop {
+  0%   { opacity: 0; transform: scale(0.3) rotate(-20deg); }
+  70%  { transform: scale(1.15) rotate(3deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+/* ── Spacer ──────────────────────────────────────────────────────────────── */
+.welcome-cta-spacer {
+  height: 20px;
+}
+
+/* ── Sticky CTA bar ──────────────────────────────────────────────────────── */
+.welcome-cta {
+  flex-shrink: 0;
+  padding: 12px 20px 32px;
+  background: var(--fire-bg);
+  border-top: 1px solid var(--fire-border);
+}
+
+.welcome-cta__hint {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--fire-text-muted);
+  text-align: center;
+  margin-bottom: 10px;
+  animation: hint-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes hint-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.welcome-cta__btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--fire-border);
+  color: var(--fire-text-muted);
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: var(--fire-radius);
+  padding: 16px 20px;
+  border: none;
+  cursor: not-allowed;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.15s ease, box-shadow 0.3s ease;
+}
+
+.welcome-cta__btn--active {
+  background: var(--fire-primary);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(28, 56, 38, 0.28);
+  animation: btn-appear 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.welcome-cta__btn--active:active {
+  transform: scale(0.97);
+}
+
+@keyframes btn-appear {
+  0%   { transform: scale(0.95); opacity: 0.6; }
+  100% { transform: scale(1);    opacity: 1;   }
+}

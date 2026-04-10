@@ -1,0 +1,11 @@
+/* ── Nav List Item Icon Backgrounds ─────────────────────────────────────── */
+.nav-list__icon-box--red     { background: #E53E3E; }
+.nav-list__icon-box--gray    { background: #4B5563; }
+.nav-list__icon-box--green   { background: #3DAA72; }
+.nav-list__icon-box--primary { background: #1C3826; }
+
+/* ── Section label spacing variant ──────────────────────────────────────── */
+.section-label--mt { margin-top: 20px; }
+
+/* ── Warning text bold ───────────────────────────────────────────────────── */
+.info-warning__bold { text-decoration: underline; }

@@ -17,6 +17,12 @@
 export type IconVariant = 'green' | 'teal' | 'red' | 'orange' | 'gray';
 
 /**
+ * Nav list icon background variants used in MenuView.
+ * Maps to CSS classes like `.nav-list__icon-box--red`.
+ */
+export type NavIconVariant = 'red' | 'gray' | 'green' | 'primary';
+
+/**
  * Badge style variants for positive, warning, and danger states.
  * Used in KpiCard badges and other badge components.
  */

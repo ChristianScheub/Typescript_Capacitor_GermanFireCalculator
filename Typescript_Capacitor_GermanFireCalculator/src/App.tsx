@@ -5,16 +5,24 @@ import { DashboardContainer }         from './container/Dashboard/DashboardConta
 import { PlannerContainer }           from './container/Planner/PlannerContainer';
 import { SteuerContainer }            from './container/Scenario/ScenarioContainer';
 import { Menu }                       from './views/MenuView';
+import { WelcomeContainer }           from './container/Welcome/WelcomeContainer';
+import { welcomeService }             from './services/welcome';
 import type { Tab }                   from './types/navigation/Tab';
 import './App.css';
 
 function AppShell() {
   const [activeTab, setActiveTab] = useState<Tab>('dashboard');
+  const [welcomeAccepted, setWelcomeAccepted] = useState(
+    () => welcomeService.isAccepted()
+  );
 
   const handleTabChange = (tab: Tab) => setActiveTab(tab);
 
   return (
     <div className="app-shell">
+      {!welcomeAccepted && (
+        <WelcomeContainer onAccept={() => setWelcomeAccepted(true)} />
+      )}
       <main className="app-main">
         {activeTab === 'dashboard' && <DashboardContainer onTabChange={handleTabChange} />}
         {activeTab === 'planner'   && <PlannerContainer />}

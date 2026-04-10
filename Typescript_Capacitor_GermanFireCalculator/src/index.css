@@ -938,6 +938,74 @@ input, select { font: inherit; }
   flex-shrink: 0;
 }
 
+/* ── Nav List Icon Box ───────────────────────────────────────────────────────── */
+.nav-list__icon-box {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* ── Info Warning Box ────────────────────────────────────────────────────────── */
+.info-warning {
+  background: #C0392B;
+  border-radius: var(--fire-radius);
+  padding: 16px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.info-warning__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.info-warning__text {
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+/* ── Info Footer ─────────────────────────────────────────────────────────────── */
+.info-footer {
+  margin-top: 32px;
+  padding-bottom: 24px;
+  text-align: center;
+}
+
+.info-footer__tagline {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--fire-text-muted);
+  margin-bottom: 6px;
+}
+
+.info-footer__copy {
+  font-size: 12px;
+  color: var(--fire-text-muted);
+}
+
+/* ── Info Version Badge ──────────────────────────────────────────────────────── */
+.info-version {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--fire-text-muted);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
 /* ── Menu Footer ─────────────────────────────────────────────────────────────── */
 .menu-footer {
   margin-top: 32px;
