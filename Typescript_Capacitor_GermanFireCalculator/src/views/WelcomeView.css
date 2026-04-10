@@ -118,6 +118,10 @@
   color: var(--fire-text-secondary);
 }
 
+.welcome-card__text--spacer {
+  height: 0.6em;
+}
+
 /* ── Tagline card ────────────────────────────────────────────────────────── */
 .welcome-tagline-card {
   background: var(--fire-primary);

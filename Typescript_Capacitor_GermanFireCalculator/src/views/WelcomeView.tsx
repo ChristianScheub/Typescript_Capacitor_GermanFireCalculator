@@ -8,6 +8,7 @@ interface SectionItem {
   titleKey: string;
   badgeKey?: string;
   textKey: string;
+  textKey2?: string;
 }
 
 interface ConsentItem {
@@ -17,10 +18,10 @@ interface ConsentItem {
 }
 
 const SECTIONS: SectionItem[] = [
-  { icon: 'trending', titleKey: 'welcome.section1Title', badgeKey: 'welcome.section1Badge', textKey: 'welcome.section1Text' },
-  { icon: 'layers',   titleKey: 'welcome.section2Title', badgeKey: 'welcome.section2Badge', textKey: 'welcome.section2Text' },
-  { icon: 'warning',  titleKey: 'welcome.section3Title', textKey: 'welcome.section3Text' },
-  { icon: 'shield',   titleKey: 'welcome.section4Title', textKey: 'welcome.section4Text' },
+  { icon: 'trending', titleKey: 'welcome.section1Title', badgeKey: 'welcome.section1Badge', textKey: 'welcome.section1Text', textKey2: 'welcome.section1Text2' },
+  { icon: 'layers',   titleKey: 'welcome.section2Title', badgeKey: 'welcome.section2Badge', textKey: 'welcome.section2Text', textKey2: 'welcome.section2Text2' },
+  { icon: 'warning',  titleKey: 'welcome.section3Title', textKey: 'welcome.section3Text', textKey2: 'welcome.section3Text2' },
+  { icon: 'shield',   titleKey: 'welcome.section4Title', textKey: 'welcome.section4Text', textKey2: 'welcome.section4Text2' },
   { icon: 'book',     titleKey: 'welcome.section5Title', textKey: 'welcome.section5Text' },
 ];
 
@@ -59,14 +60,15 @@ export function WelcomeView({ checked, onToggle, onAccept }: WelcomeViewProps) {
                     )}
                   </div>
                   <p className="welcome-card__text">{t(s.textKey)}</p>
+                  {s.textKey2 && (
+                    <>
+                      <p className="welcome-card__text welcome-card__text--spacer" />
+                      <p className="welcome-card__text">{t(s.textKey2)}</p>
+                    </>
+                  )}
                 </div>
               </div>
             ))}
-          </div>
-
-          <div className="welcome-tagline-card">
-            <p className="welcome-tagline-card__text">{t('welcome.footerTagline')}</p>
-            <p className="welcome-tagline-card__sub">{t('welcome.footerSub')}</p>
           </div>
 
           <div className="welcome-consents">
