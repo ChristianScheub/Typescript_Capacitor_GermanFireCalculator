@@ -22,7 +22,7 @@ const SECTIONS: SectionItem[] = [
   { icon: 'layers',   titleKey: 'welcome.section2Title', badgeKey: 'welcome.section2Badge', textKey: 'welcome.section2Text', textKey2: 'welcome.section2Text2' },
   { icon: 'warning',  titleKey: 'welcome.section3Title', textKey: 'welcome.section3Text', textKey2: 'welcome.section3Text2' },
   { icon: 'shield',   titleKey: 'welcome.section4Title', textKey: 'welcome.section4Text', textKey2: 'welcome.section4Text2' },
-  { icon: 'book',     titleKey: 'welcome.section5Title', textKey: 'welcome.section5Text' },
+  { icon: 'book',     titleKey: 'welcome.section5Title', textKey: 'welcome.section5Text', textKey2: 'welcome.section5Text2' },
 ];
 
 const CONSENTS: ConsentItem[] = [

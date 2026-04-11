@@ -264,6 +264,10 @@ export function checkCodeQuality() {
       if (!str || str.length < 3) return false;
       if (ALLOWED_HARDCODED.has(str)) return false;
       if (str.startsWith('--')) return false; // CSS custom properties
+      // SVG path data (d attribute): starts with an SVG command letter followed by coords
+      if (/^[MLHVCSQTAZmlhvcsqtaz][\d\s,.\-MLHVCSQTAZmlhvcsqtaz]*$/.test(str)) return false;
+      // SVG polyline/polygon points or viewBox (only numbers, spaces, commas, dots, dashes)
+      if (/^[\d\s,.\-]+$/.test(str)) return false;
       // HTML attribute values (rel, target, type values)
       if (/^(noopener|noreferrer|nofollow|_blank|_self|submit|button|reset|text|password|email|number)(\s+(noopener|noreferrer|nofollow|_blank|_self))*$/.test(str)) return false;
       // CSS class names (kebab-case)

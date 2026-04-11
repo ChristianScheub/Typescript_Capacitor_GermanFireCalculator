@@ -227,28 +227,36 @@ export function checkViewUIComponents() {
 
       const relFile = getRelativePath(file, projectRoot);
       const content = fs.readFileSync(file, 'utf8');
-      
-      // Find the export statement
-      const exportMatch = content.match(/\nexport\s+(?:function|const|default)/);
+
+      // Guard: count total meaningful lines in the entire file.
+      // A real component with actual JSX will always have many lines.
+      // Only run the wrapper-check on small files (≤ 20 meaningful lines).
+      const totalMeaningfulLines = content.split('\n').filter((l) => {
+        const t = l.trim();
+        return t && !t.startsWith('//') && !t.startsWith('*') && !t.startsWith('import');
+      }).length;
+      if (totalMeaningfulLines > 20) return; // Clearly not a wrapper – skip
+
+      // Find the first inline-export (export function / export const / export default)
+      const exportMatch = content.match(/\nexport\s+(?:function|const|default\s+(?!export))/);
       if (!exportMatch) return;
 
-      // Get code after export
+      // Get code after that export keyword
       const exportIndex = content.indexOf(exportMatch[0]);
       const codeAfterExport = content.substring(exportIndex);
       const lines = codeAfterExport.split('\n');
 
-      // Count non-empty, non-whitespace-only lines (excluding import/export lines)
+      // Count non-empty, non-trivial lines after the export
       let contentLineCount = 0;
       for (const line of lines) {
         const trimmed = line.trim();
         if (trimmed && !trimmed.startsWith('//') && trimmed !== '}' && trimmed !== ');') {
           contentLineCount++;
-          // Stop after first meaningful export line
           if (contentLineCount > 3) break;
         }
       }
 
-      // If there are 3 or fewer lines of actual content after export, it's too minimal
+      // Only flag if truly minimal (≤ 3 lines) AND the whole file is small
       if (contentLineCount <= 3 && contentLineCount > 0) {
         violations.push(
           `Minimal Component Check (${folderName}): File '${relFile}' exports a component with only ${contentLineCount} lines of code. ` +

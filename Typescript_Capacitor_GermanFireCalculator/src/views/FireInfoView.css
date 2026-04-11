@@ -1,0 +1,303 @@
+/* ══════════════════════════════════════════════════════════════════
+   FIRE INFO CONTENT  (Was ist FIRE?)
+   ══════════════════════════════════════════════════════════════════ */
+
+.fi {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 12px;
+}
+
+/* ── Hero ────────────────────────────────────────────────────────── */
+.fi-overline {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--fire-accent);
+  margin-bottom: -6px;
+}
+
+.fi-title {
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--fire-text);
+  letter-spacing: -0.025em;
+}
+
+.fi-subtitle {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--fire-text-secondary);
+  margin-top: -2px;
+}
+
+/* ── Generic card (Souveränität, Dynamik) ────────────────────────── */
+.fi-card {
+  background: var(--fire-card);
+  border: 1px solid var(--fire-border);
+  border-radius: var(--fire-radius);
+  padding: 14px 16px;
+  box-shadow: var(--fire-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fi-card__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fi-card__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fire-text);
+}
+
+.fi-card__text {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--fire-text-secondary);
+}
+
+/* ── Icon pill ───────────────────────────────────────────────────── */
+.fi-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.fi-icon--primary { background: var(--fire-primary); }
+.fi-icon--accent  { background: var(--fire-accent); }
+
+/* ── Quote ───────────────────────────────────────────────────────── */
+.fi-quote {
+  background: rgba(28, 56, 38, 0.05);
+  border-left: 3px solid var(--fire-accent);
+  border-radius: 0 8px 8px 0;
+  padding: 11px 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.fi-quote__text {
+  font-size: 13px;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--fire-text);
+}
+
+.fi-quote__label {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  color: var(--fire-text-muted);
+}
+
+/* ── BAUPLAN section header ──────────────────────────────────────── */
+.fi-section-overline {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--fire-text-muted);
+  margin-bottom: -6px;
+}
+
+.fi-section-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--fire-text);
+  letter-spacing: -0.01em;
+}
+
+/* ── 25er-Regel card ─────────────────────────────────────────────── */
+.fi-rule25 {
+  border-radius: var(--fire-radius);
+  overflow: hidden;
+  border: 1px solid var(--fire-border);
+  box-shadow: var(--fire-shadow);
+}
+
+/* dark cap / header bar */
+.fi-rule25__cap {
+  background: var(--fire-primary);
+  padding: 13px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fi-rule25__cap-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.fi-rule25__cap-label {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.fi-rule25__cap-badge {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--fire-accent);
+  background: rgba(61, 170, 114, 0.18);
+  border-radius: 5px;
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+
+/* white body */
+.fi-rule25__body {
+  background: var(--fire-card);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fi-rule25__text {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--fire-text-secondary);
+}
+
+.fi-rule25__badge {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #92400e;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  border-radius: 6px;
+  padding: 5px 10px;
+  align-self: flex-start;
+}
+
+/* ── Key-value table (STATUS / KORREKTURBEDARF) ──────────────────── */
+.fi-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.fi-table__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 0;
+}
+
+.fi-table__divider {
+  height: 1px;
+  background: var(--fire-border);
+}
+
+.fi-table__key {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--fire-text-muted);
+  white-space: nowrap;
+}
+
+.fi-table__val {
+  font-size: 13px;
+  text-align: right;
+}
+
+.fi-table__val--red {
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.fi-table__val--bold {
+  font-weight: 700;
+  color: var(--fire-text);
+}
+
+/* ── Inline disclaimer inside 25er card ─────────────────────────── */
+.fi-rule25__disclaimer {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.fi-rule25__disclaimer-text {
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: #7f1d1d;
+}
+
+.fi-rule25__disclaimer-text strong {
+  color: #dc2626;
+  font-weight: 800;
+}
+
+/* ── Revision badge (Dynamik) ────────────────────────────────────── */
+.fi-revision-badge {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.55;
+  color: var(--fire-primary);
+  background: rgba(28, 56, 38, 0.07);
+  border: 1px solid rgba(28, 56, 38, 0.16);
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+/* ── Rechtliche Einordnung ───────────────────────────────────────── */
+.fi-legal {
+  border-top: 1px solid var(--fire-border);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.fi-legal__label {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--fire-text-muted);
+}
+
+.fi-legal__text {
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--fire-text-secondary);
+}
+
+.fi-legal__text--bold {
+  font-weight: 700;
+  color: var(--fire-text);
+  border-left: 3px solid #dc2626;
+  padding-left: 10px;
+}
+
+.fi-legal__text--italic {
+  font-style: italic;
+  color: var(--fire-text-secondary);
+}

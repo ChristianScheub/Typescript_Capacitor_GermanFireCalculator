@@ -4,7 +4,7 @@ import { BottomNav }                  from './ui/navigation/BottomNav';
 import { DashboardContainer }         from './container/Dashboard/DashboardContainer';
 import { PlannerContainer }           from './container/Planner/PlannerContainer';
 import { SteuerContainer }            from './container/Scenario/ScenarioContainer';
-import { Menu }                       from './views/MenuView';
+import { MenuContainer }              from './container/Menu/MenuContainer';
 import { WelcomeContainer }           from './container/Welcome/WelcomeContainer';
 import { welcomeService }             from './services/welcome';
 import type { Tab }                   from './types/navigation/Tab';
@@ -27,7 +27,7 @@ function AppShell() {
         {activeTab === 'dashboard' && <DashboardContainer onTabChange={handleTabChange} />}
         {activeTab === 'planner'   && <PlannerContainer />}
         {activeTab === 'scenarios' && <SteuerContainer />}
-        {activeTab === 'menu'      && <Menu />}
+        {activeTab === 'menu'      && <MenuContainer />}
       </main>
       <BottomNav active={activeTab} onTabChange={handleTabChange} />
     </div>
