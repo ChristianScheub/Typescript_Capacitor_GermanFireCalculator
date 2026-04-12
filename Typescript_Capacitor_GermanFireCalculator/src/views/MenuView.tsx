@@ -8,6 +8,7 @@ import Impressum from '../legal/impressum';
 import UsedLibsListContainer from '../legal/usedLibs/container_usedLibList';
 import WithdrawalRules from '../legal/withdrawalRules';
 import FireInfoContent from './FireInfoView';
+import CalculationInfoContent from './CalculationInfoView';
 import type { ModalInfo } from '../types/menu/ModalInfo';
 import './MenuView.css';
 
@@ -58,7 +59,7 @@ export function Menu({ openModal, onOpenModal, onDeleteAllData, onExportAllData 
   const KNOWLEDGE_ITEMS: NavItem[] = [
     { icon: 'book',     iconVariant: 'green', label: 'info.fireInformation', onClick: () => onOpenModal('fireInfo') },
     { icon: 'trending', iconVariant: 'green', label: 'info.withdrawalInfo', onClick: () => onOpenModal('withdrawalInfo') },
-    { icon: 'sigma',    iconVariant: 'green', label: 'info.calculationInfo' },
+    { icon: 'sigma',    iconVariant: 'green', label: 'info.calculationInfo', onClick: () => onOpenModal('calculationInfo') },
     { icon: 'layers',   iconVariant: 'green', label: 'info.usedLibraries', onClick: () => onOpenModal('libraries') },
   ];
 
@@ -139,6 +140,14 @@ export function Menu({ openModal, onOpenModal, onDeleteAllData, onExportAllData 
         onClose={() => onOpenModal(null)}
       >
         <FireInfoContent />
+      </Modal>
+
+      <Modal
+        isOpen={openModal === 'calculationInfo'}
+        title={t('info.calculationInfo')}
+        onClose={() => onOpenModal(null)}
+      >
+        <CalculationInfoContent />
       </Modal>
     </div>
   );

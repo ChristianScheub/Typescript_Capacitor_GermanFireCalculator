@@ -295,5 +295,31 @@
 	"fireInfo": {
 		"disclaimerLabel": "DISCLAIMER:",
 		"mathematicalSnapshot": "mathematische Momentaufnahme"
+	},
+	"calculationInfo": {
+		"overline": "METHODIKGRENZEN",
+		"title": "Die Logik der Berechnung",
+		"subtitle": "Ein Blick in den mathematischen Maschinenraum. Erfahren Sie, wie unsere Modelle arbeiten und wo sie an ihre Grenzen stoßen.",
+		"section1Title": "Das Fundament (Zielvermögen)",
+		"section1Text": "Das FIRE-Zielkapital (FIRE-Target) ist der stärkste Hebel, da es ausschließlich auf Ihren manuell kalibrierten Ausgaben im Ruhestand basiert und von einer konservativ gewählten Entnahmerate abhängt. Das Ziel: Kapital so anzuhäufen, dass die Ausgaben dauerhaft gedeckt sind – die langfristige Kapitalstabilität eines Portfolios wird dabei nicht geprüft.",
+		"section1Warning1": "ZINSEN UND REALRENDITE WERDEN GLEICHGESETZT",
+		"section1Warning2": "BERECHNUNG: KEINE INFLATIONS- UND STEUERANPASSUNG",
+		"section2Title": "Die Ansparphase (Deterministisch)",
+		"section2Text": "Die Berechnung der Dauer bis zur finanziellen Unabhängigkeit basiert auf Ihrem Sparplan und einer jährlich konstant angenommenen Rendite. Der Zinseszinseffekt wird monatlich berechnet und auf das gesamte Portfolio angewendet.",
+		"section2Badge": "DER BLAUE PLAN",
+		"section2Warning": "WARNUNG: Diese Zinseszinsberechnung erfolgt auf Monats-zu-Monats-Basis und setzt konstante Renditen voraus. Reale Marktvolatilität wird nicht abgebildet.",
+		"section3Title": "Die Entnahmephase (der Kapitalverzehr)",
+		"section3Text": "Die Simulation des Lebensunterhalts im Ruhestand zeigt, wie sich Ihr Kapital über die Zeit entwickelt. Die Entnahmerate bestimmt, wie viel Kapital jährlich entnommen wird – ohne Berücksichtigung von Marktschwankungen.",
+		"section3Bullet1": "Mathematischer Kapitalverzehr ohne Marktvolatilität",
+		"section3Bullet2": "Kapitalwertverlauf über den gesamten Planungshorizont",
+		"section3TaxNote": "Steuerliche Berechnung erfolgt nach Ihren konfigurierten Prozentsätzen",
+		"section4Title": "Monte-Carlo (Der Stresstest)",
+		"section4Text": "Wir simulieren 10.000 mögliche Marktverläufe, um die Robustheit Ihrer Strategie zu ermitteln. Dies ist kein Versprechen, sondern eine stochastische Einschätzung auf Basis historischer Volatilitätsmuster.",
+		"section4Badge": "STATISTISCHE EINSTREUUNG",
+		"legalLabel": "BERECHTIGUNGSGRUNDLAGE",
+		"legalText1": "Dieses Tool führt ausschließlich mathematische Modellrechnungen auf Basis Ihrer Eingaben durch. Es handelt sich um kein Finanzprodukt und keine Anlageberatung.",
+		"legalText2": "Kapitalmarktanlagen unterliegen Risiken bis hin zum Totalverlust. Die Berechnungen basieren auf Annahmen, die sich jederzeit als falsch erweisen können.",
+		"legalText3": "Historische Renditen sind kein verlässlicher Indikator für zukünftige Wertentwicklungen.",
+		"legalText4": "Die gezeigten Szenarien sind mathematische Momentaufnahmen und stellen keine individuelle Anlagestrategie oder Empfehlung dar."
 	}
 }

@@ -295,5 +295,31 @@
 	"fireInfo": {
 		"disclaimerLabel": "DISCLAIMER:",
 		"mathematicalSnapshot": "mathematical snapshot"
+	},
+	"calculationInfo": {
+		"overline": "METHODOLOGYLIMITS",
+		"title": "The Logic of the Calculation",
+		"subtitle": "A look inside the mathematical engine room. Learn how our models work and where they reach their limits.",
+		"section1Title": "The Foundation (Target Capital)",
+		"section1Text": "The FIRE target capital (FIRE-Target) is the most powerful lever, as it is based exclusively on your manually calibrated retirement expenses and depends on a conservatively chosen withdrawal rate. The goal: to accumulate enough capital to permanently cover expenses – without examining the long-term capital stability of a portfolio.",
+		"section1Warning1": "INTEREST AND REAL RETURN ARE TREATED AS EQUAL",
+		"section1Warning2": "CALCULATION: NO INFLATION OR TAX ADJUSTMENT",
+		"section2Title": "The Savings Phase (Deterministic)",
+		"section2Text": "The calculation of the time to financial independence is based on your savings plan and a constant annual assumed return. The compound interest effect is calculated monthly and applied to the entire portfolio.",
+		"section2Badge": "THE BLUEPRINT",
+		"section2Warning": "WARNING: This compound interest calculation runs on a month-to-month basis and assumes constant returns. Real market volatility is not modeled.",
+		"section3Title": "The Withdrawal Phase (Capital Depletion)",
+		"section3Text": "The simulation of retirement living expenses shows how your capital develops over time. The withdrawal rate determines how much capital is withdrawn annually – without accounting for market fluctuations.",
+		"section3Bullet1": "Mathematical capital depletion without market volatility",
+		"section3Bullet2": "Capital value trajectory over the entire planning horizon",
+		"section3TaxNote": "Tax calculation is performed according to your configured percentages",
+		"section4Title": "Monte Carlo (The Stress Test)",
+		"section4Text": "We simulate 10,000 possible market trajectories to assess the robustness of your strategy. This is not a promise, but a stochastic assessment based on historical volatility patterns.",
+		"section4Badge": "STATISTICAL DISPERSION",
+		"legalLabel": "LEGAL BASIS",
+		"legalText1": "This tool performs exclusively mathematical model calculations based on your inputs. It is not a financial product and does not constitute investment advice.",
+		"legalText2": "Capital market investments are subject to risks, including total loss. The calculations are based on assumptions that may prove incorrect at any time.",
+		"legalText3": "Historical returns are not a reliable indicator of future performance.",
+		"legalText4": "The scenarios shown are mathematical snapshots and do not represent individual investment strategies or recommendations."
 	}
 }
