@@ -71,3 +71,28 @@ export default defineConfig([
   },
 ])
 ```
+
+## Used NPM Libs
+<br />├── @capacitor/cli@8.3.0
+<br />├── @capacitor/core@8.3.0
+<br />├── @capacitor/ios@8.3.0
+<br />├── @capacitor/share@8.0.1
+<br />├── @emnapi/wasi-threads@1.2.1 extraneous
+<br />├── @eslint/js@9.39.4
+<br />├── @types/jest@30.0.0
+<br />├── @types/node@24.12.2
+<br />├── @types/react-dom@19.2.3
+<br />├── @types/react@19.2.14
+<br />├── @vitejs/plugin-react@6.0.1
+<br />├── eslint-plugin-react-hooks@7.0.1
+<br />├── eslint-plugin-react-refresh@0.5.2
+<br />├── eslint@9.39.4
+<br />├── globals@17.4.0
+<br />├── i18next@26.0.3
+<br />├── license-checker@25.0.1
+<br />├── react-dom@19.2.4
+<br />├── react-i18next@17.0.2
+<br />├── react@19.2.4
+<br />├── typescript-eslint@8.58.0
+<br />├── typescript@6.0.2
+<br />└── vite@8.0.4
