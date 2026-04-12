@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Fire Rechner</string>
+    <string name="title_activity_main">Fire Rechner</string>
+    <string name="package_name">de.scheub.fireCalculator</string>
+    <string name="custom_url_scheme">de.scheub.fireCalculator</string>
+</resources>
