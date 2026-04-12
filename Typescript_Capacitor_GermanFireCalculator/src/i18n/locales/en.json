@@ -201,6 +201,18 @@
 		"successRate": "SUCCESS RATE",
 		"withdrawalRisk": "WITHDRAWAL RISK"
 	},
+	"monteCarloProView": {
+		"title": "Monte Carlo Simulation Pro",
+		"subtitle": "DYNAMIC SPENDING CONTROL",
+		"drawdownTitle": "Spending Protection Strategy",
+		"drawdownDesc": "When your portfolio drops significantly from its all-time high, you automatically reduce your monthly expenses. Once it has recovered, you return to your normal spending.",
+		"drawdownThreshold": "DRAWDOWN TRIGGER (X)",
+		"drawdownThresholdHint": "The percentage drop from the all-time high at which you reduce expenses. E.g. 20 = at -20% from ATH.",
+		"recoveryThreshold": "RECOVERY TRIGGER (C)",
+		"recoveryThresholdHint": "The percentage rise from the trough at which you restore normal spending. E.g. 15 = at +15% from the low.",
+		"reducedWithdrawal": "REDUCED EXPENSES (Y)",
+		"reducedWithdrawalHint": "The amount you reduce your monthly expenses to during a market downturn."
+	},
 	"fanChart": {
 		"ageLabel": "Age {{age}}",
 		"tooltipHeader": "Age {{age}} ({{year}})",
@@ -264,6 +276,8 @@
 		"monteCarloSimulations": "1,000 market scenarios",
 		"monteCarloHint": "Stochastic analysis with inflation range & volatility.",
 		"monteCarloTitle": "Monte Carlo Simulation",
+		"monteCarloProTitle": "Monte Carlo Simulation Pro",
+		"monteCarloProSub": "How does reducing expenses during market downturns improve my sustainability?",
 		"badgeLifestyle": "LIFESTYLE",
 		"badgeRisk": "MARKET RISK",
 		"badgeSimulation": "SIMULATION",
@@ -277,5 +291,9 @@
 		"editBtn": "Deactivate",
 		"activateBtn": "Activate",
 		"planBtn": "Plan"
+	},
+	"fireInfo": {
+		"disclaimerLabel": "DISCLAIMER:",
+		"mathematicalSnapshot": "mathematical snapshot"
 	}
 }

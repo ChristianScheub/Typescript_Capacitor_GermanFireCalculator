@@ -1,7 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import './FireInfoView.css';
 
 const FireInfoContent: React.FC = () => {
+  const { t } = useTranslation();
   return (
     <div className="fi">
 
@@ -80,7 +82,7 @@ const FireInfoContent: React.FC = () => {
           {/* Inline disclaimer */}
           <div className="fi-rule25__disclaimer">
             <p className="fi-rule25__disclaimer-text">
-              <strong>DISCLAIMER:</strong> Historische Simulationen (Trinity Study)
+              <strong>{t('fireInfo.disclaimerLabel')}</strong> Historische Simulationen (Trinity Study)
               berücksichtigen weder deutsche Kapitalertragsteuern noch das aktuelle
               inflationäre Umfeld. Eine Erhöhung auf Faktor 30–35 ist zur
               Risikominimierung bei langen Zeithorizonten notwendig.
@@ -101,7 +103,7 @@ const FireInfoContent: React.FC = () => {
         </div>
         <p className="fi-card__text">
           FIRE ist keine statische Zielmarke, sondern eine{' '}
-          <strong>mathematische Momentaufnahme</strong>. Marktrenditen,
+          <strong>{t('fireInfo.mathematicalSnapshot')}</strong>. Marktrenditen,
           Lebenshaltungskosten und gesetzliche Rahmenbedingungen
           verändern sich kontinuierlich.
         </p>

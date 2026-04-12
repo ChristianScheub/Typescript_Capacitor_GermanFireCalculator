@@ -201,6 +201,18 @@
 		"successRate": "ERFOLGSRATE",
 		"withdrawalRisk": "ENTNAHME-RISIKO"
 	},
+	"monteCarloProView": {
+		"title": "Monte-Carlo Simulation Pro",
+		"subtitle": "DYNAMISCHE AUSGABENSTEUERUNG",
+		"drawdownTitle": "Ausgaben-Schutzstrategie",
+		"drawdownDesc": "Wenn dein Portfolio stark vom Allzeithoch fällt, reduzierst du automatisch deine monatlichen Ausgaben. Sobald es sich erholt hat, kehrst du zu deinen normalen Ausgaben zurück.",
+		"drawdownThreshold": "KURSEINBRUCH AB (X)",
+		"drawdownThresholdHint": "Ab welchem prozentualen Rückgang vom Allzeithoch du deine Ausgaben reduzierst. z.B. 20 = bei -20% vom ATH.",
+		"recoveryThreshold": "ERHOLUNG AB (C)",
+		"recoveryThresholdHint": "Ab welcher prozentualen Erholung vom Tiefststand du deine Ausgaben wieder auf den ursprünglichen Stand erhöhst. z.B. 15 = bei +15% vom Tief.",
+		"reducedWithdrawal": "REDUZIERTE AUSGABEN (Y)",
+		"reducedWithdrawalHint": "Auf welchen Betrag du deine monatlichen Ausgaben im Krisenfall senkst."
+	},
 	"fanChart": {
 		"ageLabel": "Alter {{age}}",
 		"tooltipHeader": "Alter {{age}} ({{year}})",
@@ -264,6 +276,8 @@
 		"monteCarloSimulations": "1.000 Marktszenarien",
 		"monteCarloHint": "Stochastische Analyse mit Inflations-Bandbreite & Volatilität.",
 		"monteCarloTitle": "Monte-Carlo Simulation",
+		"monteCarloProTitle": "Monte-Carlo Simulation Pro",
+		"monteCarloProSub": "Wie verändert sich meine Nachhaltigkeit wenn ich bei Kurseinbrüchen meine Ausgaben senke?",
 		"badgeLifestyle": "LIFESTYLE",
 		"badgeRisk": "MARKT-RISIKO",
 		"badgeSimulation": "SIMULATION",
@@ -277,5 +291,9 @@
 		"editBtn": "Deaktivieren",
 		"activateBtn": "Aktivieren",
 		"planBtn": "Planen"
+	},
+	"fireInfo": {
+		"disclaimerLabel": "DISCLAIMER:",
+		"mathematicalSnapshot": "mathematische Momentaufnahme"
 	}
 }

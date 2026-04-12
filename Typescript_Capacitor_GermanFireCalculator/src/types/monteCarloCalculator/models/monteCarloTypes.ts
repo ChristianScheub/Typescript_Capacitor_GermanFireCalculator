@@ -9,6 +9,12 @@ export interface MonteCarloParams {
   simulateUntilYear: number; // calendar year to simulate until (e.g. 2090)
 }
 
+export interface MonteCarloProParams extends MonteCarloParams {
+  drawdownThreshold:        number;  // % drop from ATH that triggers spending reduction (e.g. 20)
+  recoveryThreshold:        number;  // % rise from trough that restores normal spending (e.g. 15)
+  reducedAnnualWithdrawal:  number;  // reduced annual withdrawal amount (€/yr) when in drawdown mode
+}
+
 export interface FanDataPoint {
   age:  number;
   year: number;  // calendar year corresponding to this data point

@@ -11,11 +11,13 @@ export function ScenarioList({
   isCrashSelected,
   isHardcoreSelected,
   isMonteCarloSelected,
+  isMonteCarloProSelected,
   onSelectBasis,
   onSelectTeilzeit,
   onSelectCrash,
   onSelectHardcore,
   onSelectMonteCarlo,
+  onSelectMonteCarloPro,
 }: ScenarioSliderProps) {
   const { t } = useTranslation();
 
@@ -75,6 +77,17 @@ export function ScenarioList({
         actionLabel={isMonteCarloSelected ? t('tax.editBtn') : t('tax.activateBtn')}
         selected={isMonteCarloSelected}
         onClick={onSelectMonteCarlo}
+      />
+      <ScenarioListItem
+        title={t('tax.monteCarloProTitle')}
+        subtitle={t('tax.monteCarloProSub')}
+        resultBadge={t('tax.monteCarloSimulations')}
+        resultBadgeVariant="positive"
+        typeBadge={t('tax.badgeSimulation')}
+        statusLabel={isMonteCarloProSelected ? 'AKTIV' : 'INAKTIV'}
+        actionLabel={isMonteCarloProSelected ? t('tax.editBtn') : t('tax.activateBtn')}
+        selected={isMonteCarloProSelected}
+        onClick={onSelectMonteCarloPro}
       />
     </div>
   );

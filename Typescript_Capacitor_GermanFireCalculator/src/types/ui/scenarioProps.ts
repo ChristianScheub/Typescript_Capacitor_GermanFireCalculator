@@ -1,19 +1,21 @@
 import type { ScenarioResultBadgeVariant } from './variants';
 
 export interface ScenarioSliderProps {
-  teilzeitDeltaYears:   number;
-  crashDeltaMonths:     number;
-  hardcoreDeltaYears:   number;
-  isBasicSelected:      boolean;
-  isTeilzeitSelected:   boolean;
-  isCrashSelected:      boolean;
-  isHardcoreSelected:   boolean;
-  isMonteCarloSelected: boolean;
-  onSelectBasis:        () => void;
-  onSelectTeilzeit:     () => void;
-  onSelectCrash:        () => void;
-  onSelectHardcore:     () => void;
-  onSelectMonteCarlo:   () => void;
+  teilzeitDeltaYears:      number;
+  crashDeltaMonths:        number;
+  hardcoreDeltaYears:      number;
+  isBasicSelected:         boolean;
+  isTeilzeitSelected:      boolean;
+  isCrashSelected:         boolean;
+  isHardcoreSelected:      boolean;
+  isMonteCarloSelected:    boolean;
+  isMonteCarloProSelected: boolean;
+  onSelectBasis:           () => void;
+  onSelectTeilzeit:        () => void;
+  onSelectCrash:           () => void;
+  onSelectHardcore:        () => void;
+  onSelectMonteCarlo:      () => void;
+  onSelectMonteCarloPro:   () => void;
 }
 
 export interface ScenarioListItemProps {

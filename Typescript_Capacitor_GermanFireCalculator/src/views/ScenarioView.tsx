@@ -19,11 +19,13 @@ export function SteuerView({
   isCrashSelected,
   isHardcoreSelected,
   isMonteCarloSelected,
+  isMonteCarloProSelected,
   onSelectBasis,
   onSelectTeilzeit,
   onSelectCrash,
   onSelectHardcore,
   onSelectMonteCarlo,
+  onSelectMonteCarloPro,
   isExpanded,
   onToggleExpanded,
   inlinePrognose,
@@ -39,11 +41,13 @@ export function SteuerView({
     isCrashSelected,
     isHardcoreSelected,
     isMonteCarloSelected,
+    isMonteCarloProSelected,
     onSelectBasis,
     onSelectTeilzeit,
     onSelectCrash,
     onSelectHardcore,
     onSelectMonteCarlo,
+    onSelectMonteCarloPro,
   };
 
   return (

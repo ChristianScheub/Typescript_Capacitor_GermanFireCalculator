@@ -4,6 +4,7 @@ import { fireService, FIRE_CONSTANTS } from '../../services/fire';
 import { SteuerView }                                     from '../../views/ScenarioView';
 import { PrognoseContentContainer }                       from '../Prognose/PrognoseContentContainer';
 import { MonteCarloContainer }                            from '../MonteCarlo/MonteCarloContainer';
+import { MonteCarloProContainer }                         from '../MonteCarlo/MonteCarloProContainer';
 import type { PrognoseConfig }                            from '../../types/prognose/PrognoseConfig';
 
 export function SteuerContainer() {
@@ -11,6 +12,7 @@ export function SteuerContainer() {
 
   const [selectedBadge, setSelectedBadge] = useState<string | null>('BASIS');
   const [isMonteCarloSelected, setIsMonteCarloSelected] = useState(false);
+  const [isMonteCarloProSelected, setIsMonteCarloProSelected] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
   // ── Scenario configs ──────────────────────────────────────────────────────────
@@ -71,11 +73,12 @@ export function SteuerContainer() {
 
   // ── Handlers ──────────────────────────────────────────────────────────────────
 
-  const handleSelectBasis      = () => { setSelectedBadge(prev => prev === 'BASIS'    ? null : 'BASIS');    setIsMonteCarloSelected(false); };
-  const handleSelectTeilzeit   = () => { setSelectedBadge(prev => prev === 'TEILZEIT' ? null : 'TEILZEIT'); setIsMonteCarloSelected(false); };
-  const handleSelectCrash      = () => { setSelectedBadge(prev => prev === 'CRASH'    ? null : 'CRASH');    setIsMonteCarloSelected(false); };
-  const handleSelectHardcore   = () => { setSelectedBadge(prev => prev === 'HARDCORE' ? null : 'HARDCORE'); setIsMonteCarloSelected(false); };
-  const handleSelectMonteCarlo = () => { setIsMonteCarloSelected(prev => !prev); setSelectedBadge(null); };
+  const handleSelectBasis         = () => { setSelectedBadge(prev => prev === 'BASIS'    ? null : 'BASIS');    setIsMonteCarloSelected(false); setIsMonteCarloProSelected(false); };
+  const handleSelectTeilzeit      = () => { setSelectedBadge(prev => prev === 'TEILZEIT' ? null : 'TEILZEIT'); setIsMonteCarloSelected(false); setIsMonteCarloProSelected(false); };
+  const handleSelectCrash         = () => { setSelectedBadge(prev => prev === 'CRASH'    ? null : 'CRASH');    setIsMonteCarloSelected(false); setIsMonteCarloProSelected(false); };
+  const handleSelectHardcore      = () => { setSelectedBadge(prev => prev === 'HARDCORE' ? null : 'HARDCORE'); setIsMonteCarloSelected(false); setIsMonteCarloProSelected(false); };
+  const handleSelectMonteCarlo    = () => { setIsMonteCarloSelected(prev => !prev); setIsMonteCarloProSelected(false); setSelectedBadge(null); };
+  const handleSelectMonteCarloPro = () => { setIsMonteCarloProSelected(prev => !prev); setIsMonteCarloSelected(false); setSelectedBadge(null); };
 
   const selectedConfig = selectedBadge === 'BASIS'    ? basisConfig
     : selectedBadge === 'TEILZEIT' ? teilzeitConfig
@@ -91,6 +94,10 @@ export function SteuerContainer() {
     <div className="scenario-inline-prognose">
       <MonteCarloContainer />
     </div>
+  ) : isMonteCarloProSelected ? (
+    <div className="scenario-inline-prognose">
+      <MonteCarloProContainer />
+    </div>
   ) : null;
 
   return (
@@ -103,11 +110,13 @@ export function SteuerContainer() {
       isCrashSelected={selectedBadge === 'CRASH'}
       isHardcoreSelected={selectedBadge === 'HARDCORE'}
       isMonteCarloSelected={isMonteCarloSelected}
+      isMonteCarloProSelected={isMonteCarloProSelected}
       onSelectBasis={handleSelectBasis}
       onSelectTeilzeit={handleSelectTeilzeit}
       onSelectCrash={handleSelectCrash}
       onSelectHardcore={handleSelectHardcore}
       onSelectMonteCarlo={handleSelectMonteCarlo}
+      onSelectMonteCarloPro={handleSelectMonteCarloPro}
       isExpanded={isExpanded}
       onToggleExpanded={setIsExpanded}
       inlinePrognose={inlinePrognose}

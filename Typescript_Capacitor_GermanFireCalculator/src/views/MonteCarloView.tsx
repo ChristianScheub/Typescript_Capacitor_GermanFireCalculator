@@ -8,16 +8,22 @@ import { RefNumericInput } from "../ui/inputs/RefNumericInput";
 import { fmtM } from "../services/monteCarloCalculator";
 import type { MonteCarloResult } from "../services/monteCarloCalculator";
 
-interface SimConfig {
+export interface SimConfig {
   minInflation: number;
   maxInflation: number;
   volatility: number;
 }
 
-interface SimRange {
+export interface SimRange {
   startCapital: number;
   startYear: number;
   endYear: number;
+}
+
+export interface DrawdownConfig {
+  drawdownThreshold: number;
+  recoveryThreshold: number;
+  reducedMonthlyWithdrawal: number;
 }
 
 interface MonteCarloViewProps {
@@ -34,9 +40,13 @@ interface MonteCarloViewProps {
   kpiErfolgsrate: string;
   displayVolatility: number;
   showChartKpis?: boolean;
+  titleKey?: string;
+  subtitleKey?: string;
+  drawdownConfig?: DrawdownConfig;
   onSimConfigChange: (c: SimConfig) => void;
   onSimRangeChange: (r: SimRange) => void;
   onMonthlyWithdrawalChange: (w: number) => void;
+  onDrawdownConfigChange?: (d: DrawdownConfig) => void;
   onVolatilityChange: (v: number) => void;
   onFullscreenOpen: () => void;
   onRerun: () => void;
@@ -58,9 +68,13 @@ export function MonteCarloView({
   kpiErfolgsrate,
   displayVolatility,
   showChartKpis = true,
+  titleKey = 'monteCarlo.title',
+  subtitleKey = 'monteCarlo.subtitle',
+  drawdownConfig,
   onSimConfigChange,
   onSimRangeChange,
   onMonthlyWithdrawalChange,
+  onDrawdownConfigChange,
   onVolatilityChange,
   onFullscreenOpen,
   onRerun,
@@ -73,6 +87,9 @@ export function MonteCarloView({
   const startCapitalRef = useRef<HTMLInputElement>(null);
   const startYearRef = useRef<HTMLInputElement>(null);
   const endYearRef = useRef<HTMLInputElement>(null);
+  const drawdownThresholdRef = useRef<HTMLInputElement>(null);
+  const recoveryThresholdRef = useRef<HTMLInputElement>(null);
+  const reducedMonthlyWithdrawalRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (minInflationRef.current)
@@ -88,7 +105,15 @@ export function MonteCarloView({
     if (startYearRef.current)
       startYearRef.current.value = String(simRange.startYear);
     if (endYearRef.current) endYearRef.current.value = String(simRange.endYear);
-  }, [simConfig, simRange, monthlyWithdrawal]);
+    if (drawdownConfig) {
+      if (drawdownThresholdRef.current)
+        drawdownThresholdRef.current.value = String(drawdownConfig.drawdownThreshold);
+      if (recoveryThresholdRef.current)
+        recoveryThresholdRef.current.value = String(drawdownConfig.recoveryThreshold);
+      if (reducedMonthlyWithdrawalRef.current)
+        reducedMonthlyWithdrawalRef.current.value = String(drawdownConfig.reducedMonthlyWithdrawal);
+    }
+  }, [simConfig, simRange, monthlyWithdrawal, drawdownConfig]);
 
   const handleRerun = () => {
     const newConfig: SimConfig = {
@@ -124,6 +149,21 @@ export function MonteCarloView({
     onSimConfigChange(newConfig);
     onMonthlyWithdrawalChange(newWithdrawal);
     onSimRangeChange(newRange);
+
+    if (drawdownConfig && onDrawdownConfigChange) {
+      onDrawdownConfigChange({
+        drawdownThreshold: parseFloat(
+          drawdownThresholdRef.current?.value || String(drawdownConfig.drawdownThreshold),
+        ),
+        recoveryThreshold: parseFloat(
+          recoveryThresholdRef.current?.value || String(drawdownConfig.recoveryThreshold),
+        ),
+        reducedMonthlyWithdrawal: parseFloat(
+          reducedMonthlyWithdrawalRef.current?.value || String(drawdownConfig.reducedMonthlyWithdrawal),
+        ),
+      });
+    }
+
     onRerun();
   };
 
@@ -133,10 +173,10 @@ export function MonteCarloView({
         {/* ── Header ── */}
         <div className="mc-header">
           <h2 className="mc-title">
-            {t('monteCarlo.title')}
+            {t(titleKey)}
             <br />
           </h2>
-          <p className="mc-subtitle">{t('monteCarlo.subtitle')}</p>
+          <p className="mc-subtitle">{t(subtitleKey)}</p>
         </div>
 
         {/* ── Success Rate ── */}
@@ -310,6 +350,57 @@ export function MonteCarloView({
             </div>
           </div>
         </ContentSection>
+
+        {/* ── Drawdown Protection (Pro only) ── */}
+        {drawdownConfig && (
+          <ContentSection
+            icon={<Icon name="shield" size="sm" />}
+            title={t('monteCarloProView.drawdownTitle')}
+          >
+            <p className="mc-sub mc-sub--secondary" style={{ marginBottom: '12px' }}>
+              {t('monteCarloProView.drawdownDesc')}
+            </p>
+            <div className="mc-inflation-row">
+              <div className="mc-inflation-field">
+                <RefNumericInput
+                  ref={drawdownThresholdRef}
+                  label={t('monteCarloProView.drawdownThreshold')}
+                  unit="%"
+                  min={1}
+                  max={80}
+                  step={1}
+                  defaultValue={drawdownConfig.drawdownThreshold}
+                  hint={t('monteCarloProView.drawdownThresholdHint')}
+                />
+              </div>
+              <div className="mc-inflation-field">
+                <RefNumericInput
+                  ref={recoveryThresholdRef}
+                  label={t('monteCarloProView.recoveryThreshold')}
+                  unit="%"
+                  min={1}
+                  max={100}
+                  step={1}
+                  defaultValue={drawdownConfig.recoveryThreshold}
+                  hint={t('monteCarloProView.recoveryThresholdHint')}
+                />
+              </div>
+            </div>
+            <div className="mc-inflation-row mc-inflation-row--top">
+              <div className="mc-inflation-field">
+                <RefNumericInput
+                  ref={reducedMonthlyWithdrawalRef}
+                  label={t('monteCarloProView.reducedWithdrawal')}
+                  unit="€"
+                  min={0}
+                  step={100}
+                  defaultValue={drawdownConfig.reducedMonthlyWithdrawal}
+                  hint={t('monteCarloProView.reducedWithdrawalHint')}
+                />
+              </div>
+            </div>
+          </ContentSection>
+        )}
 
         {/* ── Run Button ── */}
         <button className="mc-run-btn" onClick={handleRerun}>

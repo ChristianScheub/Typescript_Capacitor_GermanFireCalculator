@@ -12,11 +12,13 @@ export function ScenarioSlider({
   isCrashSelected,
   isHardcoreSelected,
   isMonteCarloSelected,
+  isMonteCarloProSelected,
   onSelectBasis,
   onSelectTeilzeit,
   onSelectCrash,
   onSelectHardcore,
   onSelectMonteCarlo,
+  onSelectMonteCarloPro,
 }: ScenarioSliderProps) {
   const { t } = useTranslation();
 
@@ -82,6 +84,18 @@ export function ScenarioSlider({
           resultBadgeVariant="positive"
           selected={isMonteCarloSelected}
           onClick={onSelectMonteCarlo}
+        />
+        <ScenarioAnalysisCard
+          variant="slider"
+          statusLabel={isMonteCarloProSelected ? 'AKTIV' : 'INAKTIV'}
+          title={t('tax.monteCarloProTitle')}
+          subtitle={t('tax.monteCarloProSub')}
+          resultBadge={t('tax.monteCarloSimulations')}
+          typeBadge={t('tax.badgeSimulation')}
+          typeBadgeVariant="simulation"
+          resultBadgeVariant="positive"
+          selected={isMonteCarloProSelected}
+          onClick={onSelectMonteCarloPro}
         />
       </div>
     </div>
