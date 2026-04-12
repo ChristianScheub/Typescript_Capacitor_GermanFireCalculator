@@ -37,7 +37,7 @@ jobs:
       - name: Build web app
         run: npm run build
         env:
-          VITE_BASE_URL: /Typescript_React_LocalLLM/
+          VITE_BASE_URL: /Typescript_Capacitor_GermanFireCalculator/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
