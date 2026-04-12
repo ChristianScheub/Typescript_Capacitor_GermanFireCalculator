@@ -104,7 +104,8 @@ export function MonteCarloView({
       startCapitalRef.current.value = String(simRange.startCapital);
     if (startYearRef.current)
       startYearRef.current.value = String(simRange.startYear);
-    if (endYearRef.current) endYearRef.current.value = String(simRange.endYear);
+    if (endYearRef.current)
+      endYearRef.current.value = String(simRange.endYear);
     if (drawdownConfig) {
       if (drawdownThresholdRef.current)
         drawdownThresholdRef.current.value = String(drawdownConfig.drawdownThreshold);

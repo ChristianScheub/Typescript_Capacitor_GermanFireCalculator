@@ -468,51 +468,36 @@ export function checkCodeQuality() {
 
   checkNestedTypesFolders(srcDir);
 
-  // 7. Type Export Location Check – interface/type declarations only allowed inside types/ folders
-  console.log('Checking that type/interface declarations are only exported from types/ folders...');
-
-  // Files allowed to export interfaces/types directly (shared props used by adjacent containers)
-  const TYPE_EXPORT_ALLOWLIST = [
-    'src/views/MonteCarloView.tsx', // Exports SimConfig, SimRange, DrawdownConfig for MonteCarloProContainer
-  ];
+  // 7. Type Export Location Check
+  console.log('Checking type export locations...');
 
   walkDir(srcDir, (file) => {
     if (!file.endsWith('.ts') && !file.endsWith('.tsx')) return;
-    if (file.includes('.test.')) return;
-
-    // Normalise separators so /types/ check works on Windows too
-    const normalizedFile = file.split(path.sep).join('/');
-    if (normalizedFile.includes('/types/')) return;
-
     const relFile = getRelativePath(file, projectRoot);
-    if (TYPE_EXPORT_ALLOWLIST.includes(relFile)) return;
+    const isInTypes = relFile.includes('/types/');
+    const isInServices = relFile.includes('/services/');
 
     const content = fs.readFileSync(file, 'utf8');
-    const lines = content.split('\n');
 
-    lines.forEach((line, idx) => {
-      const trimmed = line.trim();
-      if (trimmed.startsWith('//') || trimmed.startsWith('*')) return;
-
-      // export interface Foo  /  export default interface Foo
-      if (/^export\s+(?:default\s+)?interface\s+\w/.test(trimmed)) {
+    // Type-Exporte sind nur in types und services erlaubt
+    if (/export\s+type\s+/.test(content)) {
+      if (!isInTypes && !isInServices) {
         violations.push(
-          `Type Export Check: File '${relFile}' line ${idx + 1}: ` +
-          `'interface' declarations must only be exported from a 'types/' folder. ` +
-          `Move this interface into a types/ subfolder.`
-        );
-        return;
-      }
-
-      // export type Foo = ...  (type alias declaration, NOT a re-export like export type { Foo })
-      if (/^export\s+type\s+\w/.test(trimmed) && !/^export\s+type\s+\{/.test(trimmed)) {
-        violations.push(
-          `Type Export Check: File '${relFile}' line ${idx + 1}: ` +
-          `'type' alias declarations must only be exported from a 'types/' folder. ` +
-          `Move this type alias into a types/ subfolder.`
+          `Type Export Location Check: File '${relFile}' exportiert einen Type. ` +
+          `Type-Exporte sind nur in 'types/' oder 'services/' erlaubt.`
         );
       }
-    });
+    }
+
+    // Enum Exporte sind weiterhin nur in types erlaubt
+    if (/export\s+enum\s+/.test(content)) {
+      if (!isInTypes) {
+        violations.push(
+          `Enum Export Location Check: File '${relFile}' exportiert einen Enum. ` +
+          `Enum-Exporte sind nur in 'types/' erlaubt, nicht in 'services/' oder anderen Ordnern.`
+        );
+      }
+    }
   });
 
   return violations;

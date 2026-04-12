@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { useFireContext } from '../../context/FireContext';
 import { calcMonteCarlo, getRisiko, fmtEuro } from '../../services/monteCarloCalculator';
 import { fireService, FIRE_CONSTANTS } from '../../services/fire';
+import { HelperService } from '../../services/helper';
 import type { MonteCarloResult } from '../../services/monteCarloCalculator';
 import { MonteCarloView } from '../../views/MonteCarloView';
 import { FullscreenMonteCarloContainer } from './FullscreenMonteCarloContainer';
@@ -57,20 +58,20 @@ export function MonteCarloContainer({ showChartKpis = true }: MonteCarloContaine
   const currentYear = new Date().getFullYear();
 
   const result: MonteCarloResult = useMemo(() => {
-    const annualWithdrawal = monthlyWithdrawal * 12;
-    const pensionAnnualNet = state.pensionMonthly * 12;
+    const annualWithdrawal = HelperService.roundToTwoDecimals(monthlyWithdrawal * 12);
+    const pensionAnnualNet = HelperService.roundToTwoDecimals(state.pensionMonthly * 12);
     const yearsToFIRE = Math.max(0, simRange.startYear - currentYear);
     const simFireAge = state.currentAge + yearsToFIRE;
 
     return calcMonteCarlo(
-      simRange.startCapital,
+      HelperService.roundToTwoDecimals(simRange.startCapital),
       annualWithdrawal,
       state.etfRate,
       simFireAge,
       {
-        minInflation: simConfig.minInflation,
-        maxInflation: simConfig.maxInflation,
-        volatility: simConfig.volatility,
+        minInflation: HelperService.roundToTwoDecimals(simConfig.minInflation),
+        maxInflation: HelperService.roundToTwoDecimals(simConfig.maxInflation),
+        volatility: HelperService.roundToTwoDecimals(simConfig.volatility),
         numSimulations: 1000,
         pensionAge: state.pensionAge,
         pensionAnnualNet,
@@ -91,9 +92,9 @@ export function MonteCarloContainer({ showChartKpis = true }: MonteCarloContaine
 
   // Format values for views
   const finalPoint = result.fanData.at(-1);
-  const zielwert = finalPoint ? finalPoint.p50 : result.medianFinalWealth;
+  const zielwert = finalPoint ? HelperService.roundToTwoDecimals(finalPoint.p50) : HelperService.roundToTwoDecimals(result.medianFinalWealth);
   const kpiZielwert = fmtEuro(zielwert);
-  const kpiErfolgsrate = result.successRate.toFixed(1).replace('.', ',') + '%';
+  const kpiErfolgsrate = HelperService.roundToTwoDecimals(result.successRate).toFixed(1).replace('.', ',') + '%';
 
   return (
     <>
@@ -103,13 +104,21 @@ export function MonteCarloContainer({ showChartKpis = true }: MonteCarloContaine
         isBadSuccess={isBadSuccess}
         risikoLabel={risiko.label}
         risikoColor={risiko.color}
-        simConfig={simConfig}
-        simRange={simRange}
-        monthlyWithdrawal={monthlyWithdrawal}
+        simConfig={{
+          minInflation: HelperService.roundToTwoDecimals(simConfig.minInflation),
+          maxInflation: HelperService.roundToTwoDecimals(simConfig.maxInflation),
+          volatility: HelperService.roundToTwoDecimals(simConfig.volatility),
+        }}
+        simRange={{
+          startCapital: HelperService.roundToTwoDecimals(simRange.startCapital),
+          startYear: simRange.startYear,
+          endYear: simRange.endYear,
+        }}
+        monthlyWithdrawal={HelperService.roundToTwoDecimals(monthlyWithdrawal)}
         currentYear={currentYear}
         kpiZielwert={kpiZielwert}
         kpiErfolgsrate={kpiErfolgsrate}
-        displayVolatility={displayVolatility}
+        displayVolatility={HelperService.roundToTwoDecimals(displayVolatility)}
         showChartKpis={showChartKpis}
         onSimConfigChange={setSimConfig}
         onSimRangeChange={setSimRange}
