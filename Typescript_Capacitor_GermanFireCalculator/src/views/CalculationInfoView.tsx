@@ -32,6 +32,8 @@ const CalculationInfoContent: React.FC = () => {
         </div>
 
         <p className="ci-card__text">{t('calculationInfo.section1Text')}</p>
+        <p className="ci-card__text">{t('calculationInfo.section1Text2')}</p>
+        <p className="ci-card__text ci-card__text--formula">{t('calculationInfo.section1Formula')}</p>
 
         <div className="ci-alert-row ci-alert-row--red">
           <span className="ci-alert-row__text">{t('calculationInfo.section1Warning1')}</span>
@@ -39,6 +41,9 @@ const CalculationInfoContent: React.FC = () => {
         <div className="ci-alert-row ci-alert-row--red">
           <span className="ci-alert-row__text">{t('calculationInfo.section1Warning2')}</span>
         </div>
+
+        <div className="ci-badge ci-badge--red">{t('calculationInfo.section1Badge1')}</div>
+        <div className="ci-badge ci-badge--red">{t('calculationInfo.section1Badge2')}</div>
       </div>
 
       {/* ── 2. Die Ansparphase (Deterministisch) ────────────────────── */}
@@ -57,10 +62,15 @@ const CalculationInfoContent: React.FC = () => {
 
         <p className="ci-card__text">{t('calculationInfo.section2Text')}</p>
 
-        <div className="ci-badge ci-badge--blue">{t('calculationInfo.section2Badge')}</div>
+        <div className="ci-alert-row ci-alert-row--red">
+          <span className="ci-alert-row__text">{t('calculationInfo.section2Warning1')}</span>
+        </div>
+        <div className="ci-alert-row ci-alert-row--red">
+          <span className="ci-alert-row__text">{t('calculationInfo.section2Warning2')}</span>
+        </div>
 
-        <div className="ci-alert-row ci-alert-row--amber">
-          <span className="ci-alert-row__label">WARNUNG</span>
+        <div className="ci-alert-row ci-alert-row--red">
+          <span className="ci-alert-row__label">{t('calculationInfo.section2WarningLabel')}</span>
           <span className="ci-alert-row__text">{t('calculationInfo.section2Warning')}</span>
         </div>
       </div>
@@ -83,25 +93,20 @@ const CalculationInfoContent: React.FC = () => {
 
         <p className="ci-card__text">{t('calculationInfo.section3Text')}</p>
 
-        <div className="ci-checklist">
-          <div className="ci-check-item">
-            <div className="ci-check-item__dot" />
-            <span className="ci-check-item__text">{t('calculationInfo.section3Bullet1')}</span>
-          </div>
-          <div className="ci-check-item">
-            <div className="ci-check-item__dot" />
-            <span className="ci-check-item__text">{t('calculationInfo.section3Bullet2')}</span>
-          </div>
+        <div className="ci-alert-row ci-alert-row--red">
+          <span className="ci-alert-row__text">{t('calculationInfo.section3Warning1')}</span>
+        </div>
+        <div className="ci-alert-row ci-alert-row--red">
+          <span className="ci-alert-row__text">{t('calculationInfo.section3Warning2')}</span>
+        </div>
+        <div className="ci-alert-row ci-alert-row--red">
+          <span className="ci-alert-row__text">{t('calculationInfo.section3Warning3')}</span>
         </div>
 
-        <div className="ci-info-row">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="12" />
-            <line x1="12" y1="16" x2="12.01" y2="16" />
-          </svg>
-          <span>{t('calculationInfo.section3TaxNote')}</span>
-        </div>
+        <div className="ci-badge ci-badge--red">{t('calculationInfo.section3Badge1')}</div>
+        <div className="ci-badge ci-badge--red">{t('calculationInfo.section3Badge2')}</div>
+        <div className="ci-badge ci-badge--red">{t('calculationInfo.section3Badge3')}</div>
+        <div className="ci-badge ci-badge--red">{t('calculationInfo.section3Badge4')}</div>
       </div>
 
       {/* ── 4. Monte-Carlo (Der Stresstest) ─────────────────────────── */}

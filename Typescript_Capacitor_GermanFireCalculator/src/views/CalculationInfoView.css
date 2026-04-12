@@ -162,6 +162,22 @@
   border: 1px solid rgba(28, 56, 38, 0.18);
 }
 
+.ci-badge--red {
+  color: #9b2c2c;
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+}
+
+.ci-card__text--formula {
+  font-style: italic;
+  font-weight: 600;
+  color: var(--fire-text);
+  background: rgba(0, 0, 0, 0.03);
+  border-left: 3px solid var(--fire-accent);
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
 /* ── Checklist ───────────────────────────────────────────────────── */
 .ci-checklist {
   display: flex;
