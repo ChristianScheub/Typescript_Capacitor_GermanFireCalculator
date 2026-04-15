@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { ScenarioListItemProps } from '../../types/ui/scenarioProps';
 
 export function ScenarioListItem({
@@ -6,17 +7,18 @@ export function ScenarioListItem({
   resultBadge,
   resultBadgeVariant,
   typeBadge,
-  statusLabel,
+  isActive,
   actionLabel,
   selected,
   onClick,
 }: ScenarioListItemProps) {
+  const { t } = useTranslation();
   return (
     <div className={`scenario-list-item${selected ? ' scenario-list-item--selected' : ''}`}>
       <div className="scenario-list-item__top">
         <div className="scenario-list-item__status">
-          <span className={`scenario-list-item__dot scenario-list-item__dot--${statusLabel === 'AKTIV' ? 'active' : 'inactive'}`} />
-          <span className="scenario-list-item__status-text">{statusLabel}</span>
+          <span className={`scenario-list-item__dot scenario-list-item__dot--${isActive ? 'active' : 'inactive'}`} />
+          <span className="scenario-list-item__status-text">{isActive ? t('tax.statusActive') : t('tax.statusInactive')}</span>
         </div>
         <span className="scenario-list-item__type-badge">{typeBadge}</span>
       </div>

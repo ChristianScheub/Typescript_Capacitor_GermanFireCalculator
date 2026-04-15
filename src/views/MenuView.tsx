@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Icon } from '../ui/icons';
 import { Modal } from '../ui/modal/Modal';
-import { type IconName } from '../types/ui/icons/iconPaths';
-import type { NavIconVariant } from '../types/ui/variants';
+import { NavList } from '../ui/navigation/NavList';
+import type { NavItem } from '../ui/navigation/NavList';
 import Datenschutz from '../legal/datenschutz';
 import Impressum from '../legal/impressum';
 import UsedLibsListContainer from '../legal/usedLibs/container_usedLibList';
@@ -12,43 +12,16 @@ import CalculationInfoContent from './CalculationInfoView';
 import type { ModalInfo } from '../types/menu/ModalInfo';
 import './MenuView.css';
 
-interface NavItem {
-  icon: IconName;
-  iconVariant: NavIconVariant;
-  label: string;
-  isExternal?: boolean;
-  onClick?: () => void;
-}
-
 interface MenuProps {
   openModal: ModalInfo | null;
   onOpenModal: (modal: ModalInfo | null) => void;
   onDeleteAllData: () => void;
   onExportAllData: () => void;
+  onConfirmDelete: () => void;
+  onDeleteSuccessClose: () => void;
 }
 
-function NavList({ items }: { items: NavItem[] }) {
-  const { t } = useTranslation();
-  return (
-    <div className="nav-list">
-      {items.map((item, i) => (
-        <button key={i} className="nav-list__item" onClick={item.onClick}>
-          <span className={`nav-list__icon-box nav-list__icon-box--${item.iconVariant}`}>
-            <Icon name={item.icon} size="sm" />
-          </span>
-          <span className="nav-list__label">{t(item.label)}</span>
-          <Icon
-            name={item.isExternal ? 'external_link' : 'chevron'}
-            size="sm"
-            className="nav-list__chevron"
-          />
-        </button>
-      ))}
-    </div>
-  );
-}
-
-export function Menu({ openModal, onOpenModal, onDeleteAllData, onExportAllData }: MenuProps) {
+export function Menu({ openModal, onOpenModal, onDeleteAllData, onExportAllData, onConfirmDelete, onDeleteSuccessClose }: MenuProps) {
   const { t } = useTranslation();
 
   const DATA_ITEMS: NavItem[] = [
@@ -148,6 +121,30 @@ export function Menu({ openModal, onOpenModal, onDeleteAllData, onExportAllData 
         onClose={() => onOpenModal(null)}
       >
         <CalculationInfoContent />
+      </Modal>
+
+      <Modal
+        isOpen={openModal === 'deleteConfirm'}
+        title={t('info.deleteAllData')}
+        onClose={() => onOpenModal(null)}
+      >
+        <p className="delete-confirm__text">{t('info.deleteAllDataConfirm')}</p>
+        <div className="delete-confirm__footer">
+          <button className="nav-list__item delete-confirm__btn" onClick={() => onOpenModal(null)}>
+            {t('tax.back')}
+          </button>
+          <button className="nav-list__item delete-confirm__btn delete-confirm__btn--danger" onClick={onConfirmDelete}>
+            {t('info.deleteAllData')}
+          </button>
+        </div>
+      </Modal>
+
+      <Modal
+        isOpen={openModal === 'deleteSuccess'}
+        title={t('info.deleteAllData')}
+        onClose={onDeleteSuccessClose}
+      >
+        <p>{t('info.deleteAllDataSuccess')}</p>
       </Modal>
     </div>
   );

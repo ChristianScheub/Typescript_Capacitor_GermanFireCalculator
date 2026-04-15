@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { IconVariant, ScenarioTypeBadgeVariant, ScenarioResultBadgeVariant } from '../../types/ui/variants';
 
 interface ScenarioAnalysisCardProps {
@@ -13,7 +14,7 @@ interface ScenarioAnalysisCardProps {
   selected?: boolean;
   onClick?: () => void;
   variant?: 'default' | 'slider';
-  statusLabel?: 'AKTIV' | 'INAKTIV';
+  isActive?: boolean;
 }
 
 export function ScenarioAnalysisCard({
@@ -29,8 +30,9 @@ export function ScenarioAnalysisCard({
   selected = false,
   onClick,
   variant = 'default',
-  statusLabel = 'INAKTIV',
+  isActive = false,
 }: ScenarioAnalysisCardProps) {
+  const { t } = useTranslation();
   // Slider variant — compact horizontal card
   if (variant === 'slider') {
     return (
@@ -41,7 +43,7 @@ export function ScenarioAnalysisCard({
         <div className="scenario-slider-card__header">
           <div className="scenario-slider-card__status">
             <span className="scenario-slider-card__dot" />
-            <span className="scenario-slider-card__status-text">{statusLabel}</span>
+            <span className="scenario-slider-card__status-text">{isActive ? t('tax.statusActive') : t('tax.statusInactive')}</span>
           </div>
           <span className={`scenario-slider-card__type-badge scenario-slider-card__type-badge--${typeBadgeVariant}`}>
             {typeBadge}

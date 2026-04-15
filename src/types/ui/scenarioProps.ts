@@ -24,7 +24,7 @@ export interface ScenarioListItemProps {
   resultBadge:        string;
   resultBadgeVariant: ScenarioResultBadgeVariant;
   typeBadge:          string;
-  statusLabel:        'AKTIV' | 'INAKTIV';
+  isActive:           boolean;
   actionLabel:        string;
   selected:           boolean;
   onClick:            () => void;

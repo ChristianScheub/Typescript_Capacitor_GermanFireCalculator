@@ -1,3 +1,7 @@
+# Keystores & secrets
+*.jks
+*.keystore
+
 # Logs
 logs
 *.log

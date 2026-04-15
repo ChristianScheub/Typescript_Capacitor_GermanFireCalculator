@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@capacitor/android": "^8.3.0",
-    "@capacitor/cli": "^8.3.0",
     "@capacitor/core": "^8.3.0",
     "@capacitor/ios": "^8.3.0",
     "@capacitor/share": "^8.0.1",
@@ -22,6 +21,7 @@
     "react-i18next": "^17.0.2"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.3.0",
     "@eslint/js": "^9.39.4",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.12.2",

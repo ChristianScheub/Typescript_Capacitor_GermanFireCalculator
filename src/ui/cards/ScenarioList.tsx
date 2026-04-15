@@ -29,7 +29,7 @@ export function ScenarioList({
         resultBadge={t('tax.standard')}
         resultBadgeVariant="positive"
         typeBadge={t('tax.badgeSimulation')}
-        statusLabel={isBasicSelected ? 'AKTIV' : 'INAKTIV'}
+        isActive={isBasicSelected}
         actionLabel={isBasicSelected ? t('tax.editBtn') : t('tax.activateBtn')}
         selected={isBasicSelected}
         onClick={onSelectBasis}
@@ -40,7 +40,7 @@ export function ScenarioList({
         resultBadge={`+${teilzeitDeltaYears} ${teilzeitDeltaYears === 1 ? t('tax.yearSingular') : t('tax.yearPlural')} ${t('tax.untilFire')}`}
         resultBadgeVariant="warn"
         typeBadge={t('tax.badgeLifestyle')}
-        statusLabel={isTeilzeitSelected ? 'AKTIV' : 'INAKTIV'}
+        isActive={isTeilzeitSelected}
         actionLabel={isTeilzeitSelected ? t('tax.editBtn') : t('tax.activateBtn')}
         selected={isTeilzeitSelected}
         onClick={onSelectTeilzeit}
@@ -51,7 +51,7 @@ export function ScenarioList({
         resultBadge={`${crashDeltaMonths > 0 ? `+${crashDeltaMonths}` : String(crashDeltaMonths)} ${t('tax.crashDeltaUnit')}`}
         resultBadgeVariant="danger"
         typeBadge={t('tax.badgeRisk')}
-        statusLabel={isCrashSelected ? 'AKTIV' : 'INAKTIV'}
+        isActive={isCrashSelected}
         actionLabel={isCrashSelected ? t('tax.editBtn') : t('tax.activateBtn')}
         selected={isCrashSelected}
         onClick={onSelectCrash}
@@ -62,7 +62,7 @@ export function ScenarioList({
         resultBadge={`${hardcoreDeltaYears} ${Math.abs(hardcoreDeltaYears) === 1 ? t('tax.yearSingular') : t('tax.yearPlural')} ${hardcoreDeltaYears <= 0 ? t('tax.earlier') : t('tax.later')}`}
         resultBadgeVariant="positive"
         typeBadge={t('tax.badgeSavings')}
-        statusLabel={isHardcoreSelected ? 'AKTIV' : 'INAKTIV'}
+        isActive={isHardcoreSelected}
         actionLabel={isHardcoreSelected ? t('tax.editBtn') : t('tax.activateBtn')}
         selected={isHardcoreSelected}
         onClick={onSelectHardcore}
@@ -73,7 +73,7 @@ export function ScenarioList({
         resultBadge={t('tax.monteCarloSimulations')}
         resultBadgeVariant="positive"
         typeBadge={t('tax.badgeSimulation')}
-        statusLabel={isMonteCarloSelected ? 'AKTIV' : 'INAKTIV'}
+        isActive={isMonteCarloSelected}
         actionLabel={isMonteCarloSelected ? t('tax.editBtn') : t('tax.activateBtn')}
         selected={isMonteCarloSelected}
         onClick={onSelectMonteCarlo}
@@ -84,7 +84,7 @@ export function ScenarioList({
         resultBadge={t('tax.monteCarloSimulations')}
         resultBadgeVariant="positive"
         typeBadge={t('tax.badgeSimulation')}
-        statusLabel={isMonteCarloProSelected ? 'AKTIV' : 'INAKTIV'}
+        isActive={isMonteCarloProSelected}
         actionLabel={isMonteCarloProSelected ? t('tax.editBtn') : t('tax.activateBtn')}
         selected={isMonteCarloProSelected}
         onClick={onSelectMonteCarloPro}

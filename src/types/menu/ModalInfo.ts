@@ -1,1 +1,1 @@
-export type ModalInfo = 'privacy' | 'imprint' | 'libraries' | 'withdrawalInfo' | 'fireInfo' | 'calculationInfo';
+export type ModalInfo = 'privacy' | 'imprint' | 'libraries' | 'withdrawalInfo' | 'fireInfo' | 'calculationInfo' | 'deleteConfirm' | 'deleteSuccess';

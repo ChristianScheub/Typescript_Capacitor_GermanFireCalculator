@@ -40,12 +40,27 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x android/gradlew
 
+      - name: Derive version from tag
+        run: |
+          TAG="${GITHUB_REF_NAME:-v1.0.2}"
+          VERSION_NAME="${TAG#v}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${VERSION_NAME}"
+          VERSION_CODE=$(( MAJOR * 10000 + MINOR * 100 + PATCH ))
+          echo "VERSION_CODE=${VERSION_CODE}" >> "$GITHUB_ENV"
+          echo "VERSION_NAME=${VERSION_NAME}" >> "$GITHUB_ENV"
+
       - name: Build APK (release)
         working-directory: android
+        env:
+          VERSION_CODE: ${{ env.VERSION_CODE }}
+          VERSION_NAME: ${{ env.VERSION_NAME }}
         run: ./gradlew assembleRelease
 
       - name: Build AAB (release)
         working-directory: android
+        env:
+          VERSION_CODE: ${{ env.VERSION_CODE }}
+          VERSION_NAME: ${{ env.VERSION_NAME }}
         run: ./gradlew bundleRelease
 
       - name: Decode keystore
@@ -95,3 +110,7 @@ jobs:
           files: |
             fireCalculator-*.apk
             fireCalculator-*.aab
+
+      - name: Remove keystore
+        if: always()
+        run: rm -f keystore.jks

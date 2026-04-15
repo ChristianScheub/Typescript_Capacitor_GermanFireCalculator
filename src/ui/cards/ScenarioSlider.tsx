@@ -27,7 +27,7 @@ export function ScenarioSlider({
       <div className="scenario-slider__track">
         <ScenarioAnalysisCard
           variant="slider"
-          statusLabel={isBasicSelected ? 'AKTIV' : 'INAKTIV'}
+          isActive={isBasicSelected}
           title={t('tax.fireCalculation')}
           subtitle={t('tax.fireCalculationSub')}
           resultBadge={t('tax.standard')}
@@ -39,7 +39,7 @@ export function ScenarioSlider({
         />
         <ScenarioAnalysisCard
           variant="slider"
-          statusLabel={isTeilzeitSelected ? 'AKTIV' : 'INAKTIV'}
+          isActive={isTeilzeitSelected}
           title={t('tax.partTime')}
           subtitle={t('tax.partTimeSub')}
           resultBadge={`+${teilzeitDeltaYears} ${teilzeitDeltaYears === 1 ? t('tax.yearSingular') : t('tax.yearPlural')} ${t('tax.untilFire')}`}
@@ -51,7 +51,7 @@ export function ScenarioSlider({
         />
         <ScenarioAnalysisCard
           variant="slider"
-          statusLabel={isCrashSelected ? 'AKTIV' : 'INAKTIV'}
+          isActive={isCrashSelected}
           title={t('tax.crash')}
           subtitle={t('tax.crashSub')}
           resultBadge={`${crashDeltaMonths > 0 ? `+${crashDeltaMonths}` : String(crashDeltaMonths)} ${t('tax.crashDeltaUnit')}`}
@@ -63,7 +63,7 @@ export function ScenarioSlider({
         />
         <ScenarioAnalysisCard
           variant="slider"
-          statusLabel={isHardcoreSelected ? 'AKTIV' : 'INAKTIV'}
+          isActive={isHardcoreSelected}
           title={t('tax.hardcoreFire')}
           subtitle={t('tax.hardcoreFireSub')}
           resultBadge={`${hardcoreDeltaYears} ${Math.abs(hardcoreDeltaYears) === 1 ? t('tax.yearSingular') : t('tax.yearPlural')} ${hardcoreDeltaYears <= 0 ? t('tax.earlier') : t('tax.later')}`}
@@ -75,7 +75,7 @@ export function ScenarioSlider({
         />
         <ScenarioAnalysisCard
           variant="slider"
-          statusLabel={isMonteCarloSelected ? 'AKTIV' : 'INAKTIV'}
+          isActive={isMonteCarloSelected}
           title={t('tax.monteCarloTitle')}
           subtitle={t('tax.monteCarloSub')}
           resultBadge={t('tax.monteCarloSimulations')}
@@ -87,7 +87,7 @@ export function ScenarioSlider({
         />
         <ScenarioAnalysisCard
           variant="slider"
-          statusLabel={isMonteCarloProSelected ? 'AKTIV' : 'INAKTIV'}
+          isActive={isMonteCarloProSelected}
           title={t('tax.monteCarloProTitle')}
           subtitle={t('tax.monteCarloProSub')}
           resultBadge={t('tax.monteCarloSimulations')}
