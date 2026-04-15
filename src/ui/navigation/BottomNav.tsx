@@ -1,17 +1,13 @@
 import type { ReactNode } from 'react';
-import type { Tab }       from '../../types/navigation/Tab';
+import { useTranslation }  from 'react-i18next';
+import type { Tab }        from '../../types/navigation/Tab';
 
 interface Props {
   active:      Tab;
   onTabChange: (tab: Tab) => void;
 }
 
-const TABS: { id: Tab; label: string }[] = [
-  { id: 'dashboard', label: 'Dashboard' },
-  { id: 'planner',   label: 'Planner'   },
-  { id: 'scenarios', label: 'Scenarios' },
-  { id: 'menu',      label: 'Menu'      },
-];
+const TAB_IDS: Tab[] = ['dashboard', 'planner', 'scenarios', 'menu'];
 
 const ICONS: Record<Tab, ReactNode> = {
   dashboard: (
@@ -40,17 +36,19 @@ const ICONS: Record<Tab, ReactNode> = {
 };
 
 export function BottomNav({ active, onTabChange }: Props) {
+  const { t } = useTranslation();
+
   return (
     <nav className="bottom-nav" aria-label="Hauptnavigation">
-      {TABS.map(tab => (
+      {TAB_IDS.map(id => (
         <button
-          key={tab.id}
-          className={`bottom-nav__item${active === tab.id ? ' bottom-nav__item--active' : ''}`}
-          onClick={() => onTabChange(tab.id)}
-          aria-current={active === tab.id ? 'page' : undefined}
+          key={id}
+          className={`bottom-nav__item${active === id ? ' bottom-nav__item--active' : ''}`}
+          onClick={() => onTabChange(id)}
+          aria-current={active === id ? 'page' : undefined}
         >
-          <span className="bottom-nav__icon">{ICONS[tab.id]}</span>
-          <span className="bottom-nav__label">{tab.label}</span>
+          <span className="bottom-nav__icon">{ICONS[id]}</span>
+          <span className="bottom-nav__label">{t(`nav.${id}`)}</span>
         </button>
       ))}
     </nav>

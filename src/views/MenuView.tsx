@@ -66,7 +66,7 @@ export function Menu({ openModal, onOpenModal, onDeleteAllData, onExportAllData 
   const LEGAL_ITEMS: NavItem[] = [
     { icon: 'shield',    iconVariant: 'green',   label: 'info.privacyPolicy', onClick: () => onOpenModal('privacy') },
     { icon: 'link_icon', iconVariant: 'green',   label: 'info.imprint',       onClick: () => onOpenModal('imprint') },
-    { icon: 'code',      iconVariant: 'primary', label: 'info.githubRepo',    isExternal: true, onClick: () => window.open('https://github.com/ChristianScheub/Typescript_Capacitor_GermanFireCalculator', '_blank') },
+    { icon: 'code',      iconVariant: 'primary', label: 'info.githubRepo',    isExternal: true, onClick: () => window.open('https://github.com/ChristianScheub/Typescript_Capacitor_GermanFireCalculator', '_blank', 'noopener,noreferrer') },
   ];
 
   return (

@@ -7,6 +7,9 @@ import { Icon }                from '../ui/icons';
 import type { ChartDataPoint } from '../types/fire/models/ChartDataPoint';
 import type { Tab }            from '../types/navigation/Tab';
 
+// Fill-based sparkle — not a stroke icon, intentionally kept inline
+const SPARKLE_PATH = 'M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z';
+
 interface DashboardViewProps {
   firePercentage:          number;
   yearsToFire:             number;
@@ -47,7 +50,7 @@ export function DashboardView({
           <div className="scenario-hero-card__top-row">
             <p className="scenario-hero-card__overline">{t('dashboard.goalAchievement')}</p>
             <svg className="dashboard-hero__sparkle" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d={t('dashboard.sparkleIcon')}/>
+              <path d={SPARKLE_PATH}/>
             </svg>
           </div>
           <p className="scenario-hero-card__date">
@@ -84,7 +87,7 @@ export function DashboardView({
             value={monthlySavingsFormatted}
             unit={t('dashboard.perMonth')}
             iconVariant="teal"
-            icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={t('dashboard.icon2')} /></svg>}
+            icon={<Icon name="heart" size="sm" />}
           />
           <KpiCard
             label={t('dashboard.assumedReturn')}
@@ -118,11 +121,7 @@ export function DashboardView({
           aria-label={t('dashboard.openPrognosis')}
         >
           <MilestoneCard
-            icon={
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d={t('dashboard.milestoneIcon')}/><line x1="4" y1="22" x2="4" y2="15"/>
-              </svg>
-            }
+            icon={<Icon name="flag" size="md" />}
             label={t('dashboard.nextMilestone')}
             subtitle={nextMilestoneText}
             variant="fire"

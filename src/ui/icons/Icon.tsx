@@ -14,12 +14,7 @@ export function Icon({
   strokeWidth = 2,
 }: IconProps) {
   const sizeValue = ICON_SIZES[size];
-  const path = IconPaths[name];
-
-  if (!path) {
-    console.warn(`Icon "${name}" not found in icon library`);
-    return null;
-  }
+  const content = IconPaths[name];
 
   return (
     <svg
@@ -32,7 +27,8 @@ export function Icon({
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
-      dangerouslySetInnerHTML={{ __html: path }}
-    />
+    >
+      {content}
+    </svg>
   );
 }

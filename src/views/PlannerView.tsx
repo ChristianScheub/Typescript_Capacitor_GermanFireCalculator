@@ -106,7 +106,7 @@ export function PlannerView({
             hint={t('planner.fixedExpensesNote')}
           />
           <em className="field__hint field__hint--total">
-            {t('planner.fixedTotalHint')}: {totalFixedWithKVFormatted} € / Monat
+            {t('planner.fixedTotalHint')}: {totalFixedWithKVFormatted} {t('planner.perMonth')}
           </em>
           <NumericInput
             label={t('planner.variableExpenses')}
