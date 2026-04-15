@@ -31,7 +31,13 @@
 		"fabLabel": "Neu",
 		"paUnit": "% p.a.",
 		"milestoneIcon": "M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z",
-		"sparkleIcon": "M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z"
+		"sparkleIcon": "M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z",
+		"milestoneHalfway": "Halbzeit",
+		"milestone75": "75%",
+		"milestoneFireGoal": "FIRE-Ziel",
+		"milestoneReachedInMonths": "{{label}} erreicht in {{count}} Monaten",
+		"milestoneReachedInYears": "{{label}} erreicht in {{count}} Jahren",
+		"milestoneAchieved": "FIRE-Ziel erreicht"
 	},
 	"menu": {
 		"profileInfo": "Profil-Informationen",
@@ -365,5 +371,6 @@
   "privacy.line_31": "Personenbezogene Daten sind Informationen, die sich auf eine identifizierte oder identifizierbare natürliche Person beziehen. In diesem Zusammenhang können personenbezogene Daten von AdMob und AdSense gesammelt und verarbeitet werden. <br /> <br />",
   "privacy.line_32": "<strong>8. Änderungen dieser Datenschutzerklärung</strong><br />",
   "privacy.line_33": "Wir behalten uns das Recht vor, diese Datenschutzerklärung zu ändern, um den rechtlichen Anforderungen zu entsprechen oder Änderungen unserer Datenverarbeitungspraktiken widerzuspiegeln. Bitte überprüfen Sie diese Erklärung regelmäßig, um auf dem Laufenden zu bleiben. <br />",
-  "privacy.line_34": "Datum: 12.04.2026 <br /> <br />"
+  "privacy.line_34": "Datum: 12.04.2026 <br /> <br />",
+  "settings_Impressum": "Impressum"
 }

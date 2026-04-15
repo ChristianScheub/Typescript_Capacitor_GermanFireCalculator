@@ -8,7 +8,7 @@ import { MonteCarloProContainer }                         from '../MonteCarlo/Mo
 import type { PrognoseConfig }                            from '../../types/prognose/PrognoseConfig';
 
 export function SteuerContainer() {
-  const { state, fireDate, monthlySavings, fireTarget } = useFireContext();
+  const { state, fireDate, monthlySavings, fireTarget, weightedReturn } = useFireContext();
 
   const [selectedBadge, setSelectedBadge] = useState<string | null>('BASIS');
   const [isMonteCarloSelected, setIsMonteCarloSelected] = useState(false);
@@ -63,11 +63,10 @@ export function SteuerContainer() {
   );
 
   const hardcoreFIREDate = useMemo(() => {
-    const hardcoreExpenses = state.fixedExpenses + state.pkvContribution
-      + state.variableExpenses * FIRE_CONSTANTS.HARDCORE_FIRE_FACTOR;
-    const hardcoreTarget = (hardcoreExpenses * 12) / (state.etfWithdrawalRate / 100);
+    const hardcoreState  = { ...state, variableExpenses: state.variableExpenses * FIRE_CONSTANTS.HARDCORE_FIRE_FACTOR };
+    const hardcoreTarget = fireService.calcFireTarget(hardcoreState, weightedReturn);
     return fireService.calcFIREDate(state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, hardcoreTarget, state.savingsGrowthRate);
-  }, [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, state.fixedExpenses, state.pkvContribution, state.variableExpenses, state.etfWithdrawalRate, monthlySavings, state.savingsGrowthRate]);
+  }, [state, weightedReturn, monthlySavings]);
 
   const hardcoreDeltaYears = hardcoreFIREDate.year - fireDate.year;
 

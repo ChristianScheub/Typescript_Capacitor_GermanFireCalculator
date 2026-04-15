@@ -721,12 +721,6 @@
     "path": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/tslib",
     "licenseFile": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/tslib/LICENSE.txt"
   },
-  "typescript-capacitor-germanfirecalculator@0.0.0": {
-    "licenses": "UNLICENSED",
-    "private": true,
-    "path": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator",
-    "licenseFile": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/README.md"
-  },
   "typescript@6.0.2": {
     "licenses": "Apache-2.0",
     "repository": "https://github.com/microsoft/TypeScript",
