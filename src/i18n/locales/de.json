@@ -53,6 +53,7 @@
 		"sectionData": "DATENMANAGEMENT",
 		"deleteAllData": "Alle lokalen Daten löschen",
 		"exportAllData": "Alle Daten exportieren",
+		"privacyToggleLabel": "Absolute Zahlen im Dashboard",
 		"sectionKnowledge": "WISSEN & METHODIK",
 		"fireInformation": "Informationen zu FIRE",
 		"withdrawalInfo": "Informationen zur Entnahmerate",

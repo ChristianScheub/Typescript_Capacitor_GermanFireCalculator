@@ -10,6 +10,8 @@ import type { Tab }            from '../types/navigation/Tab';
 // Fill-based sparkle — not a stroke icon, intentionally kept inline
 const SPARKLE_PATH = 'M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z';
 
+const MASKED = '***';
+
 interface DashboardViewProps {
   firePercentage:          number;
   yearsToFire:             number;
@@ -19,6 +21,7 @@ interface DashboardViewProps {
   assetIncomeFormatted:    string;
   nextMilestoneText:       string;
   chartData:               ChartDataPoint[];
+  showAbsoluteNumbers:     boolean;
   onTabChange:             (tab: Tab) => void;
 }
 
@@ -31,6 +34,7 @@ export function DashboardView({
   assetIncomeFormatted,
   nextMilestoneText,
   chartData,
+  showAbsoluteNumbers,
   onTabChange,
 }: DashboardViewProps) {
   const { t } = useTranslation();
@@ -77,15 +81,15 @@ export function DashboardView({
         <div className="kpi-grid">
           <KpiCard
             label={t('dashboard.currentDepot')}
-            value={netWorthFormatted}
-            unit="€"
+            value={showAbsoluteNumbers ? netWorthFormatted : MASKED}
+            unit={showAbsoluteNumbers ? '€' : ''}
             iconVariant="green"
             icon={<Icon name="wallet" size="sm" />}
           />
           <KpiCard
             label={t('dashboard.savingsRateLabel')}
-            value={monthlySavingsFormatted}
-            unit={t('dashboard.perMonth')}
+            value={showAbsoluteNumbers ? monthlySavingsFormatted : MASKED}
+            unit={showAbsoluteNumbers ? t('dashboard.perMonth') : ''}
             iconVariant="teal"
             icon={<Icon name="heart" size="sm" />}
           />
@@ -98,8 +102,8 @@ export function DashboardView({
           />
           <KpiCard
             label={t('dashboard.assetIncome')}
-            value={assetIncomeFormatted}
-            unit={t('dashboard.perMonth')}
+            value={showAbsoluteNumbers ? assetIncomeFormatted : MASKED}
+            unit={showAbsoluteNumbers ? t('dashboard.perMonth') : ''}
             iconVariant="red"
             icon={<Icon name="wallet_2" size="sm" />}
           />
@@ -127,7 +131,7 @@ export function DashboardView({
             variant="fire"
           />
           <div className="chart-wrap">
-            <BarChart data={chartData} />
+            <BarChart data={chartData} hideValues={!showAbsoluteNumbers} />
           </div>
         </button>
 

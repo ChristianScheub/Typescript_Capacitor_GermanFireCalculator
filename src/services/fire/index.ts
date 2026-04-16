@@ -27,6 +27,7 @@ const DEFAULT_STATE: FireState = {
   currentAge:           35,
   pensionAge:           67,
   pensionMonthly:       1450,
+  showAbsoluteNumbers:  true,
 };
 
 export const fireService: IFireService = {

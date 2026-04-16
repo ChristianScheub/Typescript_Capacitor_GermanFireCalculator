@@ -15,3 +15,43 @@
 
 /* ── Warning text bold ───────────────────────────────────────────────────── */
 .info-warning__bold { text-decoration: underline; }
+
+/* ── Privacy Toggle Switch ───────────────────────────────────────────────── */
+.toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.toggle-switch__track {
+  position: absolute;
+  inset: 0;
+  border-radius: 13px;
+  background: var(--fire-border, #374151);
+  transition: background 0.2s ease;
+}
+
+.toggle-switch__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.toggle-switch--on .toggle-switch__track {
+  background: #3DAA72;
+}
+
+.toggle-switch--on .toggle-switch__thumb {
+  transform: translateX(18px);
+}

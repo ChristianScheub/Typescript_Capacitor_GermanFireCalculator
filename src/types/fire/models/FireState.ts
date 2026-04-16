@@ -24,4 +24,7 @@ export interface FireState {
   currentAge:    number;  // Jahre
   pensionAge:    number;  // staatliches Rentenalter in Jahren
   pensionMonthly: number; // € / Monat (staatliche Rente)
+
+  // VI. Datenschutz / Anzeige
+  showAbsoluteNumbers: boolean; // absolute Zahlen im Dashboard anzeigen
 }

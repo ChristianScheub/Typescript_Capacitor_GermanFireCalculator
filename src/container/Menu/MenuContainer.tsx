@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { Menu } from '../../views/MenuView';
 import { deleteDataService } from '../../services/deleteData';
 import { exportDataService } from '../../services/exportData';
+import { useFireContext } from '../../context/FireContext';
 import type { ModalInfo } from '../../types/menu/ModalInfo';
 
 export function MenuContainer() {
   const [openModal, setOpenModal] = useState<ModalInfo | null>(null);
+  const { state, updateField } = useFireContext();
 
   const handleDeleteAllData = () => setOpenModal('deleteConfirm');
 
@@ -21,6 +23,9 @@ export function MenuContainer() {
 
   const handleExportAllData = () => exportDataService.exportFireState();
 
+  const handleToggleAbsoluteNumbers = () =>
+    updateField('showAbsoluteNumbers', !state.showAbsoluteNumbers);
+
   return (
     <Menu
       openModal={openModal}
@@ -29,6 +34,8 @@ export function MenuContainer() {
       onExportAllData={handleExportAllData}
       onConfirmDelete={handleConfirmDelete}
       onDeleteSuccessClose={handleDeleteSuccessClose}
+      showAbsoluteNumbers={state.showAbsoluteNumbers}
+      onToggleAbsoluteNumbers={handleToggleAbsoluteNumbers}
     />
   );
 }

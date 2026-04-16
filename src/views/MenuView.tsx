@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '../ui/icons';
 import { Modal } from '../ui/modal/Modal';
 import { NavList } from '../ui/navigation/NavList';
-import type { NavItem } from '../ui/navigation/NavList';
+import type { NavItem } from '../ui/navigation/NavList'; // used for KNOWLEDGE_ITEMS / LEGAL_ITEMS
 import Datenschutz from '../legal/datenschutz';
 import Impressum from '../legal/impressum';
 import UsedLibsListContainer from '../legal/usedLibs/container_usedLibList';
@@ -19,15 +19,13 @@ interface MenuProps {
   onExportAllData: () => void;
   onConfirmDelete: () => void;
   onDeleteSuccessClose: () => void;
+  showAbsoluteNumbers: boolean;
+  onToggleAbsoluteNumbers: () => void;
 }
 
-export function Menu({ openModal, onOpenModal, onDeleteAllData, onExportAllData, onConfirmDelete, onDeleteSuccessClose }: MenuProps) {
+export function Menu({ openModal, onOpenModal, onDeleteAllData, onExportAllData, onConfirmDelete, onDeleteSuccessClose, showAbsoluteNumbers, onToggleAbsoluteNumbers }: MenuProps) {
   const { t } = useTranslation();
 
-  const DATA_ITEMS: NavItem[] = [
-    { icon: 'trash',  iconVariant: 'red',  label: 'info.deleteAllData', onClick: onDeleteAllData },
-    { icon: 'upload', iconVariant: 'gray', label: 'info.exportAllData', onClick: onExportAllData },
-  ];
 
   const KNOWLEDGE_ITEMS: NavItem[] = [
     { icon: 'book',     iconVariant: 'green', label: 'info.fireInformation', onClick: () => onOpenModal('fireInfo') },
@@ -62,7 +60,37 @@ export function Menu({ openModal, onOpenModal, onDeleteAllData, onExportAllData,
         </div>
 
         <p className="section-label">{t('info.sectionData')}</p>
-        <NavList items={DATA_ITEMS} />
+        <div className="nav-list">
+          <button className="nav-list__item" onClick={onDeleteAllData}>
+            <span className="nav-list__icon-box nav-list__icon-box--red">
+              <Icon name="trash" size="sm" />
+            </span>
+            <span className="nav-list__label">{t('info.deleteAllData')}</span>
+            <Icon name="chevron" size="sm" className="nav-list__chevron" />
+          </button>
+          <button className="nav-list__item" onClick={onExportAllData}>
+            <span className="nav-list__icon-box nav-list__icon-box--gray">
+              <Icon name="upload" size="sm" />
+            </span>
+            <span className="nav-list__label">{t('info.exportAllData')}</span>
+            <Icon name="chevron" size="sm" className="nav-list__chevron" />
+          </button>
+          <div className="nav-list__item">
+            <span className="nav-list__icon-box nav-list__icon-box--gray">
+              <Icon name="eye" size="sm" />
+            </span>
+            <span className="nav-list__label">{t('info.privacyToggleLabel')}</span>
+            <button
+              role="switch"
+              aria-checked={showAbsoluteNumbers}
+              className={`toggle-switch${showAbsoluteNumbers ? ' toggle-switch--on' : ''}`}
+              onClick={onToggleAbsoluteNumbers}
+            >
+              <span className="toggle-switch__track" />
+              <span className="toggle-switch__thumb" />
+            </button>
+          </div>
+        </div>
 
         <p className="section-label section-label--mt">{t('info.sectionKnowledge')}</p>
         <NavList items={KNOWLEDGE_ITEMS} />

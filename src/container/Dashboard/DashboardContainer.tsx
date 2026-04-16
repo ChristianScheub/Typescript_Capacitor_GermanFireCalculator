@@ -11,6 +11,7 @@ interface Props {
 export function DashboardContainer({ onTabChange }: Props) {
   const { t } = useTranslation();
   const {
+    state,
     netWorth,
     firePercentage,
     fireDate,
@@ -58,6 +59,7 @@ export function DashboardContainer({ onTabChange }: Props) {
       assetIncomeFormatted={fmtCurrency(monthlyAssetIncome)}
       nextMilestoneText={nextMilestoneText}
       chartData={chartData}
+      showAbsoluteNumbers={state.showAbsoluteNumbers}
       onTabChange={onTabChange}
     />
   );

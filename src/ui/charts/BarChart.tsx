@@ -4,8 +4,9 @@ import type { ChartDataPoint } from '../../types/fire/models/ChartDataPoint';
 import type { BarChartMode }   from '../../types/navigation/BarChartMode';
 
 interface Props {
-  data: ChartDataPoint[];
-  mode?: BarChartMode;
+  data:        ChartDataPoint[];
+  mode?:       BarChartMode;
+  hideValues?: boolean;
 }
 
 const SVG_W     = 320;
@@ -24,7 +25,7 @@ function fmtCompact(v: number): string {
   return String(Math.round(v));
 }
 
-export function BarChart({ data, mode = 'cumulative' }: Props) {
+export function BarChart({ data, mode = 'cumulative', hideValues = false }: Props) {
   const { t } = useTranslation();
   if (!data.length) return null;
 
@@ -92,11 +93,13 @@ export function BarChart({ data, mode = 'cumulative' }: Props) {
             )}
 
             {/* Wealth value */}
-            <text x={x + BAR_W / 2} y={valueY}
-              textAnchor="middle" fontSize="7" fontFamily="inherit"
-              className="bar-value-label">
-              {fmtCompact(d.value)} €
-            </text>
+            {!hideValues && (
+              <text x={x + BAR_W / 2} y={valueY}
+                textAnchor="middle" fontSize="7" fontFamily="inherit"
+                className="bar-value-label">
+                {fmtCompact(d.value)} €
+              </text>
+            )}
           </g>
         );
       })}
