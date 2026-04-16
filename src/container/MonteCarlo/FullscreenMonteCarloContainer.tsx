@@ -1,6 +1,8 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useFireContext } from '../../context/FireContext';
 import { calcMonteCarlo, getRisiko, fmtEuro } from '../../services/monteCarloCalculator';
+import { fmtPercent } from '../../services/fire';
 import type { MonteCarloResult } from '../../services/monteCarloCalculator';
 import { FullscreenMonteCarloView } from '../../views/FullscreenMonteCarloView';
 
@@ -29,6 +31,7 @@ export function FullscreenMonteCarloContainer({
   isOpen,
   onClose,
 }: FullscreenMonteCarloContainerProps) {
+  const { t } = useTranslation();
   const { state } = useFireContext();
 
   if (!isOpen) return null;
@@ -66,14 +69,14 @@ export function FullscreenMonteCarloContainer({
   const finalPoint = result.fanData.at(-1);
   const zielwert = finalPoint ? finalPoint.p50 : result.medianFinalWealth;
   const kpiZielwert = fmtEuro(zielwert);
-  const kpiErfolgsrate = result.successRate.toFixed(1).replace('.', ',') + '%';
+  const kpiErfolgsrate = fmtPercent(result.successRate, 1) + '%';
 
   return (
     <FullscreenMonteCarloView
       fanData={result.fanData}
       zielwert={kpiZielwert}
       erfolgsrate={kpiErfolgsrate}
-      risikoLabel={risiko.label}
+      risikoLabel={t(risiko.labelKey)}
       risikoColor={risiko.color}
       onClose={onClose}
     />

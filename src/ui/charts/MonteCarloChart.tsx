@@ -69,8 +69,8 @@ export function MonteCarloChart({
 
       {landscape && (
         <div className="mc-fan-legend">
-          <span className="mc-legend-item mc-legend-item--95">95% KI</span>
-          <span className="mc-legend-item mc-legend-item--50">50% KI</span>
+          <span className="mc-legend-item mc-legend-item--95">{t('monteCarlo.ci95')}</span>
+          <span className="mc-legend-item mc-legend-item--50">{t('monteCarlo.ci50')}</span>
         </div>
       )}
 

@@ -1,1 +1,3 @@
-export type { IExportDataService } from '../../types/exportData/interfaces/IExportDataService';
+export interface IExportDataService {
+  exportFireState: () => Promise<void>;
+}

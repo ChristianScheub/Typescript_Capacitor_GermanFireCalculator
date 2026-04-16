@@ -1,1 +1,3 @@
-export type { IDeleteDataService } from '../../types/deleteData/interfaces/IDeleteDataService';
+export interface IDeleteDataService {
+  deleteAllData: () => Promise<void>;
+}

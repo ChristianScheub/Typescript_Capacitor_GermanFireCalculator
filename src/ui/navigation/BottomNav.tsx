@@ -39,7 +39,7 @@ export function BottomNav({ active, onTabChange }: Props) {
   const { t } = useTranslation();
 
   return (
-    <nav className="bottom-nav" aria-label="Hauptnavigation">
+    <nav className="bottom-nav" aria-label={t('nav.mainNavLabel')}>
       {TAB_IDS.map(id => (
         <button
           key={id}

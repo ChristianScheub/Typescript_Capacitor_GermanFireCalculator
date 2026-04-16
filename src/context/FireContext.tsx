@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useMemo } from 'react';
+import { useTranslation }      from 'react-i18next';
 import type { FireState }      from '../types/fire/models/FireState';
 import type { ChartDataPoint } from '../types/fire/models/ChartDataPoint';
 import { fireService }         from '../services/fire';
@@ -50,6 +51,7 @@ function saveState(state: FireState): void {
 // ─── Provider ──────────────────────────────────────────────────────────────────
 
 export function FireProvider({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation();
   const [state, setState] = useState<FireState>(() => loadState());
 
   const updateField = <K extends keyof FireState>(key: K, value: FireState[K]) => {
@@ -93,10 +95,15 @@ export function FireProvider({ children }: { children: React.ReactNode }) {
       monthlySavings, monthlyWithdraw, state.assetTaxRate,
       fireDate.year, uniqueYears, pensionYear,
       state.savingsGrowthRate, state.inflationRate,
+      {
+        today:   t('prognosis.chartTodayLabel'),
+        fire:    t('prognosis.chartFireLabel'),
+        pension: t('prognosis.chartPensionLabel'),
+      },
     );
 
     return { netWorth, grossSWR, netSWR, fireTarget, firePercentage, abgabenQuote, monthlySavings, weightedReturn, fireDate, chartData };
-  }, [state]);
+  }, [state, t]);
 
   return (
     <FireContext.Provider value={{ state, updateField, ...computed }}>

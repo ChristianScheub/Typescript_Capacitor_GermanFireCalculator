@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { calcMonteCarlo, getRisiko, fmtEuro } from '../../services/monteCarloCalculator';
+import { fmtPercent } from '../../services/fire';
 import type { MonteCarloForPrognosisResult } from '../../types/hooks/MonteCarloForPrognosisResult';
 
 interface UseMonteCarloForPrognosisParams {
@@ -21,6 +23,7 @@ export function useMonteCarloForPrognosis({
   pensionMonthly,
   currentAge,
 }: UseMonteCarloForPrognosisParams): MonteCarloForPrognosisResult {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
   const pensionAnnualNet = pensionMonthly * 12;
   const yearsToFIRE = Math.max(0, fireYear - currentYear);
@@ -52,14 +55,14 @@ export function useMonteCarloForPrognosis({
   const finalPoint = mcResult.fanData.at(-1);
   const mcZielwert = finalPoint ? finalPoint.p50 : mcResult.medianFinalWealth;
   const mcKpiZielwert = fmtEuro(mcZielwert);
-  const mcKpiErfolgsrate = mcResult.successRate.toFixed(1).replace('.', ',') + '%';
+  const mcKpiErfolgsrate = fmtPercent(mcResult.successRate, 1) + '%';
   const risiko = getRisiko(mcResult.successRate);
 
   return {
     fanData: mcResult.fanData,
     zielwert: mcKpiZielwert,
     erfolgsrate: mcKpiErfolgsrate,
-    risikoLabel: risiko.label,
+    risikoLabel: t(risiko.labelKey),
     risikoColor: risiko.color,
   };
 }

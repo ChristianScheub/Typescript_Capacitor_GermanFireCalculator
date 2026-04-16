@@ -1,7 +1,10 @@
 export function fmtCurrency(value: number): string {
-  return new Intl.NumberFormat('de-DE', { maximumFractionDigits: 0 }).format(value);
+  return new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 }).format(value);
 }
 
 export function fmtPercent(value: number, decimals = 1): string {
-  return value.toFixed(decimals).replace('.', ',');
+  return new Intl.NumberFormat(undefined, {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  }).format(value);
 }

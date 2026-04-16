@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { fireService } from '../../services/fire';
 import type { FanDataPoint } from '../../types/monteCarloCalculator/models/monteCarloTypes';
 import type { FireState } from '../../types/fire/models/FireState';
@@ -16,6 +17,7 @@ export function usePrognoseChartData(
   monthlySavings: number,
   monthlyWithdraw: number,
 ): ChartDataResult {
+  const { t } = useTranslation();
   const chartEndYear = pensionYear + 10;
   const chartYears = useMemo(
     () => Array.from({ length: chartEndYear - currentYear + 1 }, (_, i) => currentYear + i),
@@ -37,8 +39,14 @@ export function usePrognoseChartData(
         pensionYear,
         state.savingsGrowthRate,
         state.inflationRate,
+        {
+          today:   t('prognosis.chartTodayLabel'),
+          fire:    t('prognosis.chartFireLabel'),
+          pension: t('prognosis.chartPensionLabel'),
+        },
       ),
-    [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, monthlyWithdraw, state.assetTaxRate, fireYear, chartYears, pensionYear, state.savingsGrowthRate, state.inflationRate],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, monthlyWithdraw, state.assetTaxRate, fireYear, chartYears, pensionYear, state.savingsGrowthRate, state.inflationRate, t],
   );
 
   const fanData: FanDataPoint[] = useMemo(() => {

@@ -1,16 +1,23 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useFireContext } from '../../context/FireContext';
-import { fireService, FIRE_CONSTANTS } from '../../services/fire';
+import { fireService, FIRE_CONSTANTS, fmtPercent } from '../../services/fire';
 import type { PrognoseConfig } from '../../types/prognose/PrognoseConfig';
 import type { PrognoseTableRow } from '../../types/prognose/PrognoseTableRow';
 import { usePrognoseChartData } from '../../hooks/prognose/usePrognoseChartData';
 import { PrognoseContentView } from '../../views/PrognoseContentView';
 import { FullscreenMonteCarloView } from '../../views/FullscreenMonteCarloView';
 
-// Display formatter
+// Display formatter — locale-aware, no hardcoded separators
 function fmtK(v: number): string {
   const abs = Math.abs(v);
-  if (abs >= 1_000_000) return '€' + (v / 1_000_000).toFixed(1).replace('.', ',') + ' Mio.';
+  if (abs >= 1_000_000) {
+    return '€' + new Intl.NumberFormat(undefined, {
+      notation: 'compact',
+      compactDisplay: 'short',
+      maximumFractionDigits: 1,
+    }).format(v);
+  }
   if (abs >= 1_000) return '€' + Math.round(v / 1_000) + 'k';
   return '€' + Math.round(v);
 }
@@ -20,6 +27,7 @@ interface Props {
 }
 
 export function PrognoseContentContainer({ config }: Props) {
+  const { t } = useTranslation();
   const { state: baseState, fireDate: baseFIREDate } = useFireContext();
   const [isMcFullscreenOpen, setIsMcFullscreenOpen] = useState(false);
 
@@ -89,8 +97,13 @@ export function PrognoseContentContainer({ config }: Props) {
         pensionYear,
         state.savingsGrowthRate,
         state.inflationRate,
+        {
+          today:   t('prognosis.chartTodayLabel'),
+          fire:    t('prognosis.chartFireLabel'),
+          pension: t('prognosis.chartPensionLabel'),
+        },
       ),
-    [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, monthlyWithdraw, state.assetTaxRate, fireDate.year, tableYears, pensionYear, state.savingsGrowthRate, state.inflationRate],
+    [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, monthlyWithdraw, state.assetTaxRate, fireDate.year, tableYears, pensionYear, state.savingsGrowthRate, state.inflationRate, t],
   );
 
   // Build table rows
@@ -104,12 +117,12 @@ export function PrognoseContentContainer({ config }: Props) {
         const isPost = row.year >= fireDate.year;
 
         const badge = isFire
-          ? 'FIRE BEGINN'
+          ? t('prognosis.badgeFireBegin')
           : isPension
-            ? 'STAATLICHE RENTE BEGINN'
+            ? t('prognosis.badgePensionBegin')
             : isPost
-              ? 'FIRE-RENTE'
-              : 'ANSPAREN';
+              ? t('prognosis.badgeFirePension')
+              : t('prognosis.badgeSavings');
 
         const yearsPostFire = isPost ? Math.max(0, row.year - fireDate.year) : 0;
         const grossNeededAnnual = isPost
@@ -138,7 +151,7 @@ export function PrognoseContentContainer({ config }: Props) {
           isPension,
         };
       }),
-    [tableData, fireDate.year, pensionYear, baseGrossNeededAnnual, state.inflationRate, state.etfRate, state.cashRate, currentYear],
+    [tableData, fireDate.year, pensionYear, baseGrossNeededAnnual, state.inflationRate, state.etfRate, state.cashRate, currentYear, t],
   );
 
   // Generate continuous year-by-year fan data for chart visualization
@@ -175,8 +188,8 @@ export function PrognoseContentContainer({ config }: Props) {
         <FullscreenMonteCarloView
           fanData={fanData}
           zielwert={fmtK(fireTarget)}
-          erfolgsrate={firePercentage.toFixed(1).replace('.', ',')}
-          risikoLabel="Prognose"
+          erfolgsrate={fmtPercent(firePercentage, 1)}
+          risikoLabel={t('prognosis.forecastLabel')}
           risikoColor="#3DAA72"
           onClose={() => setIsMcFullscreenOpen(false)}
         />

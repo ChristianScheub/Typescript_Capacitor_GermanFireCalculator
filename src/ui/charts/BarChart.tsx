@@ -16,12 +16,17 @@ const BAR_GAP   = 10;
 const MAX_BAR_H = 140;
 const BASE_Y    = 178;
 
-// Compact DE number: >=1M → "1,3 Mio." | >=1k → "150 T" | else plain
+// Compact locale-aware number: uses device locale for separators and suffixes
 function fmtCompact(v: number): string {
-  const MIO_SUFFIX  = ' Mio.';
-  const TAUSEND_SUF = ' T';
-  if (v >= 1_000_000) return (v / 1_000_000).toFixed(1).replace('.', ',') + MIO_SUFFIX;
-  if (v >= 1_000)     return Math.round(v / 1_000) + TAUSEND_SUF;
+  const abs = Math.abs(v);
+  if (abs >= 1_000_000) {
+    return new Intl.NumberFormat(undefined, {
+      notation: 'compact',
+      compactDisplay: 'short',
+      maximumFractionDigits: 1,
+    }).format(v);
+  }
+  if (abs >= 1_000) return Math.round(v / 1_000) + 'k';
   return String(Math.round(v));
 }
 

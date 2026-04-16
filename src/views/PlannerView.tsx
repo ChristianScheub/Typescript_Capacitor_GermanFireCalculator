@@ -156,19 +156,12 @@ export function PlannerView({
             </div>
           )}
           {state.isPkvUser && (
-            <div className="field mt-4">
-              <label className="field__label">{t('planner.pkvMonthlyContribution')}</label>
-              <div className="field__input-wrap">
-                <input
-                  className="field__input field__input--large-num"
-                  type="number"
-                  inputMode="numeric"
-                  value={state.pkvContribution}
-                  onChange={e => updateField('pkvContribution', Number(e.target.value))}
-                />
-                <span className="field__unit">{t('planner.perMonth')}</span>
-              </div>
-            </div>
+            <NumericInput
+              label={t('planner.pkvMonthlyContribution')}
+              value={state.pkvContribution}
+              unit="€"
+              onChange={v => updateField('pkvContribution', v)}
+            />
           )}
         </ContentSection>
 

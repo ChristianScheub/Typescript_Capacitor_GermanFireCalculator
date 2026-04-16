@@ -1,7 +1,8 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useFireContext } from '../../context/FireContext';
 import { calcMonteCarlo, getRisiko, fmtEuro } from '../../services/monteCarloCalculator';
-import { fireService, FIRE_CONSTANTS } from '../../services/fire';
+import { fireService, FIRE_CONSTANTS, fmtPercent } from '../../services/fire';
 import { HelperService } from '../../services/helper';
 import type { MonteCarloResult } from '../../services/monteCarloCalculator';
 import { MonteCarloView } from '../../views/MonteCarloView';
@@ -24,6 +25,7 @@ interface MonteCarloContainerProps {
 }
 
 export function MonteCarloContainer({ showChartKpis = true }: MonteCarloContainerProps) {
+  const { t } = useTranslation();
   const { state, fireDate, fireTarget } = useFireContext();
 
   const [simConfig, setSimConfig] = useState<SimConfig>({
@@ -37,6 +39,14 @@ export function MonteCarloContainer({ showChartKpis = true }: MonteCarloContaine
     startYear: fireDate.year,
     endYear: fireDate.year + Math.max(1, 100 - (state.currentAge + Math.max(0, fireDate.year - new Date().getFullYear()))),
   });
+
+  useEffect(() => {
+    setSimRange(prev => ({
+      ...prev,
+      startCapital: fireTarget,
+      startYear: fireDate.year,
+    }));
+  }, [fireTarget, fireDate.year]);
 
   const [monthlyWithdrawal, setMonthlyWithdrawal] = useState<number>(() => {
     const baseExpenses = state.fixedExpenses + state.variableExpenses;
@@ -94,7 +104,7 @@ export function MonteCarloContainer({ showChartKpis = true }: MonteCarloContaine
   const finalPoint = result.fanData.at(-1);
   const zielwert = finalPoint ? HelperService.roundToTwoDecimals(finalPoint.p50) : HelperService.roundToTwoDecimals(result.medianFinalWealth);
   const kpiZielwert = fmtEuro(zielwert);
-  const kpiErfolgsrate = HelperService.roundToTwoDecimals(result.successRate).toFixed(1).replace('.', ',') + '%';
+  const kpiErfolgsrate = fmtPercent(HelperService.roundToTwoDecimals(result.successRate), 1) + '%';
 
   return (
     <>
@@ -102,7 +112,7 @@ export function MonteCarloContainer({ showChartKpis = true }: MonteCarloContaine
         result={result}
         successPct={successPct}
         isBadSuccess={isBadSuccess}
-        risikoLabel={risiko.label}
+        risikoLabel={t(risiko.labelKey)}
         risikoColor={risiko.color}
         simConfig={{
           minInflation: HelperService.roundToTwoDecimals(simConfig.minInflation),

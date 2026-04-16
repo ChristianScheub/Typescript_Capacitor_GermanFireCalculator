@@ -1,7 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { Icon } from '../ui/icons';
-import type { WelcomeViewProps } from '../types/views/WelcomeViewProps';
 import './WelcomeView.css';
+
+interface WelcomeViewProps {
+  checked: [boolean, boolean, boolean];
+  onToggle: (index: 0 | 1 | 2) => void;
+  onAccept: () => void;
+}
 
 interface SectionItem {
   icon: 'trending' | 'layers' | 'warning' | 'shield' | 'book';

@@ -1,6 +1,12 @@
 import type { ChartDataPoint } from '../../../../types/fire/models/ChartDataPoint';
 import { FIRE_CONSTANTS }       from '../fireConfig';
 
+export interface ChartPointLabels {
+  today?:   string;
+  fire?:    string;
+  pension?: string;
+}
+
 /**
  * Projects ETF and Cash wealth separately for each target year.
  *
@@ -28,7 +34,11 @@ export function calcProjectedWealth(
   pensionYear?:      number,
   savingsGrowthRate: number = 0,      // % p.a. — annual savings increase pre-FIRE
   inflationRate:     number = 0,      // % p.a. — annual cost increase post-FIRE
+  labels:            ChartPointLabels = {},
 ): ChartDataPoint[] {
+  const todayLabel   = labels.today   ?? 'TODAY';
+  const fireLabel    = labels.fire    ?? '(FIRE)';
+  const pensionLabel = labels.pension ?? '(PENSION)';
   const currentYear       = new Date().getFullYear();
   const etfGrowthMonthly  = etfRate  / 100 / 12;
   const cashGrowthMonthly = cashRate / 100 / 12;
@@ -66,12 +76,12 @@ export function calcProjectedWealth(
     }
 
     const total    = etf + cash;
-    const label    = year === currentYear ? 'HEUTE' : String(year);
+    const label    = year === currentYear ? todayLabel : String(year);
     const resolvedPensionYear = pensionYear ?? fireYear + FIRE_CONSTANTS.YEARS_TO_PENSION;
     const sublabel = year === fireYear
-      ? '(FIRE)'
+      ? fireLabel
       : year === resolvedPensionYear
-      ? '(RENTE)'
+      ? pensionLabel
       : undefined;
 
     return { year, value: total, etfValue: etf, cashValue: cash, label, sublabel, isFIRE: year === fireYear };

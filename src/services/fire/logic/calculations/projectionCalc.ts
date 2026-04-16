@@ -4,10 +4,10 @@ export function calcMonthlySavings(state: FireState): number {
   return state.monthlySavingsAmount;
 }
 
-const MONTH_NAMES = [
-  'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez',
-];
+function getLocalizedMonthName(monthIndex: number): string {
+  return new Intl.DateTimeFormat(undefined, { month: 'short' })
+    .format(new Date(2000, monthIndex, 1));
+}
 
 /**
  * Simulates month-by-month growth of ETF and Cash separately until total >= fireTarget.
@@ -43,5 +43,5 @@ export function calcFIREDate(
 
   const fireDate = new Date();
   fireDate.setMonth(fireDate.getMonth() + months);
-  return { year: fireDate.getFullYear(), month: MONTH_NAMES[fireDate.getMonth()] };
+  return { year: fireDate.getFullYear(), month: getLocalizedMonthName(fireDate.getMonth()) };
 }

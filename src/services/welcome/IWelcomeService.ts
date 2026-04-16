@@ -1,1 +1,4 @@
-export type { IWelcomeService } from '../../types/welcome/interfaces/IWelcomeService';
+export interface IWelcomeService {
+  isAccepted: () => boolean;
+  accept: () => void;
+}

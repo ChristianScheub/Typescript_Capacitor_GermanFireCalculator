@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { MilestoneCard } from '../ui/cards/MilestoneCard';
 import { PrognoseCard } from '../ui/cards/PrognoseCard';
 import { MonteCarloChart } from '../ui/charts/MonteCarloChart';
-import { fmtCurrency } from '../services/fire';
+import { fmtCurrency, fmtPercent } from '../services/fire';
 import type { PrognoseTableRow } from '../types/prognose/PrognoseTableRow';
 import type { FanDataPoint } from '../types/monteCarloCalculator/models/monteCarloTypes';
 
@@ -58,7 +58,7 @@ export function PrognoseContentView({
         <div className="prognose-hero__stats">
           <div className="prognose-hero__stat">
             <p className="prognose-hero__stat-label">{t('prognosis.progress')}</p>
-            <p className="prognose-hero__stat-value">{firePercentage.toFixed(1).replace('.', ',')}%</p>
+            <p className="prognose-hero__stat-value">{fmtPercent(firePercentage, 1)}%</p>
           </div>
           <div className="prognose-hero__divider" />
           <div className="prognose-hero__stat">
@@ -104,8 +104,8 @@ export function PrognoseContentView({
       <MonteCarloChart
         fanData={fanData}
         zielwert={fmtK(fireTarget)}
-        erfolgsrate={firePercentage.toFixed(1).replace('.', ',')}
-        risikoLabel="Prognose"
+        erfolgsrate={fmtPercent(firePercentage, 1)}
+        risikoLabel={t('prognosis.forecastLabel')}
         risikoColor="#3DAA72"
         onFullscreenOpen={onMcFullscreenOpen}
         showBands={false}
@@ -128,7 +128,7 @@ export function PrognoseContentView({
         </div>
 
         <p className="prognose-table__footnote">
-          {t('prognosis.returnFormula')} {(weightedReturn * 100).toFixed(1).replace('.', ',')}% p.a. {t('prognosis.weightedReturn')}
+          {t('prognosis.returnFormula')} {fmtPercent(weightedReturn * 100, 1)}% p.a. {t('prognosis.weightedReturn')}
         </p>
       </div>
 

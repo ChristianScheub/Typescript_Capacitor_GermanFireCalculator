@@ -35,15 +35,6 @@
 		"milestoneReachedInYears": "{{label}} erreicht in {{count}} Jahren",
 		"milestoneAchieved": "FIRE-Ziel erreicht"
 	},
-	"menu": {
-		"profileInfo": "Profil-Informationen",
-		"privacy": "Sicherheit & Datenschutz",
-		"fireMethod": "FIRE Methodik",
-		"faq": "Häufig gestellte Fragen",
-		"support": "Support kontaktieren",
-		"title": "FIRE LEDGER",
-		"privacyPolicy": "Datenschutzerklärung"
-	},
 	"info": {
 		"pageTitle": "Info",
 		"warningTitle": "ACHTUNG",
@@ -155,7 +146,15 @@
 		"disclaimerText": "Diese Prognose dient zur Orientierung. Berechnungen erfolgen inflationsbereinigt (Realwerte). Tatsächliche Marktvolatilität kann zu Abweichungen führen. Überprüfen Sie Ihre Annahmen regelmäßig in den",
 		"scenarios": "Scenarios",
 		"until": "bis",
-		"pensionStart": "RENTENBEGINN"
+		"pensionStart": "RENTENBEGINN",
+		"forecastLabel": "Prognose",
+		"chartTodayLabel": "HEUTE",
+		"chartFireLabel": "(FIRE)",
+		"chartPensionLabel": "(RENTE)",
+		"badgeFireBegin": "FIRE BEGINN",
+		"badgePensionBegin": "STAATLICHE RENTE BEGINN",
+		"badgeFirePension": "FIRE-RENTE",
+		"badgeSavings": "ANSPAREN"
 	},
 	"monteCarlo": {
 		"title": "Monte-Carlo Simulation",
@@ -191,7 +190,13 @@
 		"runSimulation": "Simulation neu starten",
 		"expectedTargetValue": "ERWARTETER ZIELWERT",
 		"successRate": "ERFOLGSRATE",
-		"withdrawalRisk": "ENTNAHME-RISIKO"
+		"withdrawalRisk": "ENTNAHME-RISIKO",
+		"closeLabel": "Schließen",
+		"fullscreenTitle": "Monte-Carlo",
+		"riskVeryLow": "Sehr gering",
+		"riskLow": "Gering",
+		"riskModerate": "Moderat",
+		"riskHigh": "Hoch"
 	},
 	"monteCarloProView": {
 		"title": "Monte-Carlo Simulation Pro",
@@ -361,6 +366,7 @@
     "dashboard": "Dashboard",
     "planner": "Planner",
     "scenarios": "Szenarien",
-    "menu": "Menü"
+    "menu": "Menü",
+    "mainNavLabel": "Hauptnavigation"
   }
 }
