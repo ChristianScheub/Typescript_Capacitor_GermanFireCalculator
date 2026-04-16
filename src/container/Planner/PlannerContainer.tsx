@@ -8,12 +8,12 @@ export function PlannerContainer() {
   const fireProgressWidth = `${Math.min(100, firePercentage).toFixed(0)}%`;
 
   // GKV: estimated monthly contribution = fireTarget * weightedReturn * 21% / 12, capped at 1 300 €
-  const gkvMonthly = !state.isPkvUser
-    ? Math.min(
+  const gkvMonthly = state.isPkvUser
+    ? 0
+    : Math.min(
         FIRE_CONSTANTS.GKV_MAX_MONTHLY,
         (fireTarget * weightedReturn * FIRE_CONSTANTS.GKV_RATE) / 12,
-      )
-    : 0;
+      );
   const gkvMonthlyFormatted = fmtCurrency(gkvMonthly);
   const isCapped             = !state.isPkvUser
     && (fireTarget * weightedReturn * FIRE_CONSTANTS.GKV_RATE) / 12 > FIRE_CONSTANTS.GKV_MAX_MONTHLY;

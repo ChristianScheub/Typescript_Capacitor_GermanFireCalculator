@@ -21,7 +21,7 @@ interface SimRange {
 }
 
 interface MonteCarloContainerProps {
-  showChartKpis?: boolean;
+  readonly showChartKpis?: boolean;
 }
 
 export function MonteCarloContainer({ showChartKpis = true }: MonteCarloContainerProps) {
@@ -30,7 +30,7 @@ export function MonteCarloContainer({ showChartKpis = true }: MonteCarloContaine
 
   const [simConfig, setSimConfig] = useState<SimConfig>({
     minInflation: 1.5,
-    maxInflation: 4.0,
+    maxInflation: 4,
     volatility: 12.5,
   });
 

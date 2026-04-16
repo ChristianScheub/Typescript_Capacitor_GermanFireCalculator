@@ -23,7 +23,7 @@ function fmtK(v: number): string {
 }
 
 interface Props {
-  config: PrognoseConfig;
+  readonly config: PrognoseConfig;
 }
 
 export function PrognoseContentContainer({ config }: Props) {
@@ -116,13 +116,16 @@ export function PrognoseContentContainer({ config }: Props) {
         const isPension = row.year === pensionYear;
         const isPost = row.year >= fireDate.year;
 
-        const badge = isFire
-          ? t('prognosis.badgeFireBegin')
-          : isPension
-            ? t('prognosis.badgePensionBegin')
-            : isPost
-              ? t('prognosis.badgeFirePension')
-              : t('prognosis.badgeSavings');
+        let badge: string;
+        if (isFire) {
+          badge = t('prognosis.badgeFireBegin');
+        } else if (isPension) {
+          badge = t('prognosis.badgePensionBegin');
+        } else if (isPost) {
+          badge = t('prognosis.badgeFirePension');
+        } else {
+          badge = t('prognosis.badgeSavings');
+        }
 
         const yearsPostFire = isPost ? Math.max(0, row.year - fireDate.year) : 0;
         const grossNeededAnnual = isPost

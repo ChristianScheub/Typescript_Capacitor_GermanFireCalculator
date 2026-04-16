@@ -339,6 +339,9 @@ input, select { font: inherit; }
 }
 
 .chart-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
   margin-bottom: 12px;
 }
 
@@ -835,7 +838,6 @@ input, select { font: inherit; }
   padding: 12px;
 }
 
-.info-card__text {}
 
 .info-card__title {
   font-size: 14px;
@@ -1494,13 +1496,6 @@ input, select { font: inherit; }
 
 .chart-card--clickable:hover {
   box-shadow: var(--fire-shadow-md);
-}
-
-.chart-card__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-bottom: 12px;
 }
 
 .chart-card__chevron {

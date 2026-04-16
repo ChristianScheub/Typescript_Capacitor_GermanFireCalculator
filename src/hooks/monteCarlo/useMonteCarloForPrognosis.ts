@@ -41,7 +41,7 @@ export function useMonteCarloForPrognosis({
       simFireAge,
       {
         minInflation: 1.5,
-        maxInflation: 4.0,
+        maxInflation: 4,
         volatility: 12.5,
         numSimulations: 1000,
         pensionAge,

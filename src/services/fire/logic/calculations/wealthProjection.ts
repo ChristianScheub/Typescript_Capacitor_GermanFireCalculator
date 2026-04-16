@@ -78,11 +78,12 @@ export function calcProjectedWealth(
     const total    = etf + cash;
     const label    = year === currentYear ? todayLabel : String(year);
     const resolvedPensionYear = pensionYear ?? fireYear + FIRE_CONSTANTS.YEARS_TO_PENSION;
-    const sublabel = year === fireYear
-      ? fireLabel
-      : year === resolvedPensionYear
-      ? pensionLabel
-      : undefined;
+    let sublabel: string | undefined;
+    if (year === fireYear) {
+      sublabel = fireLabel;
+    } else if (year === resolvedPensionYear) {
+      sublabel = pensionLabel;
+    }
 
     return { year, value: total, etfValue: etf, cashValue: cash, label, sublabel, isFIRE: year === fireYear };
   });

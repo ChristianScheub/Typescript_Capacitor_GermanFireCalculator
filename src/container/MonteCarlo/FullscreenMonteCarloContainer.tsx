@@ -7,20 +7,20 @@ import type { MonteCarloResult } from '../../services/monteCarloCalculator';
 import { FullscreenMonteCarloView } from '../../views/FullscreenMonteCarloView';
 
 interface FullscreenMonteCarloContainerProps {
-  simConfig: {
-    minInflation: number;
-    maxInflation: number;
-    volatility: number;
+  readonly simConfig: {
+    readonly minInflation: number;
+    readonly maxInflation: number;
+    readonly volatility: number;
   };
-  simRange: {
-    startCapital: number;
-    startYear: number;
-    endYear: number;
+  readonly simRange: {
+    readonly startCapital: number;
+    readonly startYear: number;
+    readonly endYear: number;
   };
-  monthlyWithdrawal: number;
-  runKey: number;
-  isOpen: boolean;
-  onClose: () => void;
+  readonly monthlyWithdrawal: number;
+  readonly runKey: number;
+  readonly isOpen: boolean;
+  readonly onClose: () => void;
 }
 
 export function FullscreenMonteCarloContainer({

@@ -7,8 +7,8 @@
  * - Atomization (max 2 exports per logic file)
  */
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import { walkDir, getProjectPaths, getRelativePath } from './checkUtils.js';
 
 export function checkServiceComponents() {
@@ -33,7 +33,7 @@ export function checkServiceComponents() {
 
   // Regex to extract named exports from service files
   const EXPORT_NAME_REGEX =
-    /^export\s+(?:default\s+)?(?:async\s+)?(?:function|const|class|abstract\s+class)\s+([A-Za-z_$][A-Za-z0-9_$]*)|^export\s*\{\s*([A-Za-z_$][A-Za-z0-9_$]*)/gm;
+    /^export\s+(?:default\s+)?(?:async\s+)?(?:function|const|(?:abstract\s+)?class)\s+([$\w]+)|^export\s*\{\s*([$\w]+)/gm;
 
   walkDir(servicesDir, (file) => {
     if (!file.endsWith('.ts') && !file.endsWith('.tsx')) return;
@@ -58,7 +58,7 @@ export function checkServiceComponents() {
     while ((match = EXPORT_NAME_REGEX.exec(content)) !== null) {
       const exportName = match[1] || match[2];
 
-      const usageRegex = new RegExp(`\\b${exportName}\\b`);
+      const usageRegex = new RegExp(String.raw`\b${exportName}\b`);
       if (!usageRegex.test(usageContents)) {
         violations.push(
           `Unused Export Check (services): '${exportName}' in '${relFile}' is exported but never used in src (excluding test files).`
@@ -130,9 +130,9 @@ export function checkServiceComponents() {
     const logicFolder = files.includes('logic');
 
     // Files that should only be in main folder
-    const mainFolderFiles = ['index.ts', ...interfaceFiles];
+    const mainFolderFiles = new Set(['index.ts', ...interfaceFiles]);
     const otherFiles = files.filter(f =>
-      !mainFolderFiles.includes(f) && f !== 'logic' && !f.startsWith('.')
+      !mainFolderFiles.has(f) && f !== 'logic' && !f.startsWith('.')
     );
 
     // Check 1: Must have index.ts (Facade)
@@ -165,12 +165,7 @@ export function checkServiceComponents() {
     }
     // Check 3.5: Must have README.md with documentation (min 50 characters)
     const hasReadme = files.includes('README.md');
-    if (!hasReadme) {
-      violations.push(
-        `Service Documentation: Service '${relPath}' missing 'README.md'. ` +
-        `Each service must have a README.md file (minimum 50 characters) describing its purpose and responsibilities.`
-      );
-    } else {
+    if (hasReadme) {
       // Check that README.md has meaningful content (at least 50 characters)
       const readmePath = path.join(servicePath, 'README.md');
       const readmeContent = fs.readFileSync(readmePath, 'utf8');
@@ -180,6 +175,11 @@ export function checkServiceComponents() {
           `README.md must be at least 50 characters and describe the service's purpose and key responsibilities.`
         );
       }
+    } else {
+      violations.push(
+        `Service Documentation: Service '${relPath}' missing 'README.md'. ` +
+        `Each service must have a README.md file (minimum 50 characters) describing its purpose and responsibilities.`
+      );
     }
     // Check 4: No implementation files in main folder
     if (otherFiles.length > 0) {
@@ -221,13 +221,13 @@ export function checkServiceComponents() {
           // Check if this interface is actually defined as an interface (not just types)
           const interfacePathFile = path.join(servicePath, interfaceFileName);
           const interfaceFileContent = fs.readFileSync(interfacePathFile, 'utf8');
-          const hasInterfaceDefinition = new RegExp(`export\\s+interface\\s+${interfaceName}`).test(interfaceFileContent);
+          const hasInterfaceDefinition = new RegExp(String.raw`export\s+interface\s+${interfaceName}`).test(interfaceFileContent);
           
           // Only enforce type contract if we have an actual interface definition (not just type exports)
           if (hasInterfaceDefinition) {
             // Check if index.ts has a const that is typed with this interface
             // Pattern: const <name>: <InterfaceName> = { ... }
-            const typedExportPattern = new RegExp(`const\\s+\\w+\\s*:\\s*${interfaceName}\\s*=`);
+            const typedExportPattern = new RegExp(String.raw`const\s+\w+\s*:\s*${interfaceName}\s*=`);
             
             if (!typedExportPattern.test(indexContent)) {
               violations.push(

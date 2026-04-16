@@ -3,7 +3,7 @@ import { WelcomeView } from '../../views/WelcomeView';
 import { welcomeService } from '../../services/welcome';
 
 interface WelcomeContainerProps {
-  onAccept: () => void;
+  readonly onAccept: () => void;
 }
 
 export function WelcomeContainer({ onAccept }: WelcomeContainerProps) {

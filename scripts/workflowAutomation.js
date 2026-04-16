@@ -4,7 +4,7 @@
  * - Dev Mode Detection for faster development workflow
  */
 
-import { execSync } from 'child_process';
+import { execSync } from 'node:child_process';
 
 export function runWorkflowAutomation() {
   // Determine if we're in dev mode (skip tests for faster startup)
@@ -24,7 +24,7 @@ export function runWorkflowAutomation() {
     execSync('npm test -- --run', { stdio: 'inherit' });
     console.log('\n\x1b[32m✅ All tests passed!\x1b[0m\n');
     return { violations: [], hasTestPhase: true };
-  } catch (error) {
+  } catch {
     console.error('\n\x1b[31m❌ Tests failed!\x1b[0m\n');
     console.error('\x1b[33mPlease fix the test failures above before building.\x1b[0m\n');
     process.exit(1);

@@ -6,8 +6,8 @@
  * - Naming convention for UI files
  */
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import { walkDir, getProjectPaths, getRelativePath } from './checkUtils.js';
 
 export function checkViewUIComponents() {
@@ -83,9 +83,9 @@ export function checkViewUIComponents() {
   ];
 
   // Files to skip entirely (relative paths from project root, using forward slashes)
-  const HOOK_CHECK_IGNORED_FILES = [
+  const HOOK_CHECK_IGNORED_FILES = new Set([
     'src/views/Navbar/NavbarView.tsx',
-  ];
+  ]);
 
   // Per-file pattern allowlists (relative paths → set of allowed labels)
   const HOOK_CHECK_FILE_ALLOWLIST = {
@@ -106,7 +106,7 @@ export function checkViewUIComponents() {
       const relFile = getRelativePath(file, projectRoot);
 
       // Skip ignored files entirely
-      if (HOOK_CHECK_IGNORED_FILES.includes(relFile)) return;
+      if (HOOK_CHECK_IGNORED_FILES.has(relFile)) return;
 
       const content = fs.readFileSync(file, 'utf8');
       const allowedLabels = HOOK_CHECK_FILE_ALLOWLIST[relFile] ?? new Set();
@@ -154,7 +154,7 @@ export function checkViewUIComponents() {
         // Strip custom property assignments ('--xxx': ...) before checking
         // This prevents false positives when a CSS custom property value is a variable reference
         const strippedMatch = match.replaceAll(/\[?['"`]?--[\w-]+['"`]?\]?\s*(?:as\s+\S+\s*)?:\s*[^,}]*/g, '');
-        const containsRegularProps = /:\s*['"`]?(?!-)[a-zA-Z]/i.test(strippedMatch);
+        const containsRegularProps = /:\s*['"`]?(?!-)[a-z]/i.test(strippedMatch);
         
         if (containsRegularProps) {
           violations.push(

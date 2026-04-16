@@ -5,7 +5,7 @@ import { DashboardView }   from '../../views/DashboardView';
 import type { Tab }         from '../../types/navigation/Tab';
 
 interface Props {
-  onTabChange: (tab: Tab) => void;
+  readonly onTabChange: (tab: Tab) => void;
 }
 
 export function DashboardContainer({ onTabChange }: Props) {
@@ -26,7 +26,14 @@ export function DashboardContainer({ onTabChange }: Props) {
   const annualReturnFormatted = fmtPercent(weightedReturn * 100, 1);
 
   // Next milestone: 50% → 75% → FIRE goal (100%)
-  const milestoneRatio  = firePercentage < 50 ? 0.5 : firePercentage < 75 ? 0.75 : 1.0;
+  let milestoneRatio: number;
+  if (firePercentage < 50) {
+    milestoneRatio = 0.5;
+  } else if (firePercentage < 75) {
+    milestoneRatio = 0.75;
+  } else {
+    milestoneRatio = 1;
+  }
   const milestoneTarget = fireTarget * milestoneRatio;
   const r = weightedReturn / 12; // monthly rate
   const monthsToMilestone = (() => {
@@ -39,15 +46,23 @@ export function DashboardContainer({ onTabChange }: Props) {
     // Fallback: no return, purely linear
     return monthlySavings > 0 ? Math.max(1, Math.round((milestoneTarget - netWorth) / monthlySavings)) : 0;
   })();
-  const milestoneLabel =
-    milestoneRatio === 0.5  ? t('dashboard.milestoneHalfway') :
-    milestoneRatio === 0.75 ? t('dashboard.milestone75') :
-                              t('dashboard.milestoneFireGoal');
-  const nextMilestoneText = firePercentage >= 100
-    ? t('dashboard.milestoneAchieved')
-    : monthsToMilestone < 100
-      ? t('dashboard.milestoneReachedInMonths', { label: milestoneLabel, count: monthsToMilestone })
-      : t('dashboard.milestoneReachedInYears', { label: milestoneLabel, count: (monthsToMilestone / 12).toFixed(1) });
+  let milestoneLabel: string;
+  if (milestoneRatio === 0.5) {
+    milestoneLabel = t('dashboard.milestoneHalfway');
+  } else if (milestoneRatio === 0.75) {
+    milestoneLabel = t('dashboard.milestone75');
+  } else {
+    milestoneLabel = t('dashboard.milestoneFireGoal');
+  }
+
+  let nextMilestoneText: string;
+  if (firePercentage >= 100) {
+    nextMilestoneText = t('dashboard.milestoneAchieved');
+  } else if (monthsToMilestone < 100) {
+    nextMilestoneText = t('dashboard.milestoneReachedInMonths', { label: milestoneLabel, count: monthsToMilestone });
+  } else {
+    nextMilestoneText = t('dashboard.milestoneReachedInYears', { label: milestoneLabel, count: (monthsToMilestone / 12).toFixed(1) });
+  }
 
   return (
     <DashboardView

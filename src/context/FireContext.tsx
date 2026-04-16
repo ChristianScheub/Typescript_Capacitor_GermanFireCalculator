@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useMemo } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
 import { useTranslation }      from 'react-i18next';
 import type { FireState }      from '../types/fire/models/FireState';
 import type { ChartDataPoint } from '../types/fire/models/ChartDataPoint';
@@ -50,17 +50,17 @@ function saveState(state: FireState): void {
 
 // ─── Provider ──────────────────────────────────────────────────────────────────
 
-export function FireProvider({ children }: { children: React.ReactNode }) {
+export function FireProvider({ children }: { readonly children: React.ReactNode }) {
   const { t } = useTranslation();
   const [state, setState] = useState<FireState>(() => loadState());
 
-  const updateField = <K extends keyof FireState>(key: K, value: FireState[K]) => {
+  const updateField = useCallback(<K extends keyof FireState>(key: K, value: FireState[K]) => {
     setState(prev => {
       const next = { ...prev, [key]: value };
       saveState(next);
       return next;
     });
-  };
+  }, []);
 
   const computed = useMemo(() => {
     const netWorth        = fireService.calcNetWorth(state);
@@ -105,8 +105,13 @@ export function FireProvider({ children }: { children: React.ReactNode }) {
     return { netWorth, grossSWR, netSWR, fireTarget, firePercentage, abgabenQuote, monthlySavings, weightedReturn, fireDate, chartData };
   }, [state, t]);
 
+  const contextValue = useMemo(
+    () => ({ state, updateField, ...computed }),
+    [state, updateField, computed],
+  );
+
   return (
-    <FireContext.Provider value={{ state, updateField, ...computed }}>
+    <FireContext.Provider value={contextValue}>
       {children}
     </FireContext.Provider>
   );

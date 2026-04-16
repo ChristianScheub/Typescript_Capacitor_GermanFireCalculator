@@ -2,8 +2,8 @@
  * Shared utility functions for all pre-build checks
  */
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 /**
  * Helper function to recursively walk through directories

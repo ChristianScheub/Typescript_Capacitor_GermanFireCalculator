@@ -1,4 +1,4 @@
-import { useState, useMemo }                                from 'react';
+import React, { useState, useMemo }                         from 'react';
 import { useFireContext }                                  from '../../context/FireContext';
 import { fireService, FIRE_CONSTANTS } from '../../services/fire';
 import { SteuerView }                                     from '../../views/ScenarioView';
@@ -79,25 +79,41 @@ export function SteuerContainer() {
   const handleSelectMonteCarlo    = () => { setIsMonteCarloSelected(prev => !prev); setIsMonteCarloProSelected(false); setSelectedBadge(null); };
   const handleSelectMonteCarloPro = () => { setIsMonteCarloProSelected(prev => !prev); setIsMonteCarloSelected(false); setSelectedBadge(null); };
 
-  const selectedConfig = selectedBadge === 'BASIS'    ? basisConfig
-    : selectedBadge === 'TEILZEIT' ? teilzeitConfig
-    : selectedBadge === 'CRASH'    ? crashConfig
-    : selectedBadge === 'HARDCORE' ? hardcoreConfig
-    : null;
+  let selectedConfig: PrognoseConfig | null;
+  if (selectedBadge === 'BASIS') {
+    selectedConfig = basisConfig;
+  } else if (selectedBadge === 'TEILZEIT') {
+    selectedConfig = teilzeitConfig;
+  } else if (selectedBadge === 'CRASH') {
+    selectedConfig = crashConfig;
+  } else if (selectedBadge === 'HARDCORE') {
+    selectedConfig = hardcoreConfig;
+  } else {
+    selectedConfig = null;
+  }
 
-  const inlinePrognose = selectedConfig ? (
-    <div className="scenario-inline-prognose">
-      <PrognoseContentContainer config={selectedConfig} />
-    </div>
-  ) : isMonteCarloSelected ? (
-    <div className="scenario-inline-prognose">
-      <MonteCarloContainer />
-    </div>
-  ) : isMonteCarloProSelected ? (
-    <div className="scenario-inline-prognose">
-      <MonteCarloProContainer />
-    </div>
-  ) : null;
+  let inlinePrognose: React.ReactElement | null;
+  if (selectedConfig) {
+    inlinePrognose = (
+      <div className="scenario-inline-prognose">
+        <PrognoseContentContainer config={selectedConfig} />
+      </div>
+    );
+  } else if (isMonteCarloSelected) {
+    inlinePrognose = (
+      <div className="scenario-inline-prognose">
+        <MonteCarloContainer />
+      </div>
+    );
+  } else if (isMonteCarloProSelected) {
+    inlinePrognose = (
+      <div className="scenario-inline-prognose">
+        <MonteCarloProContainer />
+      </div>
+    );
+  } else {
+    inlinePrognose = null;
+  }
 
   return (
     <SteuerView

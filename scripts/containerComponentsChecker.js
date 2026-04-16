@@ -6,8 +6,8 @@
  * - Naming convention for Components
  */
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import { walkDir, getProjectPaths, getRelativePath } from './checkUtils.js';
 
 export function checkContainerComponents() {
@@ -92,7 +92,7 @@ export function checkContainerComponents() {
         let match;
         while ((match = regex.exec(content)) !== null) {
           // Count individual icons imported (comma-separated list)
-          const imports = match[1].split(',').map(i => i.trim()).filter(i => i);
+          const imports = match[1].split(',').map(i => i.trim()).filter(Boolean);
           totalIconImports += imports.length;
         }
       });
@@ -326,8 +326,6 @@ export function checkContainerComponents() {
   const MAX_SPACES = (MAX_DEPTH_LEVELS + 1) * SPACES_PER_LEVEL; // Starting from level 7
   
 
-  const depthRegex = new RegExp(`^(\\s{${MAX_SPACES},}|\\t{${MAX_DEPTH_LEVELS + 1},})\\s*<`, 'm');
-
   if (fs.existsSync(componentsDir)) {
     walkDir(componentsDir, (file) => {
       if (!file.endsWith('.tsx')) return;
@@ -349,7 +347,7 @@ export function checkContainerComponents() {
         const depthLevel = Math.ceil(spaceCount / SPACES_PER_LEVEL);
 
         // Check if this line contains a JSX tag
-        if (/<[A-Z\/]/.test(line) && depthLevel > maxDepthFound) {
+        if (/<[A-Z/]/.test(line) && depthLevel > maxDepthFound) {
           maxDepthFound = depthLevel;
           deepestLineNumber = idx + 1;
         }

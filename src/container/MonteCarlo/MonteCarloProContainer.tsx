@@ -15,7 +15,7 @@ export function MonteCarloProContainer() {
 
   const [simConfig, setSimConfig] = useState<SimConfig>({
     minInflation: 1.5,
-    maxInflation: 4.0,
+    maxInflation: 4,
     volatility: 12.5,
   });
 

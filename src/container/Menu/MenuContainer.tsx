@@ -18,7 +18,7 @@ export function MenuContainer() {
 
   const handleDeleteSuccessClose = () => {
     setOpenModal(null);
-    window.location.reload();
+    globalThis.location.reload();
   };
 
   const handleExportAllData = () => exportDataService.exportFireState();

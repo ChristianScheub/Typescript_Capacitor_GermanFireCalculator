@@ -8,8 +8,8 @@
  * - Type export location check (interface/type declarations only allowed inside types/ folders)
  */
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import { walkDir, getProjectPaths, getRelativePath } from './checkUtils.js';
 
 export function checkCodeQuality() {
@@ -40,7 +40,7 @@ export function checkCodeQuality() {
 
   // Matches a bare numeric literal used as an operand in an arithmetic expression
   const MAGIC_NUMBER_REGEX =
-    /(?:[\*\/\+\-]\s*|-\s*)(\d+(?:\.\d+)?)(?!\s*[:,}\]])/g;
+    /(?:[*/+-]\s*|-\s*)(\d+(?:\.\d+)?)(?!\s*[:,}\]])/g;
 
   if (fs.existsSync(servicesDir)) {
     walkDir(servicesDir, (file) => {
@@ -173,7 +173,7 @@ export function checkCodeQuality() {
 
       // Skip scoped npm packages (e.g. @capacitor/core, @capgo/navigation-bar)
       // These start with @ but are not project aliases - they exist in node_modules
-      const scopedPkgMatch = importPath.match(/^(@[^/]+\/[^/]+)/);
+      const scopedPkgMatch = /^(@[^/]+\/[^/]+)/.exec(importPath);
       if (scopedPkgMatch) {
         const pkgDir = path.join(projectRoot, 'node_modules', scopedPkgMatch[1]);
         if (fs.existsSync(pkgDir)) {
@@ -231,7 +231,7 @@ export function checkCodeQuality() {
     /\.test\./,
     /Logger/,
     /\.css\.ts$/,
-    /onboarding/,  // TODO: i18n für Onboarding noch nicht eingerichtet
+    /onboarding/,  // Onboarding screens excluded from i18n checks
     /FanChart/,    // Data visualization component with hardcoded colors and SVG paths
     /MonteCarloView/, // Refactored from container, i18n migration separate
     /PrognoseContentView/, // Refactored from container, i18n migration separate
@@ -255,40 +255,40 @@ export function checkCodeQuality() {
     // These are filtered by containing hyphens and being fully lowercase/hyphenated
   ]);
 
+  // Helper to determine if a string looks like user-facing hardcoded text
+  function isHardcodedText(str) {
+    if (!str || str.length < 3) return false;
+    if (ALLOWED_HARDCODED.has(str)) return false;
+    if (str.startsWith('--')) return false; // CSS custom properties
+    // SVG path data (d attribute): starts with an SVG command letter followed by coords
+    if (/^[MLHVCSQTAZmlhvcsqtaz][\d\s,.-MLHVCSQTAZmlhvcsqtaz]*$/.test(str)) return false;
+    // SVG polyline/polygon points or viewBox (only numbers, spaces, commas, dots, dashes)
+    if (/^[\d\s,.-]+$/.test(str)) return false;
+    // HTML attribute values (rel, target, type values)
+    if (/^(noopener|noreferrer|nofollow|_blank|_self|submit|button|reset|text|password|email|number)(\s+(noopener|noreferrer|nofollow|_blank|_self))*$/.test(str)) return false;
+    // CSS class names (kebab-case)
+    if (/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/.test(str) && str.includes('-')) return false;
+    // Translation keys (namespace.key format)
+    if (str.includes('.') && /^[a-zA-Z][a-zA-Z0-9._]*$/.test(str)) return false;
+    // Template literals with interpolation
+    if (str.includes('${')) return false;
+    // URLs or paths
+    if (str.startsWith('http') || str.startsWith('/') || str.startsWith('.')) return false;
+    // File extensions or format codes (e.g. ".json", "SHA256")
+    if (/^\.[a-z]+$/.test(str) || /^[A-Z0-9]+$/.test(str)) return false;
+    // Locale format strings (e.g. "2-digit", "en-US")
+    if (/^[a-z]+-[a-z0-9]+$/i.test(str) && str.length < 15) return false;
+    // Must contain at least one letter
+    if (!/[a-zA-ZäöüÄÖÜß]/.test(str)) return false;
+    // Single-word variable/identifier names (camelCase, PascalCase, snake_case)
+    if (/^[a-zA-Z_]\w*$/.test(str)) return false;
+    // If we get here, the string has multiple words or special characters → likely user-facing
+    return true;
+  }
+
   HARDCODED_TEXT_CHECK_FOLDERS.forEach((folderName) => {
     const folderPath = path.join(srcDir, folderName);
     if (!fs.existsSync(folderPath)) return;
-
-    // Helper to determine if a string looks like user-facing hardcoded text
-    function isHardcodedText(str) {
-      if (!str || str.length < 3) return false;
-      if (ALLOWED_HARDCODED.has(str)) return false;
-      if (str.startsWith('--')) return false; // CSS custom properties
-      // SVG path data (d attribute): starts with an SVG command letter followed by coords
-      if (/^[MLHVCSQTAZmlhvcsqtaz][\d\s,.\-MLHVCSQTAZmlhvcsqtaz]*$/.test(str)) return false;
-      // SVG polyline/polygon points or viewBox (only numbers, spaces, commas, dots, dashes)
-      if (/^[\d\s,.\-]+$/.test(str)) return false;
-      // HTML attribute values (rel, target, type values)
-      if (/^(noopener|noreferrer|nofollow|_blank|_self|submit|button|reset|text|password|email|number)(\s+(noopener|noreferrer|nofollow|_blank|_self))*$/.test(str)) return false;
-      // CSS class names (kebab-case)
-      if (/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/.test(str) && str.includes('-')) return false;
-      // Translation keys (namespace.key format)
-      if (str.includes('.') && /^[a-zA-Z][a-zA-Z0-9._]*$/.test(str)) return false;
-      // Template literals with interpolation
-      if (str.includes('${')) return false;
-      // URLs or paths
-      if (str.startsWith('http') || str.startsWith('/') || str.startsWith('.')) return false;
-      // File extensions or format codes (e.g. ".json", "SHA256")
-      if (/^\.[a-z]+$/.test(str) || /^[A-Z0-9]+$/.test(str)) return false;
-      // Locale format strings (e.g. "2-digit", "en-US")
-      if (/^[a-z]+-[a-z0-9]+$/i.test(str) && str.length < 15) return false;
-      // Must contain at least one letter
-      if (!/[a-zA-ZäöüÄÖÜß]/.test(str)) return false;
-      // Single-word variable/identifier names (camelCase, PascalCase, snake_case)
-      if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(str)) return false;
-      // If we get here, the string has multiple words or special characters → likely user-facing
-      return true;
-    }
 
     walkDir(folderPath, (file) => {
       if (!file.endsWith('.tsx') && !file.endsWith('.ts')) return;
@@ -331,7 +331,7 @@ export function checkCodeQuality() {
         // --- Check A: String literals in quotes (props like title="...", placeholder="...") ---
         // Use lookbehind to ensure we match actual string values (after =, (, :, ,, [, or whitespace)
         // This prevents matching text between two separate JSX attributes
-        const stringRegex = /(?<=[=(,:\[\s])(['"])([^'"]{3,}?)\1/g;
+        const stringRegex = /(?<=[=(,:[\s])(['"])([^'"]{3,}?)\1/g;
         let match;
 
         while ((match = stringRegex.exec(line)) !== null) {
@@ -363,7 +363,7 @@ export function checkCodeQuality() {
           if (!/[a-zA-ZäöüÄÖÜß]/.test(textContent)) continue;
 
           // Skip single-word camelCase/PascalCase identifiers (component text like {variable})
-          if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(textContent)) continue;
+          if (/^[a-zA-Z_]\w*$/.test(textContent)) continue;
 
           // Skip if the line already uses t() translation
           if (/\bt\(['"]/m.test(line)) continue;
@@ -382,7 +382,7 @@ export function checkCodeQuality() {
   console.log('Checking folder structure (views, ui, container, services, hooks)...');
 
   const STRUCTURE_CHECK_FOLDERS = [ 'ui', 'container', 'services', 'hooks', 'types'];
-  const STRUCTURE_EXEMPT_FILES = ['readme.md', '.gitkeep'];
+  const STRUCTURE_EXEMPT_FILES = new Set(['readme.md', '.gitkeep']);
 
   STRUCTURE_CHECK_FOLDERS.forEach((folderName) => {
     const folderPath = path.join(srcDir, folderName);
@@ -394,7 +394,7 @@ export function checkCodeQuality() {
       const entryPath = path.join(folderPath, entry);
       const stat = fs.statSync(entryPath);
       if (!stat.isDirectory()) {
-        if (!STRUCTURE_EXEMPT_FILES.includes(entry.toLowerCase())) {
+        if (!STRUCTURE_EXEMPT_FILES.has(entry.toLowerCase())) {
           const relFile = getRelativePath(entryPath, projectRoot);
           violations.push(
             `Folder Structure Check (${folderName}): File '${relFile}' is directly in the '${folderName}/' folder. ` +
@@ -415,10 +415,8 @@ export function checkCodeQuality() {
         const stat = fs.statSync(entryPath);
         if (stat.isDirectory()) {
           checkSubfolderFileCount(entryPath);
-        } else {
-          if (!STRUCTURE_EXEMPT_FILES.includes(entry.toLowerCase())) {
-            fileCount++;
-          }
+        } else if (!STRUCTURE_EXEMPT_FILES.has(entry.toLowerCase())) {
+          fileCount++;
         }
       });
 
@@ -451,7 +449,7 @@ export function checkCodeQuality() {
         fs.readdirSync(entryPath).forEach((typeEntry) => {
           const typeEntryPath = path.join(entryPath, typeEntry);
           if (!fs.statSync(typeEntryPath).isDirectory()) {
-            if (!STRUCTURE_EXEMPT_FILES.includes(typeEntry.toLowerCase())) {
+            if (!STRUCTURE_EXEMPT_FILES.has(typeEntry.toLowerCase())) {
               const relFile = getRelativePath(typeEntryPath, projectRoot);
               violations.push(
                 `Folder Structure Check (types): File '${relFile}' is directly inside a 'types/' folder. ` +

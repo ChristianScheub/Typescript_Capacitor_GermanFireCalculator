@@ -17,8 +17,8 @@ const Datenschutz: React.FC = () => {
       >
         <div className="after-login-container">
             <h2>Infos:</h2>
-              {lines.map((line, index) => (
-                <CodeToTextParser key={index} code={line} />
+              {lines.map((line) => (
+                <CodeToTextParser key={line} code={line} />
               ))}
               <a href="https://policies.google.com/privacy">
                 Google: https://policies.google.com/privacy
