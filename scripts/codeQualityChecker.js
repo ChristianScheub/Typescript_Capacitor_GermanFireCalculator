@@ -61,7 +61,7 @@ export function checkCodeQuality() {
         let m;
         MAGIC_NUMBER_REGEX.lastIndex = 0;
         while ((m = MAGIC_NUMBER_REGEX.exec(codePart)) !== null) {
-          const num = parseFloat(m[1]);
+          const num = Number.parseFloat(m[1]);
           if (MAGIC_NUMBER_WHITELIST.has(num)) continue;
           if (num <= MAGIC_NUMBER_EPSILON) continue; // convergence epsilon guard
 

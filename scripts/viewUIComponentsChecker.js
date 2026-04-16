@@ -153,7 +153,7 @@ export function checkViewUIComponents() {
       styleObjectMatches.forEach((match) => {
         // Strip custom property assignments ('--xxx': ...) before checking
         // This prevents false positives when a CSS custom property value is a variable reference
-        const strippedMatch = match.replace(/\[?['"`]?--[\w-]+['"`]?\]?\s*(?:as\s+\S+\s*)?:\s*[^,}]*/g, '');
+        const strippedMatch = match.replaceAll(/\[?['"`]?--[\w-]+['"`]?\]?\s*(?:as\s+\S+\s*)?:\s*[^,}]*/g, '');
         const containsRegularProps = /:\s*['"`]?(?!-)[a-zA-Z]/i.test(strippedMatch);
         
         if (containsRegularProps) {

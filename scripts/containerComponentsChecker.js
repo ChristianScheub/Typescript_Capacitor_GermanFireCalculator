@@ -345,7 +345,7 @@ export function checkContainerComponents() {
       lines.forEach((line, idx) => {
         // Count leading spaces/tabs to determine nesting level
         const leadingWhitespace = line.match(/^(\s*)/)[1];
-        const spaceCount = leadingWhitespace.replace(/\t/g, '  ').length; // Convert tabs to spaces
+        const spaceCount = leadingWhitespace.replaceAll('\t', '  ').length; // Convert tabs to spaces
         const depthLevel = Math.ceil(spaceCount / SPACES_PER_LEVEL);
 
         // Check if this line contains a JSX tag

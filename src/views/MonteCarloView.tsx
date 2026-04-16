@@ -118,30 +118,30 @@ export function MonteCarloView({
 
   const handleRerun = () => {
     const newConfig: SimConfig = {
-      minInflation: parseFloat(
+      minInflation: Number.parseFloat(
         minInflationRef.current?.value || String(simConfig.minInflation),
       ),
-      maxInflation: parseFloat(
+      maxInflation: Number.parseFloat(
         maxInflationRef.current?.value || String(simConfig.maxInflation),
       ),
-      volatility: parseFloat(
+      volatility: Number.parseFloat(
         volatilityRef.current?.value || String(simConfig.volatility),
       ),
     };
 
-    const newWithdrawal = parseFloat(
+    const newWithdrawal = Number.parseFloat(
       monthlyWithdrawalRef.current?.value || String(monthlyWithdrawal),
     );
 
     const newRange: SimRange = {
-      startCapital: parseFloat(
+      startCapital: Number.parseFloat(
         startCapitalRef.current?.value || String(simRange.startCapital),
       ),
-      startYear: parseInt(
+      startYear: Number.parseInt(
         startYearRef.current?.value || String(simRange.startYear),
         10,
       ),
-      endYear: parseInt(
+      endYear: Number.parseInt(
         endYearRef.current?.value || String(simRange.endYear),
         10,
       ),
@@ -153,13 +153,13 @@ export function MonteCarloView({
 
     if (drawdownConfig && onDrawdownConfigChange) {
       onDrawdownConfigChange({
-        drawdownThreshold: parseFloat(
+        drawdownThreshold: Number.parseFloat(
           drawdownThresholdRef.current?.value || String(drawdownConfig.drawdownThreshold),
         ),
-        recoveryThreshold: parseFloat(
+        recoveryThreshold: Number.parseFloat(
           recoveryThresholdRef.current?.value || String(drawdownConfig.recoveryThreshold),
         ),
-        reducedMonthlyWithdrawal: parseFloat(
+        reducedMonthlyWithdrawal: Number.parseFloat(
           reducedMonthlyWithdrawalRef.current?.value || String(drawdownConfig.reducedMonthlyWithdrawal),
         ),
       });
@@ -247,7 +247,7 @@ export function MonteCarloView({
             max={50}
             step={0.5}
             defaultValue={simConfig.volatility}
-            onChange={(e) => onVolatilityChange(parseFloat(e.target.value))}
+            onChange={(e) => onVolatilityChange(Number.parseFloat(e.target.value))}
           />
           <div className="mc-slider-hints">
             <span>{t('monteCarlo.conservative')}</span>

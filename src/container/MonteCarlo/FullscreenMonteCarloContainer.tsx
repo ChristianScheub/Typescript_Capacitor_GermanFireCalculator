@@ -34,8 +34,6 @@ export function FullscreenMonteCarloContainer({
   const { t } = useTranslation();
   const { state } = useFireContext();
 
-  if (!isOpen) return null;
-
   const currentYear = new Date().getFullYear();
 
   const result: MonteCarloResult = useMemo(() => {
@@ -62,6 +60,8 @@ export function FullscreenMonteCarloContainer({
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [simRange, simConfig, state.etfRate, state.pensionAge, state.pensionMonthly, state.currentAge, monthlyWithdrawal, runKey]);
+
+  if (!isOpen) return null;
 
   const risiko = getRisiko(result.successRate);
 
