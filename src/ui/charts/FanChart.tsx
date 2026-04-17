@@ -10,7 +10,49 @@ interface FanChartProps {
   simplifiedTooltip?: boolean;
 }
 
-export function FanChart({ fanData, landscape = false, showBands = true, simplifiedTooltip = false }: FanChartProps) {
+interface TooltipProps {
+  hovered: FanDataPoint;
+  hx: number;
+  isRight: boolean;
+  TW: number;
+  TH: number;
+  PAD_T: number;
+  FS: number;
+  simplifiedTooltip: boolean;
+  t: (key: string, opts?: Record<string, unknown>) => string;
+}
+
+function FanChartTooltip({ hovered, hx, isRight, TW, TH, PAD_T, FS, simplifiedTooltip, t }: Readonly<TooltipProps>) {
+  const tx = isRight ? hx - TW - 10 : hx + 10;
+  const ty = PAD_T + 2;
+  const r = 6;
+  return (
+    <g>
+      <rect x={tx + 1} y={ty + 2} width={TW} height={TH} rx={r} fill="rgba(0,0,0,0.18)" />
+      <rect x={tx} y={ty} width={TW} height={TH} rx={r} fill="#1C3826" />
+      <text x={tx + 9} y={ty + 14} fill="white" fontSize={9 * FS} fontWeight="800" fontFamily="inherit">
+        {t('fanChart.tooltipHeader', { age: hovered.age, year: hovered.year })}
+      </text>
+      <line x1={tx + 9} y1={ty + 19} x2={tx + TW - 9} y2={ty + 19} stroke="rgba(255,255,255,0.15)" strokeWidth="0.8" />
+      {simplifiedTooltip ? (
+        <text x={tx + TW - 9} y={ty + 34} fill="white" fontSize={9.5 * FS} fontWeight="700" textAnchor="end" fontFamily="inherit">
+          {fmtM(hovered.p50)}
+        </text>
+      ) : (
+        <>
+          <text x={tx + 9} y={ty + 34} fill="rgba(255,255,255,0.65)" fontSize={8 * FS} fontFamily="inherit">{t('fanChart.bestCase')}</text>
+          <text x={tx + TW - 9} y={ty + 34} fill="white" fontSize={9.5 * FS} fontWeight="700" textAnchor="end" fontFamily="inherit">{fmtM(hovered.p95)}</text>
+          <text x={tx + 9} y={ty + 52} fill="rgba(255,255,255,0.65)" fontSize={8 * FS} fontFamily="inherit">{t('fanChart.median')}</text>
+          <text x={tx + TW - 9} y={ty + 52} fill="white" fontSize={9.5 * FS} fontWeight="700" textAnchor="end" fontFamily="inherit">{fmtM(hovered.p50)}</text>
+          <text x={tx + 9} y={ty + 70} fill="rgba(255,255,255,0.65)" fontSize={8 * FS} fontFamily="inherit">{t('fanChart.worstCase')}</text>
+          <text x={tx + TW - 9} y={ty + 70} fill="white" fontSize={9.5 * FS} fontWeight="700" textAnchor="end" fontFamily="inherit">{fmtM(hovered.p5)}</text>
+        </>
+      )}
+    </g>
+  );
+}
+
+export function FanChart({ fanData, landscape = false, showBands = true, simplifiedTooltip = false }: Readonly<FanChartProps>) {
   const { t } = useTranslation();
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
@@ -63,13 +105,15 @@ export function FanChart({ fanData, landscape = false, showBands = true, simplif
   };
   const handlePointerLeave = () => setHoveredIdx(null);
 
-  const hovered = hoveredIdx !== null ? fanData[hoveredIdx] : null;
-  const hx = hoveredIdx !== null ? xOf(hoveredIdx) : null;
+  const hovered = hoveredIdx === null ? null : fanData[hoveredIdx];
+  const hx = hoveredIdx === null ? null : xOf(hoveredIdx);
   const isRight = hoveredIdx !== null && hoveredIdx > n * 0.55;
 
   // Tooltip dimensions (in viewBox units)
   const TW = landscape ? 148 : 128;
-  const TH = simplifiedTooltip ? (landscape ? 44 : 40) : (landscape ? 86 : 78);
+  const TH_simple = landscape ? 44 : 40;
+  const TH_full = landscape ? 86 : 78;
+  const TH = simplifiedTooltip ? TH_simple : TH_full;
   const FS = landscape ? 1.1 : 1; // font scale multiplier
 
   return (
@@ -135,124 +179,19 @@ export function FanChart({ fanData, landscape = false, showBands = true, simplif
       )}
 
       {/* Tooltip */}
-      {hovered !== null && hx !== null && (() => {
-        const tx = isRight ? hx - TW - 10 : hx + 10;
-        const ty = PAD_T + 2;
-        const r = 6;
-        return (
-          <g>
-            {/* Shadow */}
-            <rect x={tx + 1} y={ty + 2} width={TW} height={TH} rx={r} fill="rgba(0,0,0,0.18)" />
-            {/* Background */}
-            <rect x={tx} y={ty} width={TW} height={TH} rx={r} fill="#1C3826" />
-
-            {/* Header */}
-            <text
-              x={tx + 9}
-              y={ty + 14}
-              fill="white"
-              fontSize={9 * FS}
-              fontWeight="800"
-              fontFamily="inherit"
-            >
-              {t('fanChart.tooltipHeader', { age: hovered.age, year: hovered.year })}
-            </text>
-
-            {/* Divider */}
-            <line
-              x1={tx + 9}
-              y1={ty + 19}
-              x2={tx + TW - 9}
-              y2={ty + 19}
-              stroke="rgba(255,255,255,0.15)"
-              strokeWidth="0.8"
-            />
-
-            {simplifiedTooltip ? (
-              /* Simplified: just the amount */
-              <text
-                x={tx + TW - 9}
-                y={ty + 34}
-                fill="white"
-                fontSize={9.5 * FS}
-                fontWeight="700"
-                textAnchor="end"
-                fontFamily="inherit"
-              >
-                {fmtM(hovered.p50)}
-              </text>
-            ) : (
-              <>
-                {/* Best Case */}
-                <text
-                  x={tx + 9}
-                  y={ty + 34}
-                  fill="rgba(255,255,255,0.65)"
-                  fontSize={8 * FS}
-                  fontFamily="inherit"
-                >
-                  {t('fanChart.bestCase')}
-                </text>
-                <text
-                  x={tx + TW - 9}
-                  y={ty + 34}
-                  fill="white"
-                  fontSize={9.5 * FS}
-                  fontWeight="700"
-                  textAnchor="end"
-                  fontFamily="inherit"
-                >
-                  {fmtM(hovered.p95)}
-                </text>
-
-                {/* Median */}
-                <text
-                  x={tx + 9}
-                  y={ty + 52}
-                  fill="rgba(255,255,255,0.65)"
-                  fontSize={8 * FS}
-                  fontFamily="inherit"
-                >
-                  {t('fanChart.median')}
-                </text>
-                <text
-                  x={tx + TW - 9}
-                  y={ty + 52}
-                  fill="white"
-                  fontSize={9.5 * FS}
-                  fontWeight="700"
-                  textAnchor="end"
-                  fontFamily="inherit"
-                >
-                  {fmtM(hovered.p50)}
-                </text>
-
-                {/* Worst Case */}
-                <text
-                  x={tx + 9}
-                  y={ty + 70}
-                  fill="rgba(255,255,255,0.65)"
-                  fontSize={8 * FS}
-                  fontFamily="inherit"
-                >
-                  {t('fanChart.worstCase')}
-                </text>
-                <text
-                  x={tx + TW - 9}
-                  y={ty + 70}
-                  fill="white"
-                  fontSize={9.5 * FS}
-                  fontWeight="700"
-                  textAnchor="end"
-                  fontFamily="inherit"
-                >
-                  {fmtM(hovered.p5)}
-                </text>
-              </>
-            )}
-          </g>
-        );
-      })()}
+      {hovered !== null && hx !== null && (
+        <FanChartTooltip
+          hovered={hovered}
+          hx={hx}
+          isRight={isRight}
+          TW={TW}
+          TH={TH}
+          PAD_T={PAD_T}
+          FS={FS}
+          simplifiedTooltip={simplifiedTooltip}
+          t={t}
+        />
+      )}
     </svg>
   );
 }

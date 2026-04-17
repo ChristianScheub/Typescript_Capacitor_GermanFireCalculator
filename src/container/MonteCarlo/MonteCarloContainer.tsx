@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFireContext } from '../../context/FireContext';
+import { useFireContext } from '../../context/useFireContext';
 import { calcMonteCarlo, getRisiko, fmtEuro } from '../../services/monteCarloCalculator';
 import { fireService, FIRE_CONSTANTS, fmtPercent } from '../../services/fire';
 import { HelperService } from '../../services/helper';

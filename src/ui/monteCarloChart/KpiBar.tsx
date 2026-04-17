@@ -7,7 +7,7 @@ interface KpiBarProps {
   risikoColor: string;
 }
 
-export function KpiBar({ zielwert, erfolgsrate, risikoLabel, risikoColor }: KpiBarProps) {
+export function KpiBar({ zielwert, erfolgsrate, risikoLabel, risikoColor }: Readonly<KpiBarProps>) {
   const { t } = useTranslation();
   return (
     <div className="mc-kpi-bar">

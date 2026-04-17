@@ -78,7 +78,7 @@ export function MonteCarloView({
   onVolatilityChange,
   onFullscreenOpen,
   onRerun,
-}: MonteCarloViewProps) {
+}: Readonly<MonteCarloViewProps>) {
   const { t } = useTranslation();
   const minInflationRef = useRef<HTMLInputElement>(null);
   const maxInflationRef = useRef<HTMLInputElement>(null);
@@ -169,8 +169,7 @@ export function MonteCarloView({
   };
 
   return (
-    <>
-      <div className="mc-screen">
+    <div className="mc-screen">
         {/* ── Header ── */}
         <div className="mc-header">
           <h2 className="mc-title">
@@ -408,6 +407,5 @@ export function MonteCarloView({
           {t('monteCarlo.runSimulation')}
         </button>
       </div>
-    </>
   );
 }

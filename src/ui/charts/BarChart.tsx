@@ -30,7 +30,7 @@ function fmtCompact(v: number): string {
   return String(Math.round(v));
 }
 
-export function BarChart({ data, mode = 'cumulative', hideValues = false }: Props) {
+export function BarChart({ data, mode = 'cumulative', hideValues = false }: Readonly<Props>) {
   const { t } = useTranslation();
   if (!data.length) return null;
 

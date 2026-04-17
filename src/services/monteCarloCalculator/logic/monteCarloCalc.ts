@@ -48,7 +48,7 @@ export function calcMonteCarlo(
     let wealth     = fireWealth;
     let withdrawal = annualWithdrawal;
     let pension    = pensionAnnualNet;
-    let failed     = false;
+    let failAge    = -1;
 
     wealthByYear[0].push(wealth);
 
@@ -67,34 +67,32 @@ export function calcMonteCarlo(
 
       if (wealth <= 0) {
         wealth = 0;
-        if (!failed) {
-          failed = true;
-          failAges.push(fireAge + y);
-        }
+        if (failAge === -1) failAge = fireAge + y;
       }
 
       wealthByYear[y].push(wealth);
     }
 
-    if (!failed) {
+    if (failAge >= 0) {
+      failAges.push(failAge);
+      finalWealths.push(0);
+    } else {
       successCount++;
       finalWealths.push(wealth);
-    } else {
-      finalWealths.push(0);
     }
   }
 
   // Pessimistic age: 5th percentile of ages when money ran out
   const pessimisticAge = failAges.length > 0
-    ? failAges.sort((a, b) => a - b)[Math.max(0, Math.floor(failAges.length * 0.05))]
+    ? failAges.toSorted((a, b) => a - b)[Math.max(0, Math.floor(failAges.length * 0.05))]
     : 100;
 
   // Median final wealth (0 for failed simulations)
-  const sortedFinalWealths = [...finalWealths].sort((a, b) => a - b);
+  const sortedFinalWealths = finalWealths.toSorted((a, b) => a - b);
   const medianFinalWealth  = percentile(sortedFinalWealths, 50);
 
   const fanData: FanDataPoint[] = wealthByYear.map((vals, idx) => {
-    const sorted = [...vals].sort((a, b) => a - b);
+    const sorted = vals.toSorted((a, b) => a - b);
     return {
       age:  fireAge + idx,
       year: startYear + idx,

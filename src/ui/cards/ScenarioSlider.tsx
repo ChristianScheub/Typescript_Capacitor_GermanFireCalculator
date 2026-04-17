@@ -19,8 +19,12 @@ export function ScenarioSlider({
   onSelectHardcore,
   onSelectMonteCarlo,
   onSelectMonteCarloPro,
-}: ScenarioSliderProps) {
+}: Readonly<ScenarioSliderProps>) {
   const { t } = useTranslation();
+
+  const crashPrefix = crashDeltaMonths > 0 ? `+${crashDeltaMonths}` : String(crashDeltaMonths);
+  const hardcoreYearWord = Math.abs(hardcoreDeltaYears) === 1 ? t('tax.yearSingular') : t('tax.yearPlural');
+  const hardcoreDirection = hardcoreDeltaYears <= 0 ? t('tax.earlier') : t('tax.later');
 
   return (
     <div className="scenario-slider">
@@ -54,7 +58,7 @@ export function ScenarioSlider({
           isActive={isCrashSelected}
           title={t('tax.crash')}
           subtitle={t('tax.crashSub')}
-          resultBadge={`${crashDeltaMonths > 0 ? `+${crashDeltaMonths}` : String(crashDeltaMonths)} ${t('tax.crashDeltaUnit')}`}
+          resultBadge={`${crashPrefix} ${t('tax.crashDeltaUnit')}`}
           typeBadge={t('tax.badgeRisk')}
           typeBadgeVariant="risk"
           resultBadgeVariant="danger"
@@ -66,7 +70,7 @@ export function ScenarioSlider({
           isActive={isHardcoreSelected}
           title={t('tax.hardcoreFire')}
           subtitle={t('tax.hardcoreFireSub')}
-          resultBadge={`${hardcoreDeltaYears} ${Math.abs(hardcoreDeltaYears) === 1 ? t('tax.yearSingular') : t('tax.yearPlural')} ${hardcoreDeltaYears <= 0 ? t('tax.earlier') : t('tax.later')}`}
+          resultBadge={`${hardcoreDeltaYears} ${hardcoreYearWord} ${hardcoreDirection}`}
           typeBadge={t('tax.badgeSavings')}
           typeBadgeVariant="lifestyle"
           resultBadgeVariant="positive"

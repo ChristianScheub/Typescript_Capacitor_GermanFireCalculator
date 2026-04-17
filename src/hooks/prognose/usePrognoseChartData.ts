@@ -27,25 +27,11 @@ export function usePrognoseChartData(
   const chartData = useMemo(
     () =>
       fireService.calcProjectedWealth(
-        state.etfBalance,
-        state.cashBalance,
-        state.etfRate,
-        state.cashRate,
-        monthlySavings,
-        monthlyWithdraw,
-        state.assetTaxRate,
-        fireYear,
-        chartYears,
-        pensionYear,
-        state.savingsGrowthRate,
-        state.inflationRate,
-        {
-          today:   t('prognosis.chartTodayLabel'),
-          fire:    t('prognosis.chartFireLabel'),
-          pension: t('prognosis.chartPensionLabel'),
-        },
+        { etfBalance: state.etfBalance, cashBalance: state.cashBalance, monthlySavings, monthlyWithdraw, assetTaxRate: state.assetTaxRate },
+        { etfRate: state.etfRate, cashRate: state.cashRate, savingsGrowthRate: state.savingsGrowthRate, inflationRate: state.inflationRate },
+        fireYear, chartYears, pensionYear,
+        { today: t('prognosis.chartTodayLabel'), fire: t('prognosis.chartFireLabel'), pension: t('prognosis.chartPensionLabel') },
       ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, monthlyWithdraw, state.assetTaxRate, fireYear, chartYears, pensionYear, state.savingsGrowthRate, state.inflationRate, t],
   );
 

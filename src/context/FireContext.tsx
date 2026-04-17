@@ -1,27 +1,8 @@
-import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
-import { useTranslation }      from 'react-i18next';
-import type { FireState }      from '../types/fire/models/FireState';
-import type { ChartDataPoint } from '../types/fire/models/ChartDataPoint';
-import { fireService }         from '../services/fire';
-
-// ─── Context Shape ─────────────────────────────────────────────────────────────
-
-interface FireContextType {
-  state:          FireState;
-  updateField:    <K extends keyof FireState>(key: K, value: FireState[K]) => void;
-  netWorth:       number;
-  grossSWR:       number;
-  netSWR:         number;
-  fireTarget:     number;
-  firePercentage: number;
-  abgabenQuote:   number;
-  monthlySavings: number;
-  weightedReturn: number;
-  fireDate:       { year: number; month: string };
-  chartData:      ChartDataPoint[];
-}
-
-const FireContext = createContext<FireContextType | null>(null);
+import React, { useState, useMemo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { FireState } from '../types/fire/models/FireState';
+import { fireService } from '../services/fire';
+import { FireContext } from './fireContextDef';
 
 // ─── LocalStorage persistence ──────────────────────────────────────────────────
 
@@ -90,16 +71,10 @@ export function FireProvider({ children }: { readonly children: React.ReactNode 
 
     const monthlyWithdraw = state.fixedExpenses + state.pkvContribution + state.variableExpenses;
     const chartData = fireService.calcProjectedWealth(
-      state.etfBalance, state.cashBalance,
-      state.etfRate, state.cashRate,
-      monthlySavings, monthlyWithdraw, state.assetTaxRate,
+      { etfBalance: state.etfBalance, cashBalance: state.cashBalance, monthlySavings, monthlyWithdraw, assetTaxRate: state.assetTaxRate },
+      { etfRate: state.etfRate, cashRate: state.cashRate, savingsGrowthRate: state.savingsGrowthRate, inflationRate: state.inflationRate },
       fireDate.year, uniqueYears, pensionYear,
-      state.savingsGrowthRate, state.inflationRate,
-      {
-        today:   t('prognosis.chartTodayLabel'),
-        fire:    t('prognosis.chartFireLabel'),
-        pension: t('prognosis.chartPensionLabel'),
-      },
+      { today: t('prognosis.chartTodayLabel'), fire: t('prognosis.chartFireLabel'), pension: t('prognosis.chartPensionLabel') },
     );
 
     return { netWorth, grossSWR, netSWR, fireTarget, firePercentage, abgabenQuote, monthlySavings, weightedReturn, fireDate, chartData };
@@ -115,12 +90,4 @@ export function FireProvider({ children }: { readonly children: React.ReactNode 
       {children}
     </FireContext.Provider>
   );
-}
-
-// ─── Hook ──────────────────────────────────────────────────────────────────────
-
-export function useFireContext(): FireContextType {
-  const ctx = useContext(FireContext);
-  if (!ctx) throw new Error('useFireContext must be inside <FireProvider>');
-  return ctx;
 }

@@ -14,7 +14,7 @@ const START_Y = CY;
 // sweep=1 → clockwise in SVG screen-space → arc goes through the TOP (y < CY)
 const BG_PATH = `M ${START_X},${START_Y} A ${R},${R} 0 0,1 ${CX + R},${START_Y}`;
 
-export function ProgressRing({ percentage }: Props) {
+export function ProgressRing({ percentage }: Readonly<Props>) {
   const pct   = Math.min(99.9, Math.max(0.1, percentage));
   // Parametrize along the top semicircle:
   // angle=π → left endpoint, angle=0 → right endpoint

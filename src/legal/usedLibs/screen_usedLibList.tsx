@@ -21,9 +21,9 @@ const UsedLibListScreen: React.FC<UsedLibListScreenProps> = ({
   return (
     <div>
       <div data-testid="used-lib-list-modal">
-        {npmModules.map((module, index) => (
+        {npmModules.map((module) => (
           <div
-            key={module.name+module.version+index}
+            key={module.name + '@' + module.version}
             onClick={() => handleModuleClick(module.repository)}
             style={{ padding: '8px', cursor: 'pointer', borderBottom: '1px solid #ddd' }}
           >

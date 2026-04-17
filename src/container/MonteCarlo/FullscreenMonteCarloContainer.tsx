@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFireContext } from '../../context/FireContext';
+import { useFireContext } from '../../context/useFireContext';
 import { calcMonteCarlo, getRisiko, fmtEuro } from '../../services/monteCarloCalculator';
 import { fmtPercent } from '../../services/fire';
 import type { MonteCarloResult } from '../../services/monteCarloCalculator';

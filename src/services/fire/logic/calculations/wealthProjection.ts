@@ -7,6 +7,21 @@ export interface ChartPointLabels {
   pension?: string;
 }
 
+export interface WealthProjectionPortfolio {
+  etfBalance:      number;
+  cashBalance:     number;
+  monthlySavings:  number;
+  monthlyWithdraw: number;
+  assetTaxRate:    number;
+}
+
+export interface WealthProjectionRates {
+  etfRate:           number;
+  cashRate:          number;
+  savingsGrowthRate?: number;
+  inflationRate?:    number;
+}
+
 /**
  * Projects ETF and Cash wealth separately for each target year.
  *
@@ -22,20 +37,15 @@ export interface ChartPointLabels {
  *   - Cash: stays constant (interest is consumed for expenses, principal untouched)
  */
 export function calcProjectedWealth(
-  etfBalance:        number,
-  cashBalance:       number,
-  etfRate:           number,          // annual % (e.g. 7)
-  cashRate:          number,          // annual % (e.g. 2)
-  monthlySavings:    number,
-  monthlyWithdraw:   number,          // net monthly expenses (post-tax basis)
-  assetTaxRate:      number,          // % (e.g. 26.375)
-  fireYear:          number,
-  targetYears:       number[],
-  pensionYear?:      number,
-  savingsGrowthRate: number = 0,      // % p.a. — annual savings increase pre-FIRE
-  inflationRate:     number = 0,      // % p.a. — annual cost increase post-FIRE
-  labels:            ChartPointLabels = {},
+  portfolio:   WealthProjectionPortfolio,
+  rates:       WealthProjectionRates,
+  fireYear:    number,
+  targetYears: number[],
+  pensionYear?: number,
+  labels:      ChartPointLabels = {},
 ): ChartDataPoint[] {
+  const { etfBalance, cashBalance, monthlySavings, monthlyWithdraw, assetTaxRate } = portfolio;
+  const { etfRate, cashRate, savingsGrowthRate = 0, inflationRate = 0 } = rates;
   const todayLabel   = labels.today   ?? 'TODAY';
   const fireLabel    = labels.fire    ?? '(FIRE)';
   const pensionLabel = labels.pension ?? '(PENSION)';

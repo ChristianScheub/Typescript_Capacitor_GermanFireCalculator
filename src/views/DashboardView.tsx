@@ -7,9 +7,6 @@ import { Icon }                from '../ui/icons';
 import type { ChartDataPoint } from '../types/fire/models/ChartDataPoint';
 import type { Tab }            from '../types/navigation/Tab';
 
-// Fill-based sparkle — not a stroke icon, intentionally kept inline
-const SPARKLE_PATH = 'M12 2l2.09 6.26L20 10l-5.91 1.74L12 18l-2.09-6.26L4 10l5.91-1.74z';
-
 const MASKED = '***';
 
 interface DashboardViewProps {
@@ -36,7 +33,7 @@ export function DashboardView({
   chartData,
   showAbsoluteNumbers,
   onTabChange,
-}: DashboardViewProps) {
+}: Readonly<DashboardViewProps>) {
   const { t } = useTranslation();
 
   return (
@@ -53,9 +50,7 @@ export function DashboardView({
         <div className="card scenario-hero-card">
           <div className="scenario-hero-card__top-row">
             <p className="scenario-hero-card__overline">{t('dashboard.goalAchievement')}</p>
-            <svg className="dashboard-hero__sparkle" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d={SPARKLE_PATH}/>
-            </svg>
+            <Icon name="star" size="sm" fill="currentColor" stroke="none" className="dashboard-hero__sparkle" />
           </div>
           <p className="scenario-hero-card__date">
             {t('dashboard.financialFreedomIn')}<br />

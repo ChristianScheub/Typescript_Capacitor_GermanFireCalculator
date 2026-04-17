@@ -42,7 +42,7 @@ export function PrognoseContentView({
   fmtK,
   fanData,
   onMcFullscreenOpen,
-}: PrognoseContentViewProps) {
+}: Readonly<PrognoseContentViewProps>) {
   const { t } = useTranslation();
 
   return (

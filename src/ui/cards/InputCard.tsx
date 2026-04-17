@@ -17,7 +17,7 @@ export function ContentSection({
   subtitle,
   children,
   variant = 'input'
-}: ContentSectionProps) {
+}: Readonly<ContentSectionProps>) {
   // For 'input' variant (MonteCarloView style)
   if (variant === 'input') {
     return (

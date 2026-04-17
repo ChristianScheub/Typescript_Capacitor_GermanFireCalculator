@@ -31,7 +31,7 @@ export function ScenarioAnalysisCard({
   onClick,
   variant = 'default',
   isActive = false,
-}: ScenarioAnalysisCardProps) {
+}: Readonly<ScenarioAnalysisCardProps>) {
   const { t } = useTranslation();
   // Slider variant — compact horizontal card
   if (variant === 'slider') {

@@ -10,7 +10,7 @@ interface StatCardProps {
   children: ReactNode;
 }
 
-export function StatCard({ label, variant, danger = false, icon, children }: StatCardProps) {
+export function StatCard({ label, variant, danger = false, icon, children }: Readonly<StatCardProps>) {
   const { t } = useTranslation();
 
   const classNames = [

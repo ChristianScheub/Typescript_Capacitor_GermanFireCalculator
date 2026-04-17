@@ -1,26 +1,12 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useFireContext } from '../../context/FireContext';
-import { fireService, FIRE_CONSTANTS, fmtPercent } from '../../services/fire';
+import { useFireContext } from '../../context/useFireContext';
+import { fireService, FIRE_CONSTANTS, fmtPercent, fmtK } from '../../services/fire';
 import type { PrognoseConfig } from '../../types/prognose/PrognoseConfig';
 import type { PrognoseTableRow } from '../../types/prognose/PrognoseTableRow';
 import { usePrognoseChartData } from '../../hooks/prognose/usePrognoseChartData';
 import { PrognoseContentView } from '../../views/PrognoseContentView';
 import { FullscreenMonteCarloView } from '../../views/FullscreenMonteCarloView';
-
-// Display formatter — locale-aware, no hardcoded separators
-function fmtK(v: number): string {
-  const abs = Math.abs(v);
-  if (abs >= 1_000_000) {
-    return '€' + new Intl.NumberFormat(undefined, {
-      notation: 'compact',
-      compactDisplay: 'short',
-      maximumFractionDigits: 1,
-    }).format(v);
-  }
-  if (abs >= 1_000) return '€' + Math.round(v / 1_000) + 'k';
-  return '€' + Math.round(v);
-}
 
 interface Props {
   readonly config: PrognoseConfig;
@@ -85,23 +71,10 @@ export function PrognoseContentContainer({ config }: Props) {
   const tableData = useMemo(
     () =>
       fireService.calcProjectedWealth(
-        state.etfBalance,
-        state.cashBalance,
-        state.etfRate,
-        state.cashRate,
-        monthlySavings,
-        monthlyWithdraw,
-        state.assetTaxRate,
-        fireDate.year,
-        tableYears,
-        pensionYear,
-        state.savingsGrowthRate,
-        state.inflationRate,
-        {
-          today:   t('prognosis.chartTodayLabel'),
-          fire:    t('prognosis.chartFireLabel'),
-          pension: t('prognosis.chartPensionLabel'),
-        },
+        { etfBalance: state.etfBalance, cashBalance: state.cashBalance, monthlySavings, monthlyWithdraw, assetTaxRate: state.assetTaxRate },
+        { etfRate: state.etfRate, cashRate: state.cashRate, savingsGrowthRate: state.savingsGrowthRate, inflationRate: state.inflationRate },
+        fireDate.year, tableYears, pensionYear,
+        { today: t('prognosis.chartTodayLabel'), fire: t('prognosis.chartFireLabel'), pension: t('prognosis.chartPensionLabel') },
       ),
     [state.etfBalance, state.cashBalance, state.etfRate, state.cashRate, monthlySavings, monthlyWithdraw, state.assetTaxRate, fireDate.year, tableYears, pensionYear, state.savingsGrowthRate, state.inflationRate, t],
   );

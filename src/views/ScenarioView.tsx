@@ -29,7 +29,7 @@ export function SteuerView({
   isExpanded,
   onToggleExpanded,
   inlinePrognose,
-}: SteuerViewProps) {
+}: Readonly<SteuerViewProps>) {
   const { t } = useTranslation();
 
   const scenarioProps: ScenarioSliderProps = {

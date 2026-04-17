@@ -36,7 +36,7 @@
 		"milestoneAchieved": "FIRE-Ziel erreicht"
 	},
 	"info": {
-		"pageTitle": "Info",
+		"pageTitle": "Menü",
 		"warningTitle": "ACHTUNG",
 		"warningText": "Diese App führt nur mathematische Berechnungen basierend auf Ihren Eingaben durch. Dies ist",
 		"warningTextBold": "KEINE Finanzberatung.",
@@ -54,7 +54,6 @@
 		"privacyPolicy": "Datenschutz",
 		"imprint": "Impressum",
 		"githubRepo": "GitHub Repo",
-		"footerTagline": "DEVELOPED WITH PRECISION",
 		"deleteAllDataSuccess": "Alle lokalen Daten wurden erfolgreich gelöscht.",
 		"deleteAllDataConfirm": "Möchtest du wirklich alle lokalen Daten unwiderruflich löschen?"
 	},

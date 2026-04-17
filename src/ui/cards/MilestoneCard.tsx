@@ -14,7 +14,7 @@ export function MilestoneCard({
   year,
   subtitle,
   variant = 'default',
-}: MilestoneCardProps) {
+}: Readonly<MilestoneCardProps>) {
   return (
     <div className={`milestone-card${variant === 'fire' ? ' milestone-card--fire' : ''}`}>
       <div className={`milestone-icon milestone-icon--${variant}`}>

@@ -2,9 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '../ui/icons';
 import './WelcomeView.css';
 
+type CheckIndex = 0 | 1 | 2;
+
 interface WelcomeViewProps {
   checked: [boolean, boolean, boolean];
-  onToggle: (index: 0 | 1 | 2) => void;
+  onToggle: (index: CheckIndex) => void;
   onAccept: () => void;
 }
 
@@ -36,7 +38,7 @@ const CONSENTS: ConsentItem[] = [
   { icon: 'layers', titleKey: 'welcome.consent3Title', descKey: 'welcome.consent3Desc' },
 ];
 
-export function WelcomeView({ checked, onToggle, onAccept }: WelcomeViewProps) {
+export function WelcomeView({ checked, onToggle, onAccept }: Readonly<WelcomeViewProps>) {
   const { t } = useTranslation();
   const allChecked = checked[0] && checked[1] && checked[2];
 
@@ -52,8 +54,8 @@ export function WelcomeView({ checked, onToggle, onAccept }: WelcomeViewProps) {
           </section>
 
           <div className="welcome-sections">
-            {SECTIONS.map((s, i) => (
-              <div key={i} className="welcome-card">
+            {SECTIONS.map((s) => (
+              <div key={s.titleKey} className="welcome-card">
                 <div className="welcome-card__icon-wrap">
                   <Icon name={s.icon} size="md" />
                 </div>
@@ -79,9 +81,9 @@ export function WelcomeView({ checked, onToggle, onAccept }: WelcomeViewProps) {
           <div className="welcome-consents">
             {CONSENTS.map((c, i) => (
               <button
-                key={i}
-                className={`welcome-consent${checked[i as 0 | 1 | 2] ? ' welcome-consent--checked' : ''}`}
-                onClick={() => onToggle(i as 0 | 1 | 2)}
+                key={c.titleKey}
+                className={`welcome-consent${checked[i as CheckIndex] ? ' welcome-consent--checked' : ''}`}
+                onClick={() => onToggle(i as CheckIndex)}
               >
                 <div className="welcome-consent__icon-wrap">
                   <Icon name={c.icon} size="md" />
@@ -90,8 +92,8 @@ export function WelcomeView({ checked, onToggle, onAccept }: WelcomeViewProps) {
                   <p className="welcome-consent__title">{t(c.titleKey)}</p>
                   <p className="welcome-consent__desc">{t(c.descKey)}</p>
                 </div>
-                <div className={`welcome-consent__check${checked[i as 0 | 1 | 2] ? ' welcome-consent__check--on' : ''}`}>
-                  {checked[i as 0 | 1 | 2] && (
+                <div className={`welcome-consent__check${checked[i as CheckIndex] ? ' welcome-consent__check--on' : ''}`}>
+                  {checked[i as CheckIndex] && (
                     <svg className="welcome-consent__checkmark" width="12" height="12" viewBox="0 0 12 12" fill="none">
                       <polyline points="2,6 5,9 10,3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>

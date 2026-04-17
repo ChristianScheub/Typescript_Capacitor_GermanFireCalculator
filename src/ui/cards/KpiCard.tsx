@@ -14,7 +14,7 @@ export function KpiCard({
   unit,
   iconVariant,
   icon,
-}: KpiCardProps) {
+}: Readonly<KpiCardProps>) {
   return (
     <div className="card kpi-card">
       <div className="kpi-card__header">

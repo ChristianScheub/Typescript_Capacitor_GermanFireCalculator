@@ -23,7 +23,7 @@ export function PlannerView({
   totalFixedWithKVFormatted,
   gkvMonthlyFormatted,
   isCapped,
-}: PlannerViewProps) {
+}: Readonly<PlannerViewProps>) {
   const { t } = useTranslation();
 
   return (
@@ -134,7 +134,7 @@ export function PlannerView({
         >
           <div className="segmented">
             <button
-              className={`segmented__btn${!state.isPkvUser ? ' segmented__btn--active' : ''}`}
+              className={`segmented__btn${state.isPkvUser ? '' : ' segmented__btn--active'}`}
               onClick={() => updateField('isPkvUser', false)}
             >{t('planner.gkv')}</button>
             <button

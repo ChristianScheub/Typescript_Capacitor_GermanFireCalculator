@@ -8,6 +8,7 @@ import { calcProjectedWealth }                    from './logic/calculations/wea
 import type { FireState } from '../../types/fire/models/FireState';
 
 export { fmtCurrency, fmtPercent } from './logic/formatters';
+export { fmtK }                   from './logic/compactFormatter';
 export { FIRE_CONSTANTS }          from './logic/fireConfig';
 
 const DEFAULT_STATE: FireState = {

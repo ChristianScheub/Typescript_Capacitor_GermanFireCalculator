@@ -23,7 +23,7 @@ interface MenuProps {
   onToggleAbsoluteNumbers: () => void;
 }
 
-export function Menu({ openModal, onOpenModal, onDeleteAllData, onExportAllData, onConfirmDelete, onDeleteSuccessClose, showAbsoluteNumbers, onToggleAbsoluteNumbers }: MenuProps) {
+export function Menu({ openModal, onOpenModal, onDeleteAllData, onExportAllData, onConfirmDelete, onDeleteSuccessClose, showAbsoluteNumbers, onToggleAbsoluteNumbers }: Readonly<MenuProps>) {
   const { t } = useTranslation();
 
 
@@ -97,10 +97,6 @@ export function Menu({ openModal, onOpenModal, onDeleteAllData, onExportAllData,
 
         <p className="section-label section-label--mt">{t('info.sectionLegal')}</p>
         <NavList items={LEGAL_ITEMS} />
-
-        <footer className="info-footer">
-          <p className="info-footer__tagline">{t('info.footerTagline')}</p>
-        </footer>
       </div>
 
       <Modal

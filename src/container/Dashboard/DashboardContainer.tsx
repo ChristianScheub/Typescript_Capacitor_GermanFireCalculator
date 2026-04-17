@@ -1,5 +1,5 @@
 import { useTranslation }  from 'react-i18next';
-import { useFireContext }  from '../../context/FireContext';
+import { useFireContext }  from '../../context/useFireContext';
 import { fireService, fmtCurrency, fmtPercent } from '../../services/fire';
 import { DashboardView }   from '../../views/DashboardView';
 import type { Tab }         from '../../types/navigation/Tab';

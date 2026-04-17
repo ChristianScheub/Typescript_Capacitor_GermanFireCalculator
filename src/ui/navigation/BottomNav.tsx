@@ -35,7 +35,7 @@ const ICONS: Record<Tab, ReactNode> = {
   ),
 };
 
-export function BottomNav({ active, onTabChange }: Props) {
+export function BottomNav({ active, onTabChange }: Readonly<Props>) {
   const { t } = useTranslation();
 
   return (

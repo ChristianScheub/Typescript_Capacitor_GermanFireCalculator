@@ -5,6 +5,8 @@ interface IconProps {
   size?: IconSize;
   className?: string;
   strokeWidth?: number;
+  fill?: string;
+  stroke?: string;
 }
 
 export function Icon({
@@ -12,7 +14,9 @@ export function Icon({
   size = 'sm',
   className,
   strokeWidth = 2,
-}: IconProps) {
+  fill = 'none',
+  stroke = 'currentColor',
+}: Readonly<IconProps>) {
   const sizeValue = ICON_SIZES[size];
   const content = IconPaths[name];
 
@@ -21,8 +25,8 @@ export function Icon({
       width={sizeValue}
       height={sizeValue}
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
+      fill={fill}
+      stroke={stroke}
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"

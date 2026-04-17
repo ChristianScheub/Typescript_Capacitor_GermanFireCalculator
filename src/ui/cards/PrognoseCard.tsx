@@ -5,7 +5,7 @@ interface PrognoseCardProps {
   row: PrognoseTableRow;
 }
 
-export function PrognoseCard({ row }: PrognoseCardProps) {
+export function PrognoseCard({ row }: Readonly<PrognoseCardProps>) {
   const { t } = useTranslation();
 
   return (

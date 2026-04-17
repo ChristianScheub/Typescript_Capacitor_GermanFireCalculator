@@ -1,5 +1,5 @@
 import React, { useState, useMemo }                         from 'react';
-import { useFireContext }                                  from '../../context/FireContext';
+import { useFireContext }                                  from '../../context/useFireContext';
 import { fireService, FIRE_CONSTANTS } from '../../services/fire';
 import { SteuerView }                                     from '../../views/ScenarioView';
 import { PrognoseContentContainer }                       from '../Prognose/PrognoseContentContainer';

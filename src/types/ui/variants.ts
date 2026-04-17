@@ -76,8 +76,3 @@ export type ScenarioResultBadgeVariant = 'warn' | 'danger' | 'positive';
  * Union of all common status/sentiment variants used across components.
  */
 export type StatusVariant = BadgeVariant | StatCardVariant;
-
-/**
- * Union of all color/theme variants used across components.
- */
-export type ColorVariant = IconVariant;

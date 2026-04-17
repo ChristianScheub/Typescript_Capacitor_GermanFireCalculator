@@ -11,12 +11,12 @@ export interface NavItem {
   onClick?:    () => void;
 }
 
-export function NavList({ items }: { items: NavItem[] }) {
+export function NavList({ items }: Readonly<{ items: NavItem[] }>) {
   const { t } = useTranslation();
   return (
     <div className="nav-list">
-      {items.map((item, i) => (
-        <button key={i} className="nav-list__item" onClick={item.onClick}>
+      {items.map((item) => (
+        <button key={item.label} className="nav-list__item" onClick={item.onClick}>
           <span className={`nav-list__icon-box nav-list__icon-box--${item.iconVariant}`}>
             <Icon name={item.icon} size="sm" />
           </span>

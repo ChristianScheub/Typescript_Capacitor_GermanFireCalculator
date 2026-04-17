@@ -58,7 +58,7 @@ export function calcMonteCarloPro(
     let wealth     = fireWealth;
     let withdrawal = annualWithdrawal;
     let pension    = pensionAnnualNet;
-    let failed     = false;
+    let failAge    = -1;
 
     // ATH tracking for dynamic spending
     let ath           = fireWealth;   // all-time-high of pre-withdrawal portfolio value
@@ -78,19 +78,17 @@ export function calcMonteCarloPro(
       if (preWithdrawalWealth > ath) ath = preWithdrawalWealth;
 
       // 3. Spending-cut logic based on ATH drawdown
-      if (!inReducedMode) {
-        if (preWithdrawalWealth < ath * drawdownFactor) {
-          // Enter reduced spending mode
-          inReducedMode = true;
-          troughWealth  = preWithdrawalWealth;
-        }
-      } else {
+      if (inReducedMode) {
         // Track trough
         if (preWithdrawalWealth < troughWealth) troughWealth = preWithdrawalWealth;
         // Check recovery: portfolio recovered C% from the recorded trough
         if (preWithdrawalWealth >= troughWealth * recoveryFactor) {
           inReducedMode = false;
         }
+      } else if (preWithdrawalWealth < ath * drawdownFactor) {
+        // Enter reduced spending mode
+        inReducedMode = true;
+        troughWealth  = preWithdrawalWealth;
       }
 
       // 4. Determine effective withdrawal (inflate reduced withdrawal with same inflation)
@@ -109,32 +107,30 @@ export function calcMonteCarloPro(
 
       if (wealth <= 0) {
         wealth = 0;
-        if (!failed) {
-          failed = true;
-          failAges.push(fireAge + y);
-        }
+        if (failAge === -1) failAge = fireAge + y;
       }
 
       wealthByYear[y].push(wealth);
     }
 
-    if (!failed) {
+    if (failAge >= 0) {
+      failAges.push(failAge);
+      finalWealths.push(0);
+    } else {
       successCount++;
       finalWealths.push(wealth);
-    } else {
-      finalWealths.push(0);
     }
   }
 
   const pessimisticAge = failAges.length > 0
-    ? failAges.sort((a, b) => a - b)[Math.max(0, Math.floor(failAges.length * 0.05))]
+    ? failAges.toSorted((a, b) => a - b)[Math.max(0, Math.floor(failAges.length * 0.05))]
     : 100;
 
-  const sortedFinalWealths = [...finalWealths].sort((a, b) => a - b);
+  const sortedFinalWealths = finalWealths.toSorted((a, b) => a - b);
   const medianFinalWealth  = percentile(sortedFinalWealths, 50);
 
   const fanData: FanDataPoint[] = wealthByYear.map((vals, idx) => {
-    const sorted = [...vals].sort((a, b) => a - b);
+    const sorted = vals.toSorted((a, b) => a - b);
     return {
       age:  fireAge + idx,
       year: startYear + idx,

@@ -11,7 +11,7 @@ export function ScenarioListItem({
   actionLabel,
   selected,
   onClick,
-}: ScenarioListItemProps) {
+}: Readonly<ScenarioListItemProps>) {
   const { t } = useTranslation();
   return (
     <div className={`scenario-list-item${selected ? ' scenario-list-item--selected' : ''}`}>

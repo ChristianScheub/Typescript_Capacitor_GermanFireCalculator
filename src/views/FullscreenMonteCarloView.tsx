@@ -29,7 +29,7 @@ export function FullscreenMonteCarloView({
   risikoLabel,
   risikoColor,
   onClose,
-}: FullscreenMonteCarloViewProps) {
+}: Readonly<FullscreenMonteCarloViewProps>) {
   const { t } = useTranslation();
 
   return (

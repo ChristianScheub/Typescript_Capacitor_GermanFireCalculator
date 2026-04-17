@@ -36,7 +36,7 @@
 		"milestoneAchieved": "FIRE goal achieved"
 	},
 	"info": {
-		"pageTitle": "Info",
+		"pageTitle": "Menu",
 		"warningTitle": "NOTICE",
 		"warningText": "This app performs only mathematical calculations based on your inputs. This is",
 		"warningTextBold": "NOT financial advice.",
@@ -54,7 +54,6 @@
 		"privacyPolicy": "Privacy policy",
 		"imprint": "Imprint",
 		"githubRepo": "GitHub Repo",
-		"footerTagline": "DEVELOPED WITH PRECISION",
 		"deleteAllDataSuccess": "All local data has been successfully deleted.",
 		"deleteAllDataConfirm": "Do you really want to permanently delete all local data?"
 	},

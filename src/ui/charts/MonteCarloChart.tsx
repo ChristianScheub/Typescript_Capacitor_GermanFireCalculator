@@ -30,7 +30,7 @@ export function MonteCarloChart({
   landscape = false,
   showBands = true,
   simplifiedTooltip = false,
-}: MonteCarloChartProps) {
+}: Readonly<MonteCarloChartProps>) {
   const { t } = useTranslation();
 
   return (

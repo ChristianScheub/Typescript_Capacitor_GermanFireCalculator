@@ -12,7 +12,7 @@ export function NumericInput({
   unit,
   onChange,
   hint,
-}: NumericInputProps) {
+}: Readonly<NumericInputProps>) {
   return (
     <div className="field">
       <label className="field__label">{label}</label>
@@ -25,7 +25,7 @@ export function NumericInput({
           value={value}
           onChange={e => onChange(Number(e.target.value))}
         />
-        <span className="field__unit">{unit !== '€' ? unit : ''}</span>
+        <span className="field__unit">{unit === '€' ? '' : unit}</span>
       </div>
       {hint && <p className="field__hint">{hint}</p>}
     </div>

@@ -1,6 +1,6 @@
 import type { FireState }        from '../../types/fire/models/FireState';
 import type { ChartDataPoint }   from '../../types/fire/models/ChartDataPoint';
-import type { ChartPointLabels } from './logic/calculations/wealthProjection';
+import type { ChartPointLabels, WealthProjectionPortfolio, WealthProjectionRates } from './logic/calculations/wealthProjection';
 
 export interface IFireService {
   calcNetWorth(state: FireState): number;
@@ -22,19 +22,12 @@ export interface IFireService {
     savingsGrowthRate?: number,
   ): { year: number; month: string };
   calcProjectedWealth(
-    etfBalance:         number,
-    cashBalance:        number,
-    etfRate:            number,
-    cashRate:           number,
-    monthlySavings:     number,
-    monthlyWithdraw:    number,
-    assetTaxRate:       number,
-    fireYear:           number,
-    targetYears:        number[],
-    pensionYear?:       number,
-    savingsGrowthRate?: number,
-    inflationRate?:     number,
-    labels?:            ChartPointLabels,
+    portfolio:   WealthProjectionPortfolio,
+    rates:       WealthProjectionRates,
+    fireYear:    number,
+    targetYears: number[],
+    pensionYear?: number,
+    labels?:     ChartPointLabels,
   ): ChartDataPoint[];
   getDefaultState(): FireState;
 }

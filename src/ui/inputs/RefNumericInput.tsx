@@ -10,7 +10,7 @@ interface RefNumericInputProps {
   step?: number | string;
 }
 
-export const RefNumericInput = forwardRef<HTMLInputElement, RefNumericInputProps>(
+export const RefNumericInput = forwardRef<HTMLInputElement, Readonly<RefNumericInputProps>>(
   (
     {
       label,
@@ -38,7 +38,7 @@ export const RefNumericInput = forwardRef<HTMLInputElement, RefNumericInputProps
             max={max}
             step={step}
           />
-          <span className="field__unit">{unit !== '€' ? unit : ''}</span>
+          <span className="field__unit">{unit === '€' ? '' : unit}</span>
         </div>
         {hint && <p className="field__hint">{hint}</p>}
       </div>

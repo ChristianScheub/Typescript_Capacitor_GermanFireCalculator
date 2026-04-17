@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import './CalculationInfoView.css';
+import { Icon } from '../ui/icons';
 
 const CalculationInfoContent: React.FC = () => {
   const { t } = useTranslation();
@@ -114,10 +115,7 @@ const CalculationInfoContent: React.FC = () => {
         <div className="ci-card__header">
           <span className="ci-step-pill">4.</span>
           <div className="ci-icon ci-icon--green">
-            {/* sigma */}
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 4H6l6 8-6 8h12" />
-            </svg>
+            <Icon name="sigma" size="sm" />
           </div>
           <span className="ci-card__title">{t('calculationInfo.section4Title')}</span>
         </div>
