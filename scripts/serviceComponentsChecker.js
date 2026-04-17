@@ -108,6 +108,9 @@ export function checkServiceComponents() {
     );
   }
 
+  // External/third-party services that must not be restructured
+  const EXTERNAL_SERVICES = ['Ads'];
+
   const serviceFolderNames = fs.readdirSync(servicesDir)
     .filter(name => {
       const fullPath = path.join(servicesDir, name);
@@ -120,6 +123,7 @@ export function checkServiceComponents() {
     });
 
   serviceFolderNames.forEach((serviceName) => {
+    if (EXTERNAL_SERVICES.includes(serviceName)) return;
     const servicePath = path.join(servicesDir, serviceName);
     const files = fs.readdirSync(servicePath);
     const relPath = getRelativePath(servicePath, projectRoot);

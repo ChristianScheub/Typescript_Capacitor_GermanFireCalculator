@@ -7,6 +7,14 @@
     "path": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/@babel/runtime",
     "licenseFile": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/@babel/runtime/LICENSE"
   },
+  "@capacitor-community/admob@8.0.0": {
+    "licenses": "MIT",
+    "repository": "https://github.com/capacitor-community/admob",
+    "publisher": "Masahiko Sakakibara",
+    "email": "sakakibara@rdlabo.jp",
+    "path": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/@capacitor-community/admob",
+    "licenseFile": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/@capacitor-community/admob/LICENSE"
+  },
   "@capacitor/android@8.3.0": {
     "licenses": "MIT",
     "repository": "https://github.com/ionic-team/capacitor",
@@ -42,6 +50,28 @@
     "path": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/@capacitor/share",
     "licenseFile": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/@capacitor/share/LICENSE"
   },
+  "@rdlabo/capacitor-docgen@0.4.1": {
+    "licenses": "MIT",
+    "repository": "https://github.com/rdlabo-team/capacitor-docgen",
+    "publisher": "Ionic Team",
+    "path": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/@rdlabo/capacitor-docgen",
+    "licenseFile": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/@rdlabo/capacitor-docgen/LICENSE"
+  },
+  "colorette@2.0.20": {
+    "licenses": "MIT",
+    "repository": "https://github.com/jorgebucaran/colorette",
+    "publisher": "Jorge Bucaran",
+    "path": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/colorette",
+    "licenseFile": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/colorette/LICENSE.md"
+  },
+  "github-slugger@1.5.0": {
+    "licenses": "ISC",
+    "repository": "https://github.com/Flet/github-slugger",
+    "publisher": "Dan Flettre",
+    "email": "flettre@gmail.com",
+    "path": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/github-slugger",
+    "licenseFile": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/github-slugger/LICENSE"
+  },
   "html-parse-stringify@3.0.1": {
     "licenses": "MIT",
     "repository": "https://github.com/henrikjoreteg/html-parse-stringify",
@@ -67,6 +97,15 @@
     "url": "https://github.com/jamuhl",
     "path": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/i18next",
     "licenseFile": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/i18next/LICENSE"
+  },
+  "minimist@1.2.8": {
+    "licenses": "MIT",
+    "repository": "https://github.com/minimistjs/minimist",
+    "publisher": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net",
+    "path": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/minimist",
+    "licenseFile": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/minimist/LICENSE"
   },
   "react-dom@19.2.4": {
     "licenses": "MIT",
@@ -107,6 +146,13 @@
     "private": true,
     "path": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator",
     "licenseFile": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/README.md"
+  },
+  "typescript@4.2.4": {
+    "licenses": "Apache-2.0",
+    "repository": "https://github.com/Microsoft/TypeScript",
+    "publisher": "Microsoft Corp.",
+    "path": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/@rdlabo/capacitor-docgen/node_modules/typescript",
+    "licenseFile": "/Users/christianscheub/Documents/Develope/ReactTypescriptFireCalculator/Typescript_Capacitor_GermanFireCalculator/node_modules/@rdlabo/capacitor-docgen/node_modules/typescript/LICENSE.txt"
   },
   "typescript@6.0.2": {
     "licenses": "Apache-2.0",
