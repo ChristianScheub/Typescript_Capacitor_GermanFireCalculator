@@ -86,7 +86,14 @@ jobs:
           cp "${PROFILE_PATH}" \
             ~/Library/MobileDevice/Provisioning\ Profiles/"${UUID}.mobileprovision"
 
-      # ── 4. ExportOptions.plist ───────────────────────────────────────────────
+      # ── 4. App Store Connect API Key ────────────────────────────────────────
+      - name: Set up App Store Connect API key
+        run: |
+          ASC_KEY_PATH="$RUNNER_TEMP/AuthKey_${{ secrets.ASC_API_KEY_ID }}.p8"
+          echo "${{ secrets.ASC_API_KEY_BASE64 }}" | openssl base64 -d -A > "${ASC_KEY_PATH}"
+          echo "ASC_KEY_PATH=${ASC_KEY_PATH}" >> "$GITHUB_ENV"
+
+      # ── 5. ExportOptions.plist ───────────────────────────────────────────────
       - name: Create ExportOptions.plist
         run: |
           cat > "$RUNNER_TEMP/ExportOptions.plist" <<EOF
@@ -96,7 +103,9 @@ jobs:
           <plist version="1.0">
           <dict>
             <key>method</key>
-            <string>app-store</string>
+            <string>app-store-connect</string>
+            <key>destination</key>
+            <string>upload</string>
             <key>teamID</key>
             <string>${{ secrets.APPLE_TEAM_ID }}</string>
             <key>signingStyle</key>
@@ -108,17 +117,13 @@ jobs:
               <key>de.scheub.fireCalculator</key>
               <string>${{ secrets.IOS_PROVISIONING_PROFILE_NAME }}</string>
             </dict>
-            <key>uploadBitcode</key>
-            <false/>
             <key>uploadSymbols</key>
             <true/>
-            <key>compileBitcode</key>
-            <false/>
           </dict>
           </plist>
           EOF
 
-      # ── 5. Xcode Build & Archive ─────────────────────────────────────────────
+      # ── 6. Xcode Build & Archive ─────────────────────────────────────────────
       - name: Build Xcode archive
         run: |
           xcodebuild \
@@ -134,34 +139,20 @@ jobs:
             OTHER_CODE_SIGN_FLAGS="--keychain ${KEYCHAIN_PATH}" \
             archive
 
-      # ── 6. IPA exportieren ───────────────────────────────────────────────────
-      - name: Export IPA
+      # ── 7. IPA exportieren + TestFlight Upload ───────────────────────────────
+      - name: Export IPA and upload to TestFlight
         run: |
           xcodebuild \
             -exportArchive \
             -archivePath "$RUNNER_TEMP/FireRechner.xcarchive" \
             -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
-            -exportPath "$RUNNER_TEMP/export"
-          # Einheitlicher Name für Release-Upload
+            -exportPath "$RUNNER_TEMP/export" \
+            -authenticationKeyPath "${ASC_KEY_PATH}" \
+            -authenticationKeyID "${{ secrets.ASC_API_KEY_ID }}" \
+            -authenticationKeyIssuerID "${{ secrets.ASC_API_ISSUER_ID }}"
           VERSION="${GITHUB_REF_NAME:-dev}"
-          cp "$RUNNER_TEMP/export/App.ipa" \
-             "fireCalculator-${VERSION}.ipa"
+          cp "$RUNNER_TEMP/export/App.ipa" "fireCalculator-${VERSION}.ipa"
           echo "IPA_PATH=fireCalculator-${VERSION}.ipa" >> "$GITHUB_ENV"
-
-      # ── 7. TestFlight Upload ─────────────────────────────────────────────────
-      - name: Set up App Store Connect API key
-        run: |
-          mkdir -p ~/.appstoreconnect/private_keys
-          echo "${{ secrets.ASC_API_KEY_BASE64 }}" | openssl base64 -d -A \
-            > ~/.appstoreconnect/private_keys/AuthKey_${{ secrets.ASC_API_KEY_ID }}.p8
-
-      - name: Upload to TestFlight
-        run: |
-          xcrun Transporter \
-            -m upload \
-            -f "${IPA_PATH}" \
-            -apiKey "${{ secrets.ASC_API_KEY_ID }}" \
-            -apiIssuer "${{ secrets.ASC_API_ISSUER_ID }}"
 
       # ── 8. GitHub Release ────────────────────────────────────────────────────
       - name: Upload IPA to GitHub Release
