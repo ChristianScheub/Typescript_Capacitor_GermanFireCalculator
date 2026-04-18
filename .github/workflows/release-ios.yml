@@ -93,35 +93,29 @@ jobs:
           echo "${{ secrets.ASC_API_KEY_BASE64 }}" | openssl base64 -d -A > "${ASC_KEY_PATH}"
           echo "ASC_KEY_PATH=${ASC_KEY_PATH}" >> "$GITHUB_ENV"
 
-      # ── 5. ExportOptions.plist ───────────────────────────────────────────────
-      - name: Create ExportOptions.plist
+      # ── 5. ExportOptions plists ──────────────────────────────────────────────
+      - name: Create ExportOptions plists
         run: |
-          cat > "$RUNNER_TEMP/ExportOptions.plist" <<EOF
+          TEAM="${{ secrets.APPLE_TEAM_ID }}"
+          PROFILE="${{ secrets.IOS_PROVISIONING_PROFILE_NAME }}"
+
+          for DEST in export upload; do
+            cat > "$RUNNER_TEMP/ExportOptions-${DEST}.plist" <<PLIST
           <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
-            "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-            <key>method</key>
-            <string>app-store-connect</string>
-            <key>destination</key>
-            <string>upload</string>
-            <key>teamID</key>
-            <string>${{ secrets.APPLE_TEAM_ID }}</string>
-            <key>signingStyle</key>
-            <string>manual</string>
-            <key>signingCertificate</key>
-            <string>Apple Distribution</string>
-            <key>provisioningProfiles</key>
-            <dict>
-              <key>de.scheub.fireCalculator</key>
-              <string>${{ secrets.IOS_PROVISIONING_PROFILE_NAME }}</string>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>${DEST}</string>
+            <key>teamID</key><string>${TEAM}</string>
+            <key>signingStyle</key><string>manual</string>
+            <key>signingCertificate</key><string>Apple Distribution</string>
+            <key>provisioningProfiles</key><dict>
+              <key>de.scheub.fireCalculator</key><string>${PROFILE}</string>
             </dict>
-            <key>uploadSymbols</key>
-            <true/>
-          </dict>
-          </plist>
-          EOF
+            <key>uploadSymbols</key><true/>
+          </dict></plist>
+          PLIST
+          done
 
       # ── 6. Xcode Build & Archive ─────────────────────────────────────────────
       - name: Build Xcode archive
@@ -139,29 +133,38 @@ jobs:
             OTHER_CODE_SIGN_FLAGS="--keychain ${KEYCHAIN_PATH}" \
             archive
 
-      # ── 7. IPA exportieren + TestFlight Upload ───────────────────────────────
-      - name: Export IPA and upload to TestFlight
+      # ── 7. IPA exportieren ───────────────────────────────────────────────────
+      - name: Export IPA
         run: |
           xcodebuild \
             -exportArchive \
             -archivePath "$RUNNER_TEMP/FireRechner.xcarchive" \
-            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
-            -exportPath "$RUNNER_TEMP/export" \
-            -authenticationKeyPath "${ASC_KEY_PATH}" \
-            -authenticationKeyID "${{ secrets.ASC_API_KEY_ID }}" \
-            -authenticationKeyIssuerID "${{ secrets.ASC_API_ISSUER_ID }}"
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions-export.plist" \
+            -exportPath "$RUNNER_TEMP/export"
           VERSION="${GITHUB_REF_NAME:-dev}"
           cp "$RUNNER_TEMP/export/App.ipa" "fireCalculator-${VERSION}.ipa"
           echo "IPA_PATH=fireCalculator-${VERSION}.ipa" >> "$GITHUB_ENV"
 
-      # ── 8. GitHub Release ────────────────────────────────────────────────────
+      # ── 8. TestFlight Upload ─────────────────────────────────────────────────
+      - name: Upload to TestFlight
+        run: |
+          xcodebuild \
+            -exportArchive \
+            -archivePath "$RUNNER_TEMP/FireRechner.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions-upload.plist" \
+            -exportPath "$RUNNER_TEMP/upload" \
+            -authenticationKeyPath "${ASC_KEY_PATH}" \
+            -authenticationKeyID "${{ secrets.ASC_API_KEY_ID }}" \
+            -authenticationKeyIssuerID "${{ secrets.ASC_API_ISSUER_ID }}"
+
+      # ── 9. GitHub Release ────────────────────────────────────────────────────
       - name: Upload IPA to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: false   # Android-Job schreibt die Notes
           files: ${{ env.IPA_PATH }}
 
-      # ── 9. Aufräumen ─────────────────────────────────────────────────────────
+      # ── 10. Aufräumen ────────────────────────────────────────────────────────
       - name: Remove temporary keychain
         if: always()
         run: |
