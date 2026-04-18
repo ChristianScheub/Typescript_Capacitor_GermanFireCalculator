@@ -65,6 +65,7 @@ input, select { font: inherit; }
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding-top: env(safe-area-inset-top);
   max-width: 430px;
   margin: 0 auto;
   background: var(--fire-bg);
@@ -465,7 +466,8 @@ input, select { font: inherit; }
   display: flex;
   background: var(--fire-nav-bg);
   border-top: 1px solid var(--fire-border);
-  height: var(--fire-nav-height);
+  height: calc(var(--fire-nav-height) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
   flex-shrink: 0;
   z-index: 20;
 }

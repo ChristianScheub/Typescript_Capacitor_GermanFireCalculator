@@ -1,11 +1,11 @@
 export const config = {
     interstitial: {
-      ios: "ca-app-pub-6250689577715326/1349634901",
+      ios: "ca-app-pub-6250689577715326/6626604825",
       android: "ca-app-pub-6250689577715326/4878408888"
     },
     banner: {
       ios: "ca-app-pub-6250689577715326/8214188474",
-      android: "ca-app-pub-6250689577715326/9489631378"
+      android: "ca-app-pub-6250689577715326/5745827484"
     }
   };
   
