@@ -19,7 +19,7 @@ import { checkCodeQuality } from './scripts/codeQualityChecker.js';
 
 async function runAllChecks() {
   // Step 1: Workflow Automation (Tests)
-  const workflowResult = runWorkflowAutomation();
+  runWorkflowAutomation();
 
   // Collect all violations from all checkers
   const allViolations = [];
@@ -57,7 +57,9 @@ async function runAllChecks() {
 }
 
 // Run all checks
-runAllChecks().catch((error) => {
+try {
+  await runAllChecks();
+} catch (error) {
   console.error('Error running pre-build checks:', error);
   process.exit(1);
-});
+}

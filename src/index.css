@@ -22,6 +22,14 @@
   --fire-shadow:         0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
   --fire-shadow-md:      0 4px 20px rgba(0,0,0,0.10);
 
+  /* ── Badge Text Colors ──────────────────────────────────────────────────── */
+  --badge-teal:   #0B6B6B;
+  --badge-red:    #B91C1C;
+  --badge-orange: #9A3E06;
+  --badge-warn:   #7C3800;
+  --badge-danger: #991B1B;
+  --badge-indigo: #3730A3;
+
   /* ── Spacing Scale ──────────────────────────────────────────────────────── */
   --spacing-1: 4px;
   --spacing-2: 8px;
@@ -284,10 +292,10 @@ input, select { font: inherit; }
 }
 
 .kpi-icon--green  { background: rgba(61, 170, 114, 0.15); color: var(--fire-accent); }
-.kpi-icon--teal   { background: rgba(20, 160, 160, 0.12); color: #0B6B6B; }
-.kpi-icon--red    { background: rgba(239, 68,  68,  0.10); color: #B91C1C; }
-.kpi-icon--gray   { background: rgba(107, 114, 128, 0.12); color: #4B5563; }
-.kpi-icon--orange { background: rgba(249, 115,  22, 0.10); color: #9A3E06; }
+.kpi-icon--teal   { background: rgba(20, 160, 160, 0.12); color: var(--badge-teal); }
+.kpi-icon--red    { background: rgba(239, 68,  68,  0.10); color: var(--badge-red); }
+.kpi-icon--gray   { background: rgba(107, 114, 128, 0.12); color: var(--fire-text-secondary); }
+.kpi-icon--orange { background: rgba(249, 115,  22, 0.10); color: var(--badge-orange); }
 
 .kpi-card__label {
   font-size: 10px;
@@ -550,8 +558,8 @@ input, select { font: inherit; }
 }
 
 .section-icon--green  { background: rgba(61, 170, 114, 0.12); color: var(--fire-accent); }
-.section-icon--teal   { background: rgba(20, 160, 160, 0.10); color: #0B6B6B; }
-.section-icon--orange { background: rgba(249, 115,  22, 0.10); color: #9A3E06; }
+.section-icon--teal   { background: rgba(20, 160, 160, 0.10); color: var(--badge-teal); }
+.section-icon--orange { background: rgba(249, 115,  22, 0.10); color: var(--badge-orange); }
 
 /* ── Form Fields ─────────────────────────────────────────────────────────────── */
 .field {
@@ -1546,8 +1554,8 @@ input, select { font: inherit; }
   flex-shrink: 0;
 }
 
-.scenario-analysis-card__icon--teal { background: rgba(20,160,160,0.12); color: #0B6B6B; }
-.scenario-analysis-card__icon--red  { background: rgba(239,68,68,0.10);  color: #B91C1C; }
+.scenario-analysis-card__icon--teal { background: rgba(20,160,160,0.12); color: var(--badge-teal); }
+.scenario-analysis-card__icon--red  { background: rgba(239,68,68,0.10);  color: var(--badge-red); }
 
 .scenario-analysis-card__title-wrap {
   flex: 1;
@@ -1590,12 +1598,12 @@ input, select { font: inherit; }
 
 .scenario-analysis-card__result-badge--warn {
   background: rgba(249,115,22,0.12);
-  color: #7C3800;
+  color: var(--badge-warn);
 }
 
 .scenario-analysis-card__result-badge--danger {
   background: rgba(239,68,68,0.10);
-  color: #991B1B;
+  color: var(--badge-danger);
 }
 
 .scenario-analysis-card__result-text {
@@ -1704,12 +1712,12 @@ input, select { font: inherit; }
 
 .scenario-analysis-card__type-badge--lifestyle {
   background: rgba(20,160,160,0.12);
-  color: #0B6B6B;
+  color: var(--badge-teal);
 }
 
 .scenario-analysis-card__type-badge--risk {
   background: rgba(239,68,68,0.10);
-  color: #B91C1C;
+  color: var(--badge-red);
 }
 
 /* Selected state */

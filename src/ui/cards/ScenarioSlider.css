@@ -133,12 +133,12 @@
 
 .scenario-slider-card__type-badge--risk {
   background: rgba(239, 68, 68, 0.1);
-  color: #B91C1C;
+  color: var(--badge-red);
 }
 
 .scenario-slider-card__type-badge--simulation {
   background: rgba(99, 102, 241, 0.1);
-  color: #3730A3;
+  color: var(--badge-indigo);
 }
 
 /* Badge colors for active (dark) cards */
@@ -302,12 +302,12 @@
 
 .scenario-list-item__result-badge--warn {
   background: rgba(251, 146, 60, 0.12);
-  color: #9A3E06;
+  color: var(--badge-orange);
 }
 
 .scenario-list-item__result-badge--danger {
   background: rgba(239, 68, 68, 0.10);
-  color: #B91C1C;
+  color: var(--badge-red);
 }
 
 .scenario-list-item__type-badge {

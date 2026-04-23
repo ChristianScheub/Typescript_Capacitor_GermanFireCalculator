@@ -12,6 +12,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { walkDir, getProjectPaths, getRelativePath } from './checkUtils.js';
 
+const EXCLUDED_TEXT_PATTERNS = [
+  /^[MLHVCSQTAZmlhvcsqtaz][\d\s,.MLHVCSQTAZmlhvcsqtaz-]*$/,
+  /^[\d\s,.-]+$/,
+  /^(noopener|noreferrer|nofollow|_blank|_self|submit|button|reset|text|password|email|number)(\s+(noopener|noreferrer|nofollow|_blank|_self))*$/,
+  /^\.[a-z]+$/,
+  /^[A-Z0-9]+$/,
+  /^[a-zA-Z_]\w*$/,
+];
+
 export function checkCodeQuality() {
   const violations = [];
   const { projectRoot, srcDir } = getProjectPaths();
@@ -151,75 +160,53 @@ export function checkCodeQuality() {
   // Define allowed import aliases
   const allowedAliases = ['@services', '@components', '@container', '@views', '@ui', '@config', '@types', '@hooks'];
 
+  function isScopedNpmPackage(importPath) {
+    const scopedPkgMatch = /^(@[^/]+\/[^/]+)/.exec(importPath);
+    if (!scopedPkgMatch) return false;
+    const pkgDir = path.join(projectRoot, 'node_modules', scopedPkgMatch[1]);
+    return fs.existsSync(pkgDir);
+  }
+
+  function validateImportPath(importPath, relFile) {
+    if (!importPath.startsWith('@')) return null;
+    if (isScopedNpmPackage(importPath)) return null;
+
+    if (importPath.startsWith('../') || importPath.startsWith('./') || importPath.startsWith('/')) {
+      return `Absolute Import Check: File '${relFile}' uses relative import path '${importPath}'. ` +
+        `All imports must use absolute paths with @ aliases. GOOD: 'import Model from "@services/model"'`;
+    }
+
+    const hasValidAlias = allowedAliases.some(alias => importPath.startsWith(alias));
+    if (!hasValidAlias) {
+      return `Import Alias Check: File '${relFile}' uses invalid import path '${importPath}'. ` +
+        `Must use: @services, @components, @views, @ui, @config, @types, @hooks. GOOD: 'import Model from "@services/model"'`;
+    }
+
+    if (importPath.startsWith('@services/')) {
+      const parts = importPath.split('/');
+      const importedService = parts[1];
+      const isFileInsideService = relFile.includes(`services/${importedService}/`);
+      if (!isFileInsideService && parts.length > 2 && (parts[2] === 'logic' || parts.includes('IService'))) {
+        return `Deep Service Import Check: File '${relFile}' bypasses service facade with '${importPath}'. ` +
+          `Import service facades only. GOOD: '@services/logger'`;
+      }
+    }
+
+    return null;
+  }
+
   walkDir(srcDir, (file) => {
     if (!file.endsWith('.ts') && !file.endsWith('.tsx')) return;
-    if (file.includes('.test.')) return; // Allow any imports in test files
+    if (file.includes('.test.')) return;
 
     const relFile = getRelativePath(file, projectRoot);
     const content = fs.readFileSync(file, 'utf8');
-
-    // Regex to find all import statements
     const importRegex = /^import\s+.*?\s+from\s+['"]([^'"]+)['"]/gm;
-    
+
     let match;
     while ((match = importRegex.exec(content)) !== null) {
-      const importPath = match[1];
-
-      // Skip external packages (packages without @ prefix)
-      // e.g. 'react', 'react-dom/client', 'vite', etc. - these are allowed
-      if (!importPath.startsWith('@')) {
-        continue; // External package - allowed
-      }
-
-      // Skip scoped npm packages (e.g. @capacitor/core, @capgo/navigation-bar)
-      // These start with @ but are not project aliases - they exist in node_modules
-      const scopedPkgMatch = /^(@[^/]+\/[^/]+)/.exec(importPath);
-      if (scopedPkgMatch) {
-        const pkgDir = path.join(projectRoot, 'node_modules', scopedPkgMatch[1]);
-        if (fs.existsSync(pkgDir)) {
-          continue; // Scoped npm package - allowed
-        }
-      }
-
-      // Check 1: No relative paths allowed (../, ./, /)
-      if (importPath.startsWith('../') || importPath.startsWith('./') || importPath.startsWith('/')) {
-        violations.push(
-          `Absolute Import Check: File '${relFile}' uses relative import path '${importPath}'. ` +
-          `All imports must use absolute paths with @ aliases. ` +
-          `GOOD: 'import Model from "@services/model"'`
-        );
-        continue;
-      }
-
-      // Check 2: Must use one of our valid aliases
-      const hasValidAlias = allowedAliases.some(alias => importPath.startsWith(alias));
-      if (!hasValidAlias) {
-        violations.push(
-          `Import Alias Check: File '${relFile}' uses invalid import path '${importPath}'. ` +
-          `Must use: @services, @components, @views, @ui, @config, @types, @hooks. ` +
-          `GOOD: 'import Model from "@services/model"'`
-        );
-        continue;
-      }
-
-      // Check 3: No deep imports into service logic folders (unless FROM inside that service)
-      // e.g., you can't do: import X from '@services/logger/logic/LoggerImpl' (unless you're inside logger/)
-      // BUT within a service facade (index.ts), importing from your own logic/ is allowed
-      if (importPath.startsWith('@services/')) {
-        const parts = importPath.split('/');
-        const importedService = parts[1]; // e.g., 'logger' from '@services/logger/logic/...'
-        
-        // Check if this file is inside a service folder
-        const isFileInsideService = relFile.includes(`services/${importedService}/`);
-        
-        // If accessing logic or interface from OUTSIDE the service, that's forbidden
-        if (!isFileInsideService && parts.length > 2 && (parts[2] === 'logic' || parts.includes('IService'))) {
-          violations.push(
-            `Deep Service Import Check: File '${relFile}' bypasses service facade with '${importPath}'. ` +
-            `Import service facades only. GOOD: '@services/logger'`
-          );
-        }
-      }
+      const violation = validateImportPath(match[1], relFile);
+      if (violation) violations.push(violation);
     }
   });
 
@@ -255,35 +242,45 @@ export function checkCodeQuality() {
     // These are filtered by containing hyphens and being fully lowercase/hyphenated
   ]);
 
-  // Helper to determine if a string looks like user-facing hardcoded text
   function isHardcodedText(str) {
     if (!str || str.length < 3) return false;
     if (ALLOWED_HARDCODED.has(str)) return false;
-    if (str.startsWith('--')) return false; // CSS custom properties
-    // SVG path data (d attribute): starts with an SVG command letter followed by coords
-    if (/^[MLHVCSQTAZmlhvcsqtaz][\d\s,.-MLHVCSQTAZmlhvcsqtaz]*$/.test(str)) return false;
-    // SVG polyline/polygon points or viewBox (only numbers, spaces, commas, dots, dashes)
-    if (/^[\d\s,.-]+$/.test(str)) return false;
-    // HTML attribute values (rel, target, type values)
-    if (/^(noopener|noreferrer|nofollow|_blank|_self|submit|button|reset|text|password|email|number)(\s+(noopener|noreferrer|nofollow|_blank|_self))*$/.test(str)) return false;
-    // CSS class names (kebab-case)
-    if (/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/.test(str) && str.includes('-')) return false;
-    // Translation keys (namespace.key format)
-    if (str.includes('.') && /^[a-zA-Z][a-zA-Z0-9._]*$/.test(str)) return false;
-    // Template literals with interpolation
-    if (str.includes('${')) return false;
-    // URLs or paths
+    if (str.startsWith('--') || str.includes('${')) return false;
     if (str.startsWith('http') || str.startsWith('/') || str.startsWith('.')) return false;
-    // File extensions or format codes (e.g. ".json", "SHA256")
-    if (/^\.[a-z]+$/.test(str) || /^[A-Z0-9]+$/.test(str)) return false;
-    // Locale format strings (e.g. "2-digit", "en-US")
+    if (EXCLUDED_TEXT_PATTERNS.some(p => p.test(str))) return false;
+    if (/^[a-z0-9]([a-z0-9-]*[a-z0-9])?$/.test(str) && str.includes('-')) return false;
+    if (str.includes('.') && /^[a-zA-Z][a-zA-Z0-9._]*$/.test(str)) return false;
     if (/^[a-z]+-[a-z0-9]+$/i.test(str) && str.length < 15) return false;
-    // Must contain at least one letter
-    if (!/[a-zA-ZäöüÄÖÜß]/.test(str)) return false;
-    // Single-word variable/identifier names (camelCase, PascalCase, snake_case)
-    if (/^[a-zA-Z_]\w*$/.test(str)) return false;
-    // If we get here, the string has multiple words or special characters → likely user-facing
-    return true;
+    return /[a-zA-ZäöüÄÖÜß]/.test(str);
+  }
+
+  function shouldSkipLine(line) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('import ') || trimmed.startsWith('//') || trimmed.startsWith('*') ||
+        trimmed.startsWith('interface ') || trimmed.startsWith('type ')) return true;
+    if (/\bt\(['"]/m.test(line) || /useTranslation/m.test(line)) return true;
+    if (line.includes('className') || line.includes('class=') || line.includes('[`') ||
+        line.includes('style') || line.includes('CSS')) return true;
+    return line.includes('Key=') || line.includes('Key:');
+  }
+
+  function collectJsxTextViolations(line, idx, relFile, folderName) {
+    const results = [];
+    const jsxTextRegex = />([^<>{}`]+)</g;
+    let jsxMatch;
+    while ((jsxMatch = jsxTextRegex.exec(line)) !== null) {
+      const textContent = jsxMatch[1].trim();
+      if (textContent.length < 3) continue;
+      if (!/[a-zA-ZäöüÄÖÜß]/.test(textContent)) continue;
+      if (/^[a-zA-Z_]\w*$/.test(textContent)) continue;
+      if (/\bt\(['"]/m.test(line)) continue;
+      results.push(
+        `Hardcoded JSX Text Check (${folderName}): File '${relFile}' line ${idx + 1} contains hardcoded JSX text: "${textContent}". ` +
+        `Use i18next translation function instead: {t('namespace.key')}. ` +
+        `Add the text to src/i18n/locales/de.json and en.json, then use useTranslation() hook to access it.`
+      );
+    }
+    return results;
   }
 
   HARDCODED_TEXT_CHECK_FOLDERS.forEach((folderName) => {
@@ -298,48 +295,14 @@ export function checkCodeQuality() {
       const content = fs.readFileSync(file, 'utf8');
       const lines = content.split('\n');
 
-      // Check each line for hardcoded strings that should be i18n keys
       lines.forEach((line, idx) => {
-        // Skip imports, comments, and type declarations
-        if (line.trim().startsWith('import ') || 
-            line.trim().startsWith('//') || 
-            line.trim().startsWith('*') ||
-            line.trim().startsWith('interface ') ||
-            line.trim().startsWith('type ')) {
-          return;
-        }
+        if (shouldSkipLine(line)) return;
 
-        // Skip lines that already use i18next translation function
-        if (/\bt\(['"]/m.test(line) || /useTranslation/m.test(line)) {
-          return;
-        }
-
-        // Skip lines that are clearly className, CSS, or style-related
-        if (line.includes('className') || 
-            line.includes('class=') || 
-            line.includes('[`') ||
-            line.includes('style') ||
-            line.includes('CSS')) {
-          return;
-        }
-
-        // Skip lines with titleKey, descriptionKey, or other *Key props (i18n keys, not hardcoded text)
-        if (line.includes('Key=') || line.includes('Key:')) {
-          return;
-        }
-
-        // --- Check A: String literals in quotes (props like title="...", placeholder="...") ---
-        // Use lookbehind to ensure we match actual string values (after =, (, :, ,, [, or whitespace)
-        // This prevents matching text between two separate JSX attributes
         const stringRegex = /(?<=[=(,:[\s])(['"])([^'"]{3,}?)\1/g;
         let match;
-
         while ((match = stringRegex.exec(line)) !== null) {
           const stringContent = match[2].trim();
-
-          // Skip if it's in comment
           if (line.substring(0, match.index).includes('//')) continue;
-
           if (isHardcodedText(stringContent)) {
             violations.push(
               `Hardcoded Text Check (${folderName}): File '${relFile}' line ${idx + 1} contains potential hardcoded text: "${stringContent}". ` +
@@ -349,31 +312,7 @@ export function checkCodeQuality() {
           }
         }
 
-        // --- Check B: JSX text content between tags (e.g. <p>Some text</p>) ---
-        const jsxTextRegex = />([^<>{}`]+)</g;
-        let jsxMatch;
-
-        while ((jsxMatch = jsxTextRegex.exec(line)) !== null) {
-          const textContent = jsxMatch[1].trim();
-
-          // Skip empty, whitespace-only, or very short
-          if (textContent.length < 3) continue;
-
-          // Skip if it's only special chars, numbers, or braces
-          if (!/[a-zA-ZäöüÄÖÜß]/.test(textContent)) continue;
-
-          // Skip single-word camelCase/PascalCase identifiers (component text like {variable})
-          if (/^[a-zA-Z_]\w*$/.test(textContent)) continue;
-
-          // Skip if the line already uses t() translation
-          if (/\bt\(['"]/m.test(line)) continue;
-
-          violations.push(
-            `Hardcoded JSX Text Check (${folderName}): File '${relFile}' line ${idx + 1} contains hardcoded JSX text: "${textContent}". ` +
-            `Use i18next translation function instead: {t('namespace.key')}. ` +
-            `Add the text to src/i18n/locales/de.json and en.json, then use useTranslation() hook to access it.`
-          );
-        }
+        violations.push(...collectJsxTextViolations(line, idx, relFile, folderName));
       });
     });
   });
