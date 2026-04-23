@@ -1,5 +1,65 @@
 import type { MonteCarloProParams, MonteCarloResult, FanDataPoint } from '../../../types/monteCarloCalculator/models/monteCarloTypes';
 
+interface SimState {
+  wealth: number;
+  withdrawal: number;
+  pension: number;
+  failAge: number;
+  ath: number;
+  inReducedMode: boolean;
+  troughWealth: number;
+}
+
+interface SimParams {
+  annualWithdrawal: number;
+  reducedAnnualWithdrawal: number;
+  fireAge: number;
+  pensionAge: number;
+  meanReturn: number;
+  stdDev: number;
+  minInflation: number;
+  maxInflation: number;
+  drawdownFactor: number;
+  recoveryFactor: number;
+}
+
+function updateSpendingMode(state: SimState, preWithdrawalWealth: number, drawdownFactor: number, recoveryFactor: number): void {
+  if (state.inReducedMode) {
+    if (preWithdrawalWealth < state.troughWealth) state.troughWealth = preWithdrawalWealth;
+    if (preWithdrawalWealth >= state.troughWealth * recoveryFactor) state.inReducedMode = false;
+  } else if (preWithdrawalWealth < state.ath * drawdownFactor) {
+    state.inReducedMode = true;
+    state.troughWealth = preWithdrawalWealth;
+  }
+}
+
+function simulateProYear(state: SimState, y: number, p: SimParams): void {
+  const annualReturn = randNormal(p.meanReturn, p.stdDev);
+  const inflation    = (p.minInflation + Math.random() * (p.maxInflation - p.minInflation)) / 100;
+  const preWithdrawalWealth = state.wealth * (1 + annualReturn);
+
+  if (preWithdrawalWealth > state.ath) state.ath = preWithdrawalWealth;
+
+  updateSpendingMode(state, preWithdrawalWealth, p.drawdownFactor, p.recoveryFactor);
+
+  const effectiveWithdrawal = state.inReducedMode
+    ? (p.reducedAnnualWithdrawal / p.annualWithdrawal) * state.withdrawal
+    : state.withdrawal;
+
+  const currentAge    = p.fireAge + y;
+  const pensionOffset = currentAge >= p.pensionAge ? state.pension : 0;
+  const netWithdrawal = Math.max(0, effectiveWithdrawal - pensionOffset);
+
+  state.wealth     = preWithdrawalWealth - netWithdrawal;
+  state.withdrawal = state.withdrawal * (1 + inflation);
+  state.pension    = state.pension    * (1 + inflation);
+
+  if (state.wealth <= 0) {
+    state.wealth  = 0;
+    if (state.failAge === -1) state.failAge = currentAge;
+  }
+}
+
 /** Box-Muller normal distribution */
 function randNormal(mean: number, stddev: number): number {
   const u1 = Math.random() || 1e-10;
@@ -54,71 +114,31 @@ export function calcMonteCarloPro(
   const finalWealths: number[] = [];
   const failAges: number[] = [];
 
+  const simParams: SimParams = {
+    annualWithdrawal, reducedAnnualWithdrawal,
+    fireAge, pensionAge, meanReturn, stdDev,
+    minInflation, maxInflation, drawdownFactor, recoveryFactor,
+  };
+
   for (let sim = 0; sim < numSimulations; sim++) {
-    let wealth     = fireWealth;
-    let withdrawal = annualWithdrawal;
-    let pension    = pensionAnnualNet;
-    let failAge    = -1;
+    const state: SimState = {
+      wealth: fireWealth, withdrawal: annualWithdrawal, pension: pensionAnnualNet,
+      failAge: -1, ath: fireWealth, inReducedMode: false, troughWealth: fireWealth,
+    };
 
-    // ATH tracking for dynamic spending
-    let ath           = fireWealth;   // all-time-high of pre-withdrawal portfolio value
-    let inReducedMode = false;
-    let troughWealth  = fireWealth;
-
-    wealthByYear[0].push(wealth);
+    wealthByYear[0].push(state.wealth);
 
     for (let y = 1; y <= yearsInRetirement; y++) {
-      const annualReturn = randNormal(meanReturn, stdDev);
-      const inflation    = (minInflation + Math.random() * (maxInflation - minInflation)) / 100;
-
-      // 1. Apply market return (before withdrawal)
-      const preWithdrawalWealth = wealth * (1 + annualReturn);
-
-      // 2. Update ATH
-      if (preWithdrawalWealth > ath) ath = preWithdrawalWealth;
-
-      // 3. Spending-cut logic based on ATH drawdown
-      if (inReducedMode) {
-        // Track trough
-        if (preWithdrawalWealth < troughWealth) troughWealth = preWithdrawalWealth;
-        // Check recovery: portfolio recovered C% from the recorded trough
-        if (preWithdrawalWealth >= troughWealth * recoveryFactor) {
-          inReducedMode = false;
-        }
-      } else if (preWithdrawalWealth < ath * drawdownFactor) {
-        // Enter reduced spending mode
-        inReducedMode = true;
-        troughWealth  = preWithdrawalWealth;
-      }
-
-      // 4. Determine effective withdrawal (inflate reduced withdrawal with same inflation)
-      const effectiveWithdrawal = inReducedMode
-        ? (reducedAnnualWithdrawal / annualWithdrawal) * withdrawal  // keep same inflation scaling ratio
-        : withdrawal;
-
-      // 5. Pension offset
-      const currentAge    = fireAge + y;
-      const pensionOffset = currentAge >= pensionAge ? pension : 0;
-      const netWithdrawal = Math.max(0, effectiveWithdrawal - pensionOffset);
-
-      wealth     = preWithdrawalWealth - netWithdrawal;
-      withdrawal = withdrawal * (1 + inflation);
-      pension    = pension    * (1 + inflation);
-
-      if (wealth <= 0) {
-        wealth = 0;
-        if (failAge === -1) failAge = fireAge + y;
-      }
-
-      wealthByYear[y].push(wealth);
+      simulateProYear(state, y, simParams);
+      wealthByYear[y].push(state.wealth);
     }
 
-    if (failAge >= 0) {
-      failAges.push(failAge);
+    if (state.failAge >= 0) {
+      failAges.push(state.failAge);
       finalWealths.push(0);
     } else {
       successCount++;
-      finalWealths.push(wealth);
+      finalWealths.push(state.wealth);
     }
   }
 

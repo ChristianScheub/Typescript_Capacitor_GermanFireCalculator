@@ -1,5 +1,12 @@
 import type { MonteCarloParams, MonteCarloResult, FanDataPoint } from '../../../types/monteCarloCalculator/models/monteCarloTypes';
 
+function applyRuin(wealth: number, failAge: number, currentAge: number): { wealth: number; failAge: number } {
+  if (wealth <= 0) {
+    return { wealth: 0, failAge: failAge === -1 ? currentAge : failAge };
+  }
+  return { wealth, failAge };
+}
+
 /** Box-Muller normal distribution */
 function randNormal(mean: number, stddev: number): number {
   const u1 = Math.random() || 1e-10;
@@ -65,10 +72,7 @@ export function calcMonteCarlo(
       withdrawal = withdrawal * (1 + inflation);
       pension    = pension    * (1 + inflation);
 
-      if (wealth <= 0) {
-        wealth = 0;
-        if (failAge === -1) failAge = fireAge + y;
-      }
+      ({ wealth, failAge } = applyRuin(wealth, failAge, fireAge + y));
 
       wealthByYear[y].push(wealth);
     }

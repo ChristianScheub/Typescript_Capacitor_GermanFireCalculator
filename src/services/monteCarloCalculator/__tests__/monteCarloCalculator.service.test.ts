@@ -15,7 +15,7 @@ import type { MonteCarloParams, MonteCarloProParams } from '../index';
 
 const BASE_PARAMS: MonteCarloParams = {
   minInflation: 1.5,
-  maxInflation: 4.0,
+  maxInflation: 4,
   volatility: 12.5,
   numSimulations: 200,   // small count for speed
   pensionAge: 67,

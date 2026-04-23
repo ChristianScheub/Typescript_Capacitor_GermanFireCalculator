@@ -133,18 +133,18 @@
 
 .scenario-slider-card__type-badge--risk {
   background: rgba(239, 68, 68, 0.1);
-  color: #EF4444;
+  color: #B91C1C;
 }
 
 .scenario-slider-card__type-badge--simulation {
   background: rgba(99, 102, 241, 0.1);
-  color: #6366F1;
+  color: #3730A3;
 }
 
 /* Badge colors for active (dark) cards */
 .scenario-slider-card--active .scenario-slider-card__type-badge {
-  background: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.85);
+  background: #3E5647;
+  color: #fff;
 }
 
 /* Title */
@@ -302,12 +302,12 @@
 
 .scenario-list-item__result-badge--warn {
   background: rgba(251, 146, 60, 0.12);
-  color: #FB923C;
+  color: #9A3E06;
 }
 
 .scenario-list-item__result-badge--danger {
   background: rgba(239, 68, 68, 0.10);
-  color: #EF4444;
+  color: #B91C1C;
 }
 
 .scenario-list-item__type-badge {

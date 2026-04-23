@@ -22,6 +22,19 @@ interface TooltipProps {
   t: (key: string, opts?: Record<string, unknown>) => string;
 }
 
+interface ChartLayout {
+  W: number; H: number;
+  PAD_L: number; PAD_R: number; PAD_T: number; PAD_B: number;
+  step: number; TH_simple: number; TH_full: number; FS: number;
+}
+
+function getChartLayout(landscape: boolean): ChartLayout {
+  if (landscape) {
+    return { W: 580, H: 280, PAD_L: 10, PAD_R: 10, PAD_T: 16, PAD_B: 44, step: 10, TH_simple: 44, TH_full: 86, FS: 1.1 };
+  }
+  return { W: 320, H: 200, PAD_L: 6, PAD_R: 6, PAD_T: 10, PAD_B: 36, step: 15, TH_simple: 40, TH_full: 78, FS: 1 };
+}
+
 function FanChartTooltip({ hovered, hx, isRight, TW, TH, PAD_T, FS, simplifiedTooltip, t }: Readonly<TooltipProps>) {
   const tx = isRight ? hx - TW - 10 : hx + 10;
   const ty = PAD_T + 2;
@@ -58,12 +71,7 @@ export function FanChart({ fanData, landscape = false, showBands = true, simplif
 
   if (fanData.length < 2) return null;
 
-  const W = landscape ? 580 : 320;
-  const H = landscape ? 280 : 200;
-  const PAD_L = landscape ? 10 : 6;
-  const PAD_R = landscape ? 10 : 6;
-  const PAD_T = landscape ? 16 : 10;
-  const PAD_B = landscape ? 44 : 36;
+  const { W, H, PAD_L, PAD_R, PAD_T, PAD_B, step, TH_simple, TH_full, FS } = getChartLayout(landscape);
   const chartW = W - PAD_L - PAD_R;
   const chartH = H - PAD_T - PAD_B;
 
@@ -85,7 +93,6 @@ export function FanChart({ fanData, landscape = false, showBands = true, simplif
   const medianPts = fanData.map((d, i) => `${xOf(i).toFixed(1)},${yOf(d.p50).toFixed(1)}`).join(' ');
 
   // Axis labels
-  const step = landscape ? 10 : 15;
   const labelAges = new Set<number>();
   labelAges.add(fanData[0].age);
   for (let a = fanData[0].age + step; a < 100; a += step) labelAges.add(a);
@@ -111,10 +118,7 @@ export function FanChart({ fanData, landscape = false, showBands = true, simplif
 
   // Tooltip dimensions (in viewBox units)
   const TW = landscape ? 148 : 128;
-  const TH_simple = landscape ? 44 : 40;
-  const TH_full = landscape ? 86 : 78;
   const TH = simplifiedTooltip ? TH_simple : TH_full;
-  const FS = landscape ? 1.1 : 1; // font scale multiplier
 
   return (
     <svg

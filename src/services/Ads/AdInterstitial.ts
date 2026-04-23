@@ -21,6 +21,7 @@ const showAdInterstitial = async () => {
     await AdMob.prepareInterstitial(options);
     await AdMob.showInterstitial();
   } catch (error) {
+    console.warn('AdInterstitial failed:', error);
   }
 };
 

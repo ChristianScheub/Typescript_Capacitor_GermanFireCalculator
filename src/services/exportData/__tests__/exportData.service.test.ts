@@ -89,7 +89,7 @@ describe('exportDataService.exportFireState – web platform', () => {
     const OrigBlob = globalThis.Blob;
     (globalThis as unknown as Record<string, unknown>).Blob = class extends OrigBlob {
       constructor(parts?: BlobPart[], opts?: BlobPropertyBag) {
-        blobContent = String((parts ?? [])[0]);
+        blobContent = ((parts ?? [])[0] as string | undefined) ?? '';
         super(parts, opts);
       }
     };
@@ -106,7 +106,7 @@ describe('exportDataService.exportFireState – web platform', () => {
     const OrigBlob = globalThis.Blob;
     (globalThis as unknown as Record<string, unknown>).Blob = class extends OrigBlob {
       constructor(parts?: BlobPart[], opts?: BlobPropertyBag) {
-        blobContent = String((parts ?? [])[0]);
+        blobContent = ((parts ?? [])[0] as string | undefined) ?? '';
         super(parts, opts);
       }
     };

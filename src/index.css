@@ -284,10 +284,10 @@ input, select { font: inherit; }
 }
 
 .kpi-icon--green  { background: rgba(61, 170, 114, 0.15); color: var(--fire-accent); }
-.kpi-icon--teal   { background: rgba(20, 160, 160, 0.12); color: #14A0A0; }
-.kpi-icon--red    { background: rgba(239, 68,  68,  0.10); color: #EF4444; }
-.kpi-icon--gray   { background: rgba(107, 114, 128, 0.12); color: #6B7280; }
-.kpi-icon--orange { background: rgba(249, 115,  22, 0.10); color: #F97316; }
+.kpi-icon--teal   { background: rgba(20, 160, 160, 0.12); color: #0B6B6B; }
+.kpi-icon--red    { background: rgba(239, 68,  68,  0.10); color: #B91C1C; }
+.kpi-icon--gray   { background: rgba(107, 114, 128, 0.12); color: #4B5563; }
+.kpi-icon--orange { background: rgba(249, 115,  22, 0.10); color: #9A3E06; }
 
 .kpi-card__label {
   font-size: 10px;
@@ -550,8 +550,8 @@ input, select { font: inherit; }
 }
 
 .section-icon--green  { background: rgba(61, 170, 114, 0.12); color: var(--fire-accent); }
-.section-icon--teal   { background: rgba(20, 160, 160, 0.10); color: #14A0A0; }
-.section-icon--orange { background: rgba(249, 115,  22, 0.10); color: #F97316; }
+.section-icon--teal   { background: rgba(20, 160, 160, 0.10); color: #0B6B6B; }
+.section-icon--orange { background: rgba(249, 115,  22, 0.10); color: #9A3E06; }
 
 /* ── Form Fields ─────────────────────────────────────────────────────────────── */
 .field {
@@ -1319,7 +1319,7 @@ input, select { font: inherit; }
 }
 
 .prognose-table__tag--fire {
-  background: rgba(255,255,255,0.2);
+  background: #496051;
   color: #fff;
 }
 
@@ -1425,7 +1425,7 @@ input, select { font: inherit; }
 }
 
 .prognose-card--featured .prognose-card__tag--heute {
-  background: rgba(255,255,255,0.2);
+  background: #496051;
   color: #fff;
 }
 
@@ -1546,8 +1546,8 @@ input, select { font: inherit; }
   flex-shrink: 0;
 }
 
-.scenario-analysis-card__icon--teal { background: rgba(20,160,160,0.12); color: #14A0A0; }
-.scenario-analysis-card__icon--red  { background: rgba(239,68,68,0.10);  color: #EF4444; }
+.scenario-analysis-card__icon--teal { background: rgba(20,160,160,0.12); color: #0B6B6B; }
+.scenario-analysis-card__icon--red  { background: rgba(239,68,68,0.10);  color: #B91C1C; }
 
 .scenario-analysis-card__title-wrap {
   flex: 1;
@@ -1590,12 +1590,12 @@ input, select { font: inherit; }
 
 .scenario-analysis-card__result-badge--warn {
   background: rgba(249,115,22,0.12);
-  color: #C05A00;
+  color: #7C3800;
 }
 
 .scenario-analysis-card__result-badge--danger {
   background: rgba(239,68,68,0.10);
-  color: #DC2626;
+  color: #991B1B;
 }
 
 .scenario-analysis-card__result-text {
@@ -1704,12 +1704,12 @@ input, select { font: inherit; }
 
 .scenario-analysis-card__type-badge--lifestyle {
   background: rgba(20,160,160,0.12);
-  color: #14A0A0;
+  color: #0B6B6B;
 }
 
 .scenario-analysis-card__type-badge--risk {
   background: rgba(239,68,68,0.10);
-  color: #EF4444;
+  color: #B91C1C;
 }
 
 /* Selected state */

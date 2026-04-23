@@ -11,7 +11,7 @@ export const AdManager: React.FC = () => {
     const lastAdTime = localStorage.getItem("lastAdTime");
     if (!lastAdTime) return true;
 
-    const lastAdTimestamp = parseInt(lastAdTime, 10);
+    const lastAdTimestamp = Number.parseInt(lastAdTime, 10);
     const now = Date.now();
     const elapsedMinutes = (now - lastAdTimestamp) / (1000 * 60);
     return elapsedMinutes >= AD_INTERVAL_MINUTES;
@@ -26,6 +26,7 @@ export const AdManager: React.FC = () => {
         await showAdInterstitial();
         localStorage.setItem("lastAdTime", Date.now().toString());
       } catch (err) {
+        console.warn('Ad interstitial failed:', err);
       }
     }
   }, []);
@@ -35,6 +36,7 @@ export const AdManager: React.FC = () => {
       await initializeAds();
       await showBanner();
     } catch (err) {
+      console.warn('Ad initialization failed:', err);
     }
 
     setTimeout(() => {

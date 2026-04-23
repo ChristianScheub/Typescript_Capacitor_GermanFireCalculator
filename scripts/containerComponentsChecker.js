@@ -323,8 +323,7 @@ export function checkContainerComponents() {
 
   const MAX_DEPTH_LEVELS = 4;
   const SPACES_PER_LEVEL = 2; // React typically uses 2-space indents
-  const MAX_SPACES = (MAX_DEPTH_LEVELS + 1) * SPACES_PER_LEVEL; // Starting from level 7
-  
+
 
   if (fs.existsSync(componentsDir)) {
     walkDir(componentsDir, (file) => {
